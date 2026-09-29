@@ -3,388 +3,530 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ball Magic - Sort Puzzle</title>
-    <script src="https://connect.facebook.net/en_US/fbinstant.6.3.js"></script>
+    <title>Ball Sort - Admin CMS & Assets</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Lilita+One&display=swap');
-
-        body {
-            margin: 0; font-family: 'Lilita One', cursive; color: #fff; overflow: hidden; touch-action: manipulation;
-            background-color: #1f140e;
-            background-image: 
-                linear-gradient(90deg, rgba(0,0,0,0.7) 2px, transparent 2px, transparent 98px, rgba(255,255,255,0.02) 98px, rgba(255,255,255,0.02) 100px),
-                repeating-linear-gradient(174deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 4px, transparent 4px, transparent 8px),
-                repeating-linear-gradient(6deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 5px, transparent 5px, transparent 10px);
-            background-size: 100px 100%, 100% 100%, 100% 100%;
-        }
-
-        #dynamic-game-title {
-            text-align: center; font-size: 32px; margin: 15px 0 5px 0;
-            text-shadow: 0 4px 6px rgba(0,0,0,0.8); display: none;
-            background: -webkit-linear-gradient(#fff, #ffd700); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-
-        .header-section { width: 100%; display: flex; flex-direction: column; align-items: center; margin-bottom: 5px; padding-top: 5px; }
-        .game-info { display: flex; justify-content: space-around; align-items: center; width: 100%; max-width: 420px; font-size: 15px; text-shadow: 0 2px 4px rgba(0,0,0,0.9); padding: 0 5px; box-sizing: border-box; color: #ffd700; }
-        .level-select-wrapper { background: linear-gradient(135deg, #ffe066 0%, #d4af37 100%); border: 2px solid #8c6b14; border-radius: 6px; padding: 2px 8px; color: #3e2700; font-family: 'Lilita One', cursive; font-size: 14px; cursor: pointer; outline: none; box-shadow: 0 2px 6px rgba(0,0,0,0.5); }
-        .level-select-wrapper option:disabled { color: #999; background: #ddd; }
-
-        #game-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100dvh; padding: 10px 0; box-sizing: border-box; }
-        .board-section { flex-grow: 1; display: flex; align-items: center; justify-content: center; width: 100%; }
-
-        .board { display: flex; flex-direction: column; align-items: center; gap: 15px; width: 100%; max-width: 100vw; padding: 0; box-sizing: border-box; }
-        .row { display: flex; justify-content: center; gap: 6px; width: 100%; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #1f140e; color: #fff; margin: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden;}
         
-        .tube {
-            width: 36px; height: 215px; background: rgba(255, 255, 255, 0.1); border: 2px solid rgba(255, 255, 255, 0.3); border-radius: 2px 2px 18px 18px; 
-            display: flex; flex-direction: column-reverse; align-items: center; padding-bottom: 6px; position: relative; cursor: pointer; 
-            box-shadow: inset 0 -8px 15px rgba(0,0,0,0.5); -webkit-tap-highlight-color: transparent; transition: box-shadow 0.3s ease, border-color 0.3s ease;
-        }
+        /* TOP BAR & TABS */
+        .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 12px 30px; background: rgba(0,0,0,0.6); border-bottom: 2px solid #d4af37; }
+        .logo { font-family: 'Lilita One', cursive; font-size: 26px; color: #ffd700; text-shadow: 0 2px 4px #000; }
         
-        .tube.selected { border-color: #ffd700; box-shadow: 0 0 12px #ffd700, inset 0 -8px 15px rgba(0,0,0,0.5); }
-        .tube.completed-magic { border-color: #00ffff; box-shadow: 0 0 20px #00ffff, inset 0 -8px 15px rgba(0,255,255,0.4); animation: pulseGlow 1.5s infinite alternate; }
-        @keyframes pulseGlow { 0% { box-shadow: 0 0 10px #00ffff, inset 0 -8px 15px rgba(0,255,255,0.4); } 100% { box-shadow: 0 0 25px #ff77ff, inset 0 -8px 15px rgba(255,119,255,0.6); } }
+        .nav-tabs { display: flex; gap: 10px; }
+        .tab-btn { background: #333; color: #aaa; border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 15px; transition: 0.2s; }
+        .tab-btn.active { background: #d4af37; color: #3e2700; }
 
-        .ball { width: 28px; height: 28px; border-radius: 50%; margin-top: 3px; box-shadow: inset -4px -4px 8px rgba(0,0,0,0.5); }
-        .ball.jump { transform: translateY(-14px); }
+        .game-title-editor { display: flex; align-items: center; gap: 10px; background: #333; padding: 5px 15px; border-radius: 8px; }
+        .game-title-editor input { padding: 8px; border: 1px solid #555; border-radius: 4px; background: #222; color: #fff; font-size: 14px; width: 180px;}
+        .game-title-editor button { background: #0f9d58; color: #fff; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .level-selector select { font-family: 'Lilita One', cursive; background: #fff; color: #000; border: 2px solid #d4af37; padding: 8px 15px; border-radius: 4px; font-size: 16px; cursor: pointer; width: 120px; }
 
-        .btn-gem { position: relative; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; border: 2px solid; color: #ffffff; cursor: pointer; overflow: hidden; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6); transition: 0.1s ease; -webkit-tap-highlight-color: transparent; font-family: 'Lilita One', cursive;}
-        .btn-gem::before { content: ''; position: absolute; top: 2px; left: 4%; width: 92%; height: 35%; background: linear-gradient(to bottom, rgba(255,255,255,0.7), rgba(255,255,255,0.05)); border-radius: 12px; pointer-events: none; }
-        .btn-gem:active { transform: scale(0.92); }
-        .gem-gold { background: linear-gradient(135deg, #ffe066 0%, #d4af37 100%); border-color: #8c6b14; color: #3e2700; box-shadow: inset 0 -5px 10px rgba(100,50,0,0.5), inset 0 4px 8px rgba(255,255,255,0.6), 0 0 15px rgba(255, 215, 0, 0.4); }
-        .gem-mode { background: linear-gradient(135deg, #444 0%, #222 100%); border-color: #111; color: #888; box-shadow: inset 0 -3px 8px rgba(0,0,0,0.8), inset 0 2px 5px rgba(255,255,255,0.1); }
+        /* TAB CONTENT PANELS */
+        .tab-content { display: none; flex: 1; overflow: hidden; width: 100%; }
+        .tab-content.active { display: flex; }
 
-        #btn-mute { position: fixed; bottom: 20px; right: 20px; z-index: 1000; width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
-        #btn-mute img { width: 24px; height: 24px; object-fit: contain; }
+        /* MAIN LAYOUT (LEVEL EDITOR) */
+        .main-content { display: flex; flex: 1; overflow: hidden; width: 100%; }
+        .editor-area { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; background-image: linear-gradient(90deg, rgba(0,0,0,0.7) 2px, transparent 2px, transparent 98px, rgba(255,255,255,0.02) 98px, rgba(255,255,255,0.02) 100px); }
+        
+        .empty-state { display: flex; justify-content: center; align-items: center; flex: 1; }
+        .btn-create-board { background: #d4af37; color: #3e2700; border: none; padding: 15px 30px; font-size: 18px; cursor: pointer; font-weight: bold; border-radius: 4px; font-family: 'Segoe UI', sans-serif; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        
+        .board-state { display: none; flex-direction: column; align-items: center; width: 100%; height: 100%; padding-top: 40px; box-sizing: border-box; overflow-y: auto;}
+        .game-info { display: flex; gap: 30px; color: #fff; font-size: 24px; margin-bottom: 30px; font-family: 'Lilita One', cursive;}
+        .board { display: flex; flex-direction: column; align-items: center; gap: 20px; margin-bottom: 20px; width: 100%; }
+        .row { display: flex; justify-content: center; gap: 10px; }
+        .tube { width: 40px; height: 240px; background: rgba(255, 255, 255, 0.05); border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 2px 2px 20px 20px; display: flex; flex-direction: column-reverse; align-items: center; padding-bottom: 6px; cursor: pointer; -webkit-tap-highlight-color: transparent;}
+        .tube.selected { border-color: #ffd700; box-shadow: 0 0 12px #ffd700; }
+        .ball { width: 32px; height: 32px; border-radius: 50%; margin-top: 4px; box-shadow: inset -4px -4px 8px rgba(0,0,0,0.5); }
+        .ball.jump { transform: translateY(-16px); }
 
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 1000; justify-content: center; align-items: center; padding: 24px; box-sizing: border-box; }
-        .modal-content { background: #2a1b12; padding: 25px 20px; border-radius: 16px; width: 100%; max-width: 420px; text-align: center; border: 2px solid #d4af37; box-shadow: 0 10px 30px rgba(0,0,0,0.8); color: #fff; display: flex; flex-direction: column; box-sizing: border-box; }
-        .modal-content h3 { color: #ffd700; margin-top: 0; margin-bottom: 12px; text-shadow: 0 2px 4px #000; font-size: 26px; letter-spacing: 1px;}
+        .action-buttons { display: flex; gap: 20px; margin-top: 30px; margin-bottom: 40px;}
+        .btn-regenerate { background: #cc0000; color: #fff; border: none; padding: 12px 25px; font-size: 16px; cursor: pointer; border-radius: 4px; }
+        .btn-save-slot { background: #00aa00; color: #fff; border: none; padding: 12px 25px; font-size: 16px; cursor: pointer; border-radius: 4px; }
+
+        /* CỘT PHẢI (Danh sách 6 Slot) */
+        .sidebar { width: 350px; background: #1a110c; border-left: 2px solid #333; padding: 25px; display: flex; flex-direction: column; }
+        .sidebar-header { display: flex; justify-content: space-between; color: #aaa; font-size: 14px; margin-bottom: 20px; padding: 0 10px; }
+        .slot-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; cursor: pointer; }
+        .slot-btn { width: 110px; padding: 12px; text-align: center; background: #333; color: #aaa; border-radius: 4px; font-size: 15px; transition: 0.2s;}
+        .slot-item.active .slot-btn { background: #fff; color: #000; font-weight: bold; }
+        .slot-status { flex: 1; text-align: left; padding-left: 25px; font-size: 14px; }
+        .status-empty { color: #666; }
+        .status-saved { color: #0f9d58; }
+
+        /* TAB QUẢN LÝ GIAO DIỆN (ASSETS CMS) */
+        .assets-container { flex: 1; padding: 40px; overflow-y: auto; background: #18100c; display: flex; flex-direction: column; gap: 30px; max-width: 900px; margin: 0 auto; width: 100%; }
+        .asset-card { background: #261a12; border: 1px solid #3d281a; border-radius: 8px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
+        .asset-card h3 { margin-top: 0; color: #ffd700; font-family: 'Lilita One', cursive; font-size: 20px; margin-bottom: 15px; }
+        .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
+        .form-group label { font-size: 14px; color: #ccc; font-weight: bold; }
+        .form-group input, .form-group textarea { padding: 10px; background: #150e0a; border: 1px solid #442e1d; color: #fff; border-radius: 4px; font-size: 14px; }
+        .color-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 10px; }
+        .color-item { display: flex; align-items: center; gap: 10px; background: #150e0a; padding: 8px; border-radius: 4px; border: 1px solid #3a2517; }
+        .color-item input[type="color"] { border: none; width: 35px; height: 35px; cursor: pointer; background: none; }
+        
+        .btn-save-assets { background: #d4af37; color: #3e2700; border: none; padding: 12px 30px; font-size: 16px; font-weight: bold; border-radius: 6px; cursor: pointer; align-self: flex-start; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+
+        #toast { position: fixed; top: 80px; right: 20px; background: #0f9d58; color: white; padding: 15px 25px; border-radius: 8px; font-weight: bold; font-size: 16px; display: none; z-index: 2000; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
     </style>
 </head>
 <body>
 
-    <div id="game-screen">
-        <h1 id="dynamic-game-title">Ball Sort Magic</h1>
-        <div class="header-section">
-            <div class="game-info">
-                <span>LV: <select id="level-dropdown" class="level-select-wrapper" onchange="onLevelSelectChange(this)"></select></span>
-                <span>MIN: <span id="min-moves" style="color:#a3ffcc;">Load...</span></span>
-                <span>MOVES: <span id="player-moves" style="color:#ffd700;">0</span></span>
-            </div>
-        </div>
-        <div class="board-section">
-            <div class="board" id="board"></div>
-        </div>
+<div class="top-bar">
+    <div class="logo">Level Inspector</div>
+    
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab('levels', this)">Quản lý Màn chơi</button>
+        <button class="tab-btn" onclick="switchTab('assets', this)">Biên tập Giao diện</button>
     </div>
 
-    <button id="btn-mute" class="btn-gem gem-mode" onclick="toggleMute()">
-        <img id="mute-icon" src="assets/icons/volume-max.svg" alt="Volume" onerror="this.replaceWith(Object.assign(document.createElement('span'),{id:'mute-icon', innerText:'🔊'}))">
-    </button>
-
-    <!-- Win Modal MỚI -->
-    <div id="win-modal" class="modal-overlay">
-        <div class="modal-content">
-            <h3 style="color: #00ffff; text-shadow: 0 0 15px rgba(0,255,255,0.6);">🎉 HOÀN THÀNH!</h3>
-            <div id="win-message" style="margin: 15px 0 25px 0; font-size: 18px; line-height: 1.8; color: #fff;"></div>
-            <div style="display: flex; justify-content: center; gap: 12px; width: 100%;">
-                <button class="btn-gem gem-mode" style="width: 120px; height: 44px; border-radius: 12px; font-size: 16px;" onclick="restartLevelAndCloseWin()">CHƠI LẠI</button>
-                <button class="btn-gem gem-gold" style="width: 140px; height: 44px; border-radius: 12px; font-size: 16px;" onclick="closeWinModalAndNext()">NEXT LEVEL</button>
-            </div>
-        </div>
+    <div class="game-title-editor" id="level-top-controls">
+        Tên Game: 
+        <input type="text" id="game-title" placeholder="Ball Sort Magic">
+        <button onclick="saveConfig()">Lưu Tên</button>
     </div>
-
-    <!-- Alert / Confirm Modal -->
-    <div id="custom-modal" class="modal-overlay">
-        <div class="modal-content">
-            <h3 id="custom-modal-title">THÔNG BÁO</h3>
-            <div id="custom-modal-msg" style="margin: 15px 0; font-size: 17px; line-height: 1.6; color: #fff;"></div>
-            <div id="custom-modal-actions" style="display: flex; justify-content: center; gap: 12px; margin-top: 15px;">
-                <button id="custom-modal-btn-ok" class="btn-gem gem-gold" style="width: 120px; height: 44px; border-radius: 12px; font-size: 16px;" onclick="handleCustomOk()">OK</button>
-                <button id="custom-modal-btn-cancel" class="btn-gem gem-mode" style="width: 120px; height: 44px; border-radius: 12px; font-size: 16px; border-color: #111;" onclick="handleCustomCancel()">HỦY</button>
-            </div>
-        </div>
+    <div class="level-selector" id="level-select-container">
+        <select id="main-level-select" onchange="onLevelChange()"></select>
     </div>
+</div>
 
-    <div id="flying-ball-container"></div>
-
-    <script>
-        const API_URL = 'https://ball-sort-backend.onrender.com/api';
-        let currentLevel = 1;
-        let tubes = []; let initialTubesState = []; let undoStack = []; 
-        let selectedTubeIndex = null; let playerMoves = 0; let hiddenBalls = [];
-        const TUBE_CAPACITY = 6; 
-        
-        let customModalCallback = null; let customModalCancelCallback = null;
-        let activeLevelList = []; 
-        let isGameWon = false;
-
-        async function loadGameConfig() {
-            try {
-                let res = await fetch(`${API_URL}/game/config`);
-                let config = await res.json();
-                const titleEl = document.getElementById('dynamic-game-title');
-                if (config.showTitle) { titleEl.innerText = config.gameTitle || 'Ball Sort Magic'; titleEl.style.display = 'block'; } 
-                else titleEl.style.display = 'none';
-            } catch(e) {}
-        }
-
-        async function fetchActiveLevels() {
-            try {
-                let res = await fetch(`${API_URL}/game/levels/active`);
-                if(res.ok) activeLevelList = await res.json(); else activeLevelList = [];
-            } catch (e) { activeLevelList = []; }
-
-            const dropdown = document.getElementById('level-dropdown'); dropdown.innerHTML = '';
-            for (let i = 1; i <= 80; i++) {
-                let opt = document.createElement('option'); opt.value = i;
-                if (activeLevelList.includes(i)) opt.innerText = `Level ${i}`;
-                else { opt.innerText = `Level ${i} 🔒`; opt.disabled = true; }
-                dropdown.appendChild(opt);
-            }
-            if (activeLevelList.length > 0 && !activeLevelList.includes(currentLevel)) currentLevel = activeLevelList[0];
-            dropdown.value = currentLevel;
-        }
-
-        async function fetchRandomLevelData(levelNum) {
-            try {
-                let res = await fetch(`${API_URL}/admin/levels/list/${levelNum}`);
-                if(res.ok) {
-                    let list = await res.json();
-                    if (list && list.length > 0) return list[Math.floor(Math.random() * list.length)]; 
-                }
-            } catch (e) { }
-            return null;
-        }
-
-        // ======================= AUDIO =======================
-        let audioCtx = null; let isMuted = false;
-        function initAudio() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (audioCtx.state === 'suspended') audioCtx.resume(); }
-        document.body.addEventListener('pointerdown', initAudio, {once: true});
-        function toggleMute() { initAudio(); isMuted = !isMuted; let muteEl = document.getElementById('mute-icon'); if (muteEl.tagName === 'IMG') muteEl.src = isMuted ? 'assets/icons/volume-x.svg' : 'assets/icons/volume-max.svg'; else muteEl.innerText = isMuted ? '🔇' : '🔊'; }
-        function playSfx(type) {
-            if (isMuted || !audioCtx) return;
-            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.connect(gain); gain.connect(audioCtx.destination); const now = audioCtx.currentTime;
-            if (type === 'jump') { osc.type = 'sine'; osc.frequency.setValueAtTime(400, now); osc.frequency.exponentialRampToValueAtTime(800, now + 0.1); gain.gain.setValueAtTime(0.2, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1); osc.start(now); osc.stop(now + 0.1); } 
-            else if (type === 'drop') { osc.type = 'sine'; osc.frequency.setValueAtTime(800, now); osc.frequency.exponentialRampToValueAtTime(400, now + 0.1); gain.gain.setValueAtTime(0.2, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1); osc.start(now); osc.stop(now + 0.1); } 
-            else if (type === 'error') { osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, now); gain.gain.setValueAtTime(0.1, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2); osc.start(now); osc.stop(now + 0.2); } 
-            else if (type === 'win') { const notes = [261.63, 329.63, 392.00, 523.25]; notes.forEach((freq, i) => { const oscW = audioCtx.createOscillator(); const gainW = audioCtx.createGain(); oscW.connect(gainW); gainW.connect(audioCtx.destination); oscW.type = 'sine'; oscW.frequency.setValueAtTime(freq, now + i * 0.1); gainW.gain.setValueAtTime(0.2, now + i * 0.1); gainW.gain.exponentialRampToValueAtTime(0.01, now + i * 0.1 + 0.2); oscW.start(now + i * 0.1); oscW.stop(now + i * 0.1 + 0.2); }); }
-        }
-
-        // ======================= GAME START =======================
-        window.onload = async function() { 
-            loadGameConfig(); await fetchActiveLevels();
-            if (activeLevelList.length === 0) document.getElementById('board').innerHTML = '<div style="color:#ff5252; font-size: 20px; text-align: center; margin-top:50px;">CHƯA CÓ LEVEL NÀO ĐƯỢC TẠO!<br><span style="font-size:14px; color:#aaa;">Hãy vào Admin CMS để tạo màn chơi đầu tiên.</span></div>';
-            else initLevel(currentLevel);
-        };
-
-        function onLevelSelectChange(select) { initLevel(parseInt(select.value)); }
-
-        async function initLevel(level) {
-            currentLevel = level; document.getElementById('level-dropdown').value = currentLevel;
-            hiddenBalls = []; document.getElementById('flying-ball-container').innerHTML = '';
-            playerMoves = 0; document.getElementById('player-moves').innerText = playerMoves;
-            document.getElementById('min-moves').innerText = 'Load...';
-            document.getElementById('board').innerHTML = '<div style="color:#ffd700; font-size: 20px; margin-top:50px;">Đang tải màn chơi...</div>';
-            isGameWon = false;
-
-            let serverData = await fetchRandomLevelData(currentLevel);
-
-            if (serverData) {
-                tubes = JSON.parse(JSON.stringify(serverData.matrix)); initialTubesState = JSON.parse(JSON.stringify(tubes));
-                undoStack = []; selectedTubeIndex = null; renderBoard();
-                document.getElementById('min-moves').innerText = (serverData.metrics && serverData.metrics.minMoves) ? serverData.metrics.minMoves : '...';
-            } else {
-                document.getElementById('board').innerHTML = '<div style="color:#ff5252; font-size: 22px; text-align: center; margin-top:50px;">MÀN CHƠI CHƯA HOÀN THIỆN</div>';
-                document.getElementById('min-moves').innerText = '-';
-            }
-        }
-
-        function restartLevel() { playSfx('drop'); initLevel(currentLevel); }
-        
-        // CẬP NHẬT GIAO DIỆN WIN
-        function showWinModal() {
-            let minVal = document.getElementById('min-moves').innerText;
-            let msg = `Chúc mừng bạn đã giải thành công Level ${currentLevel}!<br><br>
-                       <span style="font-size: 22px;">Thành tích: <span style="color:#ffd700; font-weight: bold;">${playerMoves}</span> / ${minVal}</span>`;
-            document.getElementById('win-message').innerHTML = msg; 
-            document.getElementById('win-modal').style.display = 'flex';
-        }
-
-        function restartLevelAndCloseWin() { document.getElementById('win-modal').style.display = 'none'; restartLevel(); }
-        
-        function closeWinModalAndNext() {
-            playSfx('drop'); document.getElementById('win-modal').style.display = 'none';
-            let currentIndexInList = activeLevelList.indexOf(currentLevel);
-            if (currentIndexInList !== -1 && currentIndexInList < activeLevelList.length - 1) {
-                currentLevel = activeLevelList[currentIndexInList + 1]; initLevel(currentLevel);
-            } else showCustomModal("CHÚC MỪNG", "Bạn đã phá đảo tất cả các Level hiện có!", false, "ĐÓNG", "", null, null);
-        }
-
-        // ======================= THUẬT TOÁN CHECK SOLVABILITY =======================
-        function isWonState(state) { return state.every(t => t.length === 0 || (t.length === TUBE_CAPACITY && new Set(t).size === 1)); }
-        function getCanonicalSignature(state) { let copies = state.map(t => [...t]); copies.sort((a, b) => a.join(',').localeCompare(b.join(','))); return JSON.stringify(copies); }
-        
-        async function checkSolvability(tubesState) {
-            if (isWonState(tubesState)) return true;
-            let queue = [JSON.parse(JSON.stringify(tubesState))]; 
-            let visited = new Set(); visited.add(getCanonicalSignature(tubesState));
-            let iterations = 0; const MAX_ITERATIONS = 50000; // Giới hạn an toàn để không đơ game
-
-            while (queue.length > 0) {
-                if (iterations % 1000 === 0) await new Promise(resolve => setTimeout(resolve, 0));
-                iterations++; let current = queue.shift();
-                if (isWonState(current)) return true;
-                for (let i = 0; i < current.length; i++) {
-                    if (current[i].length === 0) continue;
-                    let topColor = current[i][current[i].length - 1];
-                    for (let j = 0; j < current.length; j++) {
-                        if (i === j) continue;
-                        let target = current[j]; let space = TUBE_CAPACITY - target.length;
-                        if (space > 0 && (target.length === 0 || target[target.length - 1] === topColor)) {
-                            let nextState = JSON.parse(JSON.stringify(current));
-                            while (nextState[i].length > 0 && nextState[i][nextState[i].length - 1] === topColor && nextState[j].length < TUBE_CAPACITY) nextState[j].push(nextState[i].pop());
-                            let sig = getCanonicalSignature(nextState);
-                            if (!visited.has(sig)) { visited.add(sig); queue.push(nextState); }
-                        }
-                    }
-                }
-                if (iterations > MAX_ITERATIONS) return true; // Quá rộng, mặc định cho qua
-            }
-            return false; // Hết đường đi
-        }
-
-        function checkWin() {
-            if (isGameWon) return false;
-            let win = tubes.every(tube => tube.length === 0 || (tube.length === TUBE_CAPACITY && new Set(tube).size === 1));
-            if (win) { isGameWon = true; playSfx('win'); setTimeout(() => { showWinModal(); }, 400); return true; }
-            return false;
-        }
-
-        function checkGameOver() {
-            if (isGameWon) return; let canMove = false;
-            for (let i = 0; i < tubes.length; i++) {
-                if (tubes[i].length === 0) continue; 
-                let topColor = tubes[i][tubes[i].length - 1]; let consecutiveCount = 0;
-                for(let k = tubes[i].length - 1; k >= 0; k--) { if(tubes[i][k] === topColor) consecutiveCount++; else break; }
-                for (let j = 0; j < tubes.length; j++) {
-                    if (i === j) continue; 
-                    let targetSpace = TUBE_CAPACITY - tubes[j].length;
-                    if (targetSpace > 0) {
-                        if (tubes[j].length > 0 && tubes[j][tubes[j].length - 1] === topColor) { canMove = true; break; } 
-                        else if (tubes[j].length === 0) { if (tubes[i].length > consecutiveCount) { canMove = true; break; } }
-                    }
-                }
-                if (canMove) break;
-            }
-            if (!canMove) { playSfx('error'); showCustomModal("ĐƯỜNG CỤT!", "Nước đi này dẫn đến thế cờ không thể giải!<br>Bạn muốn quay lại hay chơi lại từ đầu?", true, "QUAY LẠI", "CHƠI LẠI", () => { undoMove(); }, () => { restartLevel(); }); }
-        }
-
-        // ======================= RENDER BOARD & PLAY LOGIC =======================
-        function renderBoard() {
-            const board = document.getElementById('board'); board.innerHTML = '';
-            const numTubes = tubes.length; const topCount = Math.ceil(numTubes / 2);
-            const rows = [ tubes.slice(0, topCount), tubes.slice(topCount) ];
+<!-- TAB 1: QUẢN LÝ MÀN CHƠI -->
+<div id="tab-levels" class="tab-content active">
+    <div class="main-content">
+        <div class="editor-area">
+            <div id="empty-state" class="empty-state">
+                <button class="btn-create-board" onclick="generateAndSolveBoard()">Creat new board</button>
+            </div>
             
-            let globalIndex = 0;
-            rows.forEach((rowTubes) => {
-                if (rowTubes.length === 0) return;
-                const rowDiv = document.createElement('div'); rowDiv.className = 'row';
-                rowTubes.forEach((tube) => {
-                    let currentIndex = globalIndex++; const tubeDiv = document.createElement('div');
-                    let isComplete = (tube.length === TUBE_CAPACITY && new Set(tube).size === 1);
-                    let isWaitingForBall = hiddenBalls.some(h => h.tube === currentIndex);
-                    
-                    tubeDiv.className = `tube ${selectedTubeIndex === currentIndex ? 'selected' : ''} ${isComplete && !isWaitingForBall ? 'completed-magic' : ''}`;
-                    tubeDiv.setAttribute('data-index', currentIndex);
-                    tubeDiv.onclick = () => handleTubeClick(currentIndex);
-                    
-                    tube.forEach((ballColor, ballIndex) => {
-                        const ballDiv = document.createElement('div'); ballDiv.className = 'ball'; ballDiv.style.background = ballColor;
-                        let isHidden = hiddenBalls.some(h => h.tube === currentIndex && h.index === ballIndex);
-                        if (isHidden) ballDiv.style.opacity = '0';
-                        if (selectedTubeIndex === currentIndex && ballIndex === tube.length - 1 && !isHidden) ballDiv.classList.add('jump');
-                        tubeDiv.appendChild(ballDiv);
-                    });
-                    rowDiv.appendChild(tubeDiv);
-                });
-                board.appendChild(rowDiv);
+            <div id="board-state" class="board-state">
+                <div class="game-info">
+                    <span>MIN MOVES: <span id="info-min-moves" style="color: #a3ffcc;">Calc...</span></span>
+                    <span>TEST MOVES: <span id="info-play-moves" style="color: #ffd700;">0</span></span>
+                </div>
+                <div class="board" id="admin-board"></div>
+                <div class="action-buttons">
+                    <button class="btn-regenerate" onclick="generateAndSolveBoard()">Đổi màn chơi khác</button>
+                    <button id="btn-save-level" class="btn-save-slot" onclick="saveCurrentSlot()">Cho hiển thị ngẫu nhiên</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <span>Saved board:</span>
+                <span style="flex:1; text-align: left; padding-left: 25px;">Trạng thái</span>
+            </div>
+            <div id="slots-container"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TAB 2: BIÊN TẬP GIAO DIỆN & ASSETS -->
+<div id="tab-assets" class="tab-content">
+    <div class="assets-container">
+        <div class="asset-card">
+            <h3>🖼️ Thương hiệu & Logo</h3>
+            <div class="form-group">
+                <label>Tiêu đề Logo hiển thị trong Game:</label>
+                <input type="text" id="asset-logo-text" value="Ball Sort Magic">
+            </div>
+            <div class="form-group">
+                <label>Đường dẫn hình ảnh Logo (URL tùy chọn):</label>
+                <input type="text" id="asset-logo-img" placeholder="https://example.com/logo.png">
+            </div>
+        </div>
+
+        <div class="asset-card">
+            <h3>🎨 Bảng màu Quả bóng (Ball Color Skins)</h3>
+            <p style="font-size: 13px; color: #aaa; margin-top: 0;">Tùy chỉnh sắc độ các quả bóng xuất hiện trong game:</p>
+            <div class="color-grid" id="ball-colors-grid"></div>
+        </div>
+
+        <div class="asset-card">
+            <h3>🧪 Kiểu dáng Ống chứa (Tube Styling)</h3>
+            <div class="form-group">
+                <label>Màu viền ống nghiệm (Border Color):</label>
+                <input type="text" id="asset-tube-border" value="rgba(255, 255, 255, 0.2)">
+            </div>
+            <div class="form-group">
+                <label>Màu nền trong suốt của ống (Background):</label>
+                <input type="text" id="asset-tube-bg" value="rgba(255, 255, 255, 0.05)">
+            </div>
+        </div>
+
+        <div class="asset-card">
+            <h3>🌌 Hình nền & Hoa văn (Background Patterns)</h3>
+            <div class="form-group">
+                <label>Màu nền chủ đạo (Background Color):</label>
+                <input type="text" id="asset-bg-color" value="#1f140e">
+            </div>
+        </div>
+
+        <button class="btn-save-assets" onclick="saveAssetsConfig()">💾 Lưu Cấu Hình Giao Diện</button>
+    </div>
+</div>
+
+<div id="toast">✅ Saved successfully!</div>
+<div id="flying-ball-container" style="pointer-events: none;"></div>
+
+<script>
+    const API_URL = 'https://ball-sort-backend.onrender.com/api';
+    
+    // Default Colors
+    let defaultColors = [
+        '#ff5252', '#448aff', '#76ff03', '#ffd740', 
+        'e040fb', '#ffab40', '#90a4ae', '#ff80df', 
+        '#cfd8dc', '#81c784', '#546e7a', '#e91e63'
+    ];
+    
+    let currentAssetColors = [...defaultColors];
+
+    function switchTab(tabName, btn) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+        
+        if (tabName === 'levels') {
+            document.getElementById('tab-levels').classList.add('active');
+            document.getElementById('level-top-controls').style.display = 'flex';
+            document.getElementById('level-select-container').style.display = 'block';
+        } else {
+            document.getElementById('tab-assets').classList.add('active');
+            document.getElementById('level-top-controls').style.display = 'none';
+            document.getElementById('level-select-container').style.display = 'none';
+            renderColorPickers();
+        }
+        btn.classList.add('active');
+    }
+
+    function renderColorPickers() {
+        const grid = document.getElementById('ball-colors-grid');
+        grid.innerHTML = '';
+        currentAssetColors.forEach((color, idx) => {
+            grid.innerHTML += `
+                <div class="color-item">
+                    <input type="color" value="${color.startsWith('#') ? color : '#ff5252'}" onchange="updateAssetColor(${idx}, this.value)">
+                    <span style="font-size: 13px;">Bóng ${idx + 1}</span>
+                </div>
+            `;
+        });
+    }
+
+    function updateAssetColor(index, val) {
+        currentAssetColors[index] = val;
+    }
+
+    window.onload = () => {
+        const select = document.getElementById('main-level-select');
+        for (let i = 1; i <= 80; i++) { select.innerHTML += `<option value="${i}">Level ${i}</option>`; }
+        loadConfig(); 
+        loadAssetsConfig();
+        onLevelChange();
+    };
+
+    async function loadConfig() {
+        try {
+            let res = await fetch(`${API_URL}/game/config`);
+            let data = await res.json();
+            document.getElementById('game-title').value = data.gameTitle || '';
+        } catch (e) {}
+    }
+    
+    async function loadAssetsConfig() {
+        try {
+            let res = await fetch(`${API_URL}/game/config`);
+            let data = await res.json();
+            if(data.gameTitle) document.getElementById('asset-logo-text').value = data.gameTitle;
+            if(data.customColors && Array.isArray(data.customColors)) {
+                currentAssetColors = data.customColors;
+            }
+        } catch (e) {}
+    }
+
+    async function saveConfig() {
+        let title = document.getElementById('game-title').value;
+        try {
+            await fetch(`${API_URL}/admin/config`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ gameTitle: title, showTitle: true }) });
+            showToast("Đã lưu Tên trò chơi!");
+        } catch (e) { alert("Lỗi kết nối Server"); }
+    }
+
+    async function saveAssetsConfig() {
+        let title = document.getElementById('asset-logo-text').value;
+        try {
+            await fetch(`${API_URL}/admin/config`, { 
+                method: 'POST', 
+                headers: { 'Content-Type': 'application/json' }, 
+                body: JSON.stringify({ 
+                    gameTitle: title, 
+                    customColors: currentAssetColors,
+                    tubeBorder: document.getElementById('asset-tube-border').value,
+                    tubeBg: document.getElementById('asset-tube-bg').value,
+                    bgColor: document.getElementById('asset-bg-color').value
+                }) 
             });
+            showToast("Đã lưu Cấu hình Giao diện thành công!");
+        } catch (e) { alert("Lỗi kết nối Server"); }
+    }
+
+    // Các hàm xử lý level cũ giữ nguyên bên dưới...
+    let currentLevelNum = 1; let currentSlotIndex = 1; let slotsData = {}; 
+    let currentMatrix = []; let initialMatrix = []; let computedMinMoves = null;
+    let selectedTube = null; let playtestMoves = 0; let hiddenBalls = [];
+
+    let audioCtx = null;
+    function initAudio() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (audioCtx.state === 'suspended') audioCtx.resume(); }
+    document.body.addEventListener('pointerdown', initAudio, {once: true});
+    function playSfx(type) {
+        if (!audioCtx) return;
+        const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.connect(gain); gain.connect(audioCtx.destination); const now = audioCtx.currentTime;
+        if (type === 'jump') { osc.type = 'sine'; osc.frequency.setValueAtTime(400, now); osc.frequency.exponentialRampToValueAtTime(800, now + 0.1); gain.gain.setValueAtTime(0.2, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1); osc.start(now); osc.stop(now + 0.1); } 
+        else if (type === 'drop') { osc.type = 'sine'; osc.frequency.setValueAtTime(800, now); osc.frequency.exponentialRampToValueAtTime(400, now + 0.1); gain.gain.setValueAtTime(0.2, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1); osc.start(now); osc.stop(now + 0.1); } 
+        else if (type === 'error') { osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, now); gain.gain.setValueAtTime(0.1, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2); osc.start(now); osc.stop(now + 0.2); } 
+    }
+
+    async function onLevelChange() {
+        currentLevelNum = parseInt(document.getElementById('main-level-select').value);
+        slotsData = { 1: null, 2: null, 3: null, 4: null, 5: null, 6: null };
+        try {
+            let res = await fetch(`${API_URL}/admin/levels/list/${currentLevelNum}`);
+            let data = await res.json();
+            data.forEach(lvl => { if(lvl.slot >= 1 && lvl.slot <= 6) slotsData[lvl.slot] = lvl; });
+        } catch (e) {}
+        selectSlot(1); 
+    }
+
+    function renderSidebar() {
+        const container = document.getElementById('slots-container');
+        container.innerHTML = '';
+        for (let i = 1; i <= 6; i++) {
+            let isCreated = slotsData[i] !== null;
+            let statusText = isCreated ? "Hiển thị ngẫu nhiên" : "Chưa tạo";
+            let statusClass = isCreated ? "status-saved" : "status-empty";
+            let isActiveClass = (i === currentSlotIndex) ? "active" : "";
+            
+            container.innerHTML += `
+                <div class="slot-item ${isActiveClass}" onclick="selectSlot(${i})">
+                    <div class="slot-btn">Save 0${i}</div>
+                    <div class="slot-status ${statusClass}">${statusText}</div>
+                </div>
+            `;
+        }
+    }
+
+    function selectSlot(index) {
+        currentSlotIndex = index; renderSidebar();
+        let data = slotsData[index];
+        if (data === null) {
+            document.getElementById('empty-state').style.display = 'flex';
+            document.getElementById('board-state').style.display = 'none';
+        } else {
+            document.getElementById('empty-state').style.display = 'none';
+            document.getElementById('board-state').style.display = 'flex';
+            initialMatrix = JSON.parse(JSON.stringify(data.matrix)); currentMatrix = JSON.parse(JSON.stringify(data.matrix));
+            computedMinMoves = data.metrics ? data.metrics.minMoves : null;
+            resetBoardState();
+        }
+    }
+
+    function generateAndSolveBoard() {
+        document.getElementById('empty-state').style.display = 'none';
+        document.getElementById('board-state').style.display = 'flex';
+        
+        let numTubes, shuffleSteps;
+        if (currentLevelNum <= 15) { numTubes = (currentLevelNum <= 7) ? 7 : 8; shuffleSteps = 150 + currentLevelNum * 20; }
+        else if (currentLevelNum <= 35) { numTubes = (currentLevelNum <= 25) ? 9 : 10; shuffleSteps = 500 + (currentLevelNum - 15) * 35; }
+        else if (currentLevelNum <= 60) { numTubes = (currentLevelNum <= 48) ? 11 : 12; shuffleSteps = 1200 + (currentLevelNum - 35) * 50; }
+        else { numTubes = (currentLevelNum <= 70) ? 13 : 14; shuffleSteps = 2200 + (currentLevelNum - 60) * 80; }
+        
+        let numColors = numTubes - 2; let tubes = [];
+        const TUBE_CAPACITY = 6;
+        for (let i = 0; i < numTubes; i++) {
+            let tube = [];
+            if (i < numColors) { for (let j = 0; j < TUBE_CAPACITY; j++) tube.push(currentAssetColors[i % currentAssetColors.length]); }
+            tubes.push(tube);
+        }
+        
+        let prevSrc = -1, prevDest = -1;
+        for (let step = 0; step < shuffleSteps; step++) {
+            let validMoves = [];
+            for (let i = 0; i < numTubes; i++) {
+                if (tubes[i].length > 0) {
+                    for (let j = 0; j < numTubes; j++) {
+                        if (i !== j && tubes[j].length < TUBE_CAPACITY && !(i === prevDest && j === prevSrc)) validMoves.push({src: i, dest: j});
+                    }
+                }
+            }
+            if (validMoves.length > 0) {
+                let move = validMoves[Math.floor(Math.random() * validMoves.length)];
+                tubes[move.dest].push(tubes[move.src].pop()); prevSrc = move.src; prevDest = move.dest;
+            } else break;
         }
 
-        function handleTubeClick(index) {
-            initAudio(); 
-            if (selectedTubeIndex === null) {
-                if (tubes[index].length > 0) { selectedTubeIndex = index; playSfx('jump'); renderBoard(); }
-            } else {
-                if (selectedTubeIndex === index) { selectedTubeIndex = null; playSfx('drop'); renderBoard(); } 
-                else {
-                    let sourceTube = tubes[selectedTubeIndex]; let targetTube = tubes[index];
-                    let topBall = sourceTube[sourceTube.length - 1];
+        currentMatrix = JSON.parse(JSON.stringify(tubes)); initialMatrix = JSON.parse(JSON.stringify(tubes)); 
+        computedMinMoves = null; resetBoardState();
+    }
 
-                    if (targetTube.length < TUBE_CAPACITY && (targetTube.length === 0 || targetTube[targetTube.length - 1] === topBall)) {
-                        const sourceRect = document.querySelector(`.tube[data-index='${selectedTubeIndex}']`).lastElementChild.getBoundingClientRect();
-                        
-                        undoStack.push(JSON.parse(JSON.stringify(tubes)));
-                        selectedTubeIndex = null; 
-                        let movingBall = sourceTube.pop(); targetTube.push(movingBall);
-                        playerMoves++; document.getElementById('player-moves').innerText = playerMoves;
-                        
-                        let hiddenItem = { tube: index, index: targetTube.length - 1 }; hiddenBalls.push(hiddenItem); renderBoard(); 
-                        
-                        const targetRect = document.querySelector(`.tube[data-index='${index}']`).lastElementChild.getBoundingClientRect(); 
-                        
-                        const flyingBall = document.createElement('div'); flyingBall.className = 'ball';
-                        flyingBall.style.position = 'fixed'; flyingBall.style.margin = '0'; flyingBall.style.background = movingBall; flyingBall.style.zIndex = '9999';
-                        const jumpHeight = Math.min(sourceRect.top, targetRect.top) - 40;
-                        flyingBall.style.left = '0px'; flyingBall.style.top = '0px';
-                        document.getElementById('flying-ball-container').appendChild(flyingBall);
+    function resetBoardState() {
+        playtestMoves = 0; document.getElementById('info-play-moves').innerText = playtestMoves;
+        selectedTube = null; hiddenBalls = []; renderAdminBoard();
+        document.getElementById('info-min-moves').innerText = computedMinMoves !== null ? computedMinMoves : "Calc...";
+        document.getElementById('info-min-moves').style.color = computedMinMoves !== null ? "#a3ffcc" : "orange";
+        document.getElementById('btn-save-level').disabled = true;
 
-                        const anim = flyingBall.animate([
-                            { transform: `translate(${sourceRect.left}px, ${sourceRect.top}px)` },
-                            { transform: `translate(${sourceRect.left}px, ${jumpHeight}px)`, easing: 'ease-out', offset: 0.25 },
-                            { transform: `translate(${targetRect.left}px, ${jumpHeight}px)`, easing: 'ease-in-out', offset: 0.65 },
-                            { transform: `translate(${targetRect.left}px, ${targetRect.top}px)`, easing: 'ease-in', offset: 0.85 },
-                            { transform: `translate(${targetRect.left}px, ${targetRect.top - 12}px)`, easing: 'ease-out', offset: 0.92 },
-                            { transform: `translate(${targetRect.left}px, ${targetRect.top}px)`, easing: 'ease-in', offset: 1.0 }
-                        ], { duration: 350, fill: 'forwards' });
-                        
-                        // SAU KHI BÓNG RƠI XUỐNG XONG THÌ KIỂM TRA ĐƯỜNG CỤT & CHIẾN THẮNG
-                        anim.onfinish = () => {
-                            flyingBall.remove(); playSfx('drop'); hiddenBalls = hiddenBalls.filter(h => h !== hiddenItem); renderBoard(); 
-                            
-                            if (!checkWin()) {
-                                setTimeout(() => {
-                                    checkSolvability(tubes).then(isSolvable => {
-                                        if (!isSolvable) {
-                                            playSfx('error');
-                                            showCustomModal("ĐƯỜNG CỤT!", "Nước đi này dẫn đến thế cờ không thể giải!<br>Bạn muốn quay lại hay chơi lại từ đầu?", true, "QUAY LẠI", "CHƠI LẠI", () => { undoMove(); }, () => { restartLevel(); });
-                                        } else {
-                                            checkGameOver(); // Double check
-                                        }
-                                    });
-                                }, 50); // Delay nhẹ để UI kịp render bóng
-                            }
-                        };
-                    } else { playSfx('error'); if (targetTube.length > 0) { selectedTubeIndex = index; renderBoard(); } }
+        if (computedMinMoves === null) {
+            setTimeout(() => {
+                calculateMinMoves(initialMatrix).then(minMoves => {
+                    computedMinMoves = minMoves;
+                    if(minMoves === null) {
+                        document.getElementById('info-min-moves').innerText = "Complex"; document.getElementById('info-min-moves').style.color = "red";
+                    } else {
+                        document.getElementById('info-min-moves').innerText = minMoves; document.getElementById('info-min-moves').style.color = "#a3ffcc"; document.getElementById('btn-save-level').disabled = false;
+                    }
+                });
+            }, 50);
+        } else { document.getElementById('btn-save-level').disabled = false; }
+    }
+
+    function getCanonicalSignature(state) {
+        let copies = state.map(t => [...t]); copies.sort((a, b) => a.join(',').localeCompare(b.join(','))); return JSON.stringify(copies);
+    }
+    
+    async function calculateMinMoves(stateMatrix) {
+        let queue = [{ state: JSON.parse(JSON.stringify(stateMatrix)), dist: 0 }];
+        let visited = new Set(); visited.add(getCanonicalSignature(stateMatrix));
+        let iterations = 0;
+        const TUBE_CAPACITY = 6;
+
+        while (queue.length > 0) {
+            if (iterations % 1000 === 0) { await new Promise(resolve => setTimeout(resolve, 0)); }
+            if (iterations++ > 150000) return null; 
+            
+            let { state, dist } = queue.shift();
+            let isWon = state.every(t => t.length === 0 || (t.length === TUBE_CAPACITY && new Set(t).size === 1));
+            if (isWon) return dist;
+
+            for (let i = 0; i < state.length; i++) {
+                if (state[i].length === 0) continue;
+                let topColor = state[i][state[i].length - 1];
+                for (let j = 0; j < state.length; j++) {
+                    if (i === j) continue;
+                    let target = state[j];
+                    if (TUBE_CAPACITY - target.length > 0 && (target.length === 0 || target[target.length - 1] === topColor)) {
+                        let nextState = JSON.parse(JSON.stringify(state));
+                        while (nextState[i].length > 0 && nextState[i][nextState[i].length - 1] === topColor && nextState[j].length < TUBE_CAPACITY) { nextState[j].push(nextState[i].pop()); }
+                        let sig = getCanonicalSignature(nextState);
+                        if (!visited.has(sig)) { visited.add(sig); queue.push({ state: nextState, dist: dist + 1 }); }
+                    }
                 }
             }
         }
+        return null;
+    }
 
-        function undoMove() {
-            playSfx('drop'); hiddenBalls = []; document.getElementById('flying-ball-container').innerHTML = ''; 
-            if (undoStack.length > 0) { tubes = undoStack.pop(); selectedTubeIndex = null; playerMoves = Math.max(0, playerMoves - 1); document.getElementById('player-moves').innerText = playerMoves; renderBoard(); } 
+    function renderAdminBoard() {
+        const board = document.getElementById('admin-board'); board.innerHTML = '';
+        const numTubes = currentMatrix.length; const topCount = Math.ceil(numTubes / 2);
+        const rows = [ currentMatrix.slice(0, topCount), currentMatrix.slice(topCount) ];
+        
+        let globalIndex = 0;
+        rows.forEach((rowTubes) => {
+            if (rowTubes.length === 0) return;
+            const rowDiv = document.createElement('div'); rowDiv.className = 'row';
+            rowTubes.forEach((tube) => {
+                let currentIndex = globalIndex++; const tubeDiv = document.createElement('div');
+                tubeDiv.className = `tube ${selectedTube === currentIndex ? 'selected' : ''}`;
+                tubeDiv.setAttribute('data-index', currentIndex);
+                tubeDiv.onclick = () => handleTubeClick(currentIndex);
+                
+                tube.forEach((ballColor, ballIndex) => {
+                    const ballDiv = document.createElement('div'); ballDiv.className = 'ball'; 
+                    // Nếu color là hex thì tạo gradient giả lập
+                    ballDiv.style.background = ballColor.startsWith('#') ? `radial-gradient(circle at 35% 35%, ${ballColor} 0%, #000 80%)` : ballColor;
+                    let isHidden = hiddenBalls.some(h => h.tube === currentIndex && h.index === ballIndex);
+                    if (isHidden) ballDiv.style.opacity = '0';
+                    if (selectedTube === currentIndex && ballIndex === tube.length - 1 && !isHidden) ballDiv.classList.add('jump');
+                    tubeDiv.appendChild(ballDiv);
+                });
+                rowDiv.appendChild(tubeDiv);
+            });
+            board.appendChild(rowDiv);
+        });
+    }
+
+    function animateBallRealistic(startRect, endRect, ballColor, callback) {
+        const flyingBall = document.createElement('div'); flyingBall.className = 'ball';
+        flyingBall.style.position = 'fixed'; flyingBall.style.margin = '0'; 
+        flyingBall.style.background = ballColor.startsWith('#') ? `radial-gradient(circle at 35% 35%, ${ballColor} 0%, #000 80%)` : ballColor;
+        flyingBall.style.zIndex = '9999';
+        
+        const jumpHeight = Math.min(startRect.top, endRect.top) - 40;
+        flyingBall.style.left = '0px'; flyingBall.style.top = '0px';
+        document.getElementById('flying-ball-container').appendChild(flyingBall);
+
+        const anim = flyingBall.animate([
+            { transform: `translate(${startRect.left}px, ${startRect.top}px)` },
+            { transform: `translate(${startRect.left}px, ${jumpHeight}px)`, easing: 'ease-out', offset: 0.25 },
+            { transform: `translate(${endRect.left}px, ${jumpHeight}px)`, easing: 'ease-in-out', offset: 0.65 },
+            { transform: `translate(${endRect.left}px, ${endRect.top}px)`, easing: 'ease-in', offset: 0.85 },
+            { transform: `translate(${endRect.left}px, ${endRect.top - 12}px)`, easing: 'ease-out', offset: 0.92 },
+            { transform: `translate(${endRect.left}px, ${endRect.top}px)`, easing: 'ease-in', offset: 1.0 }
+        ], { duration: 350, fill: 'forwards' });
+        
+        anim.onfinish = () => { flyingBall.remove(); callback(); };
+    }
+
+    function handleTubeClick(index) {
+        initAudio();
+        const TUBE_CAPACITY = 6;
+        if (selectedTube === null) {
+            if (currentMatrix[index].length > 0) { selectedTube = index; playSfx('jump'); renderAdminBoard(); }
+        } else {
+            if (selectedTube === index) { selectedTube = null; playSfx('drop'); renderAdminBoard(); } 
+            else {
+                let sourceTube = currentMatrix[selectedTube]; let targetTube = currentMatrix[index];
+                let topBall = sourceTube[sourceTube.length - 1];
+
+                if (targetTube.length < TUBE_CAPACITY && (targetTube.length === 0 || targetTube[targetTube.length - 1] === topBall)) {
+                    const sourceRect = document.querySelector(`.tube[data-index='${selectedTube}']`).lastElementChild.getBoundingClientRect();
+                    
+                    selectedTube = null; 
+                    let movingBall = sourceTube.pop(); targetTube.push(movingBall);
+                    playtestMoves++; document.getElementById('info-play-moves').innerText = playtestMoves;
+                    
+                    let hiddenItem = { tube: index, index: targetTube.length - 1 };
+                    hiddenBalls.push(hiddenItem);
+                    
+                    renderAdminBoard(); 
+                    
+                    const targetRect = document.querySelector(`.tube[data-index='${index}']`).lastElementChild.getBoundingClientRect(); 
+                    
+                    animateBallRealistic(sourceRect, targetRect, movingBall, () => {
+                        playSfx('drop');
+                        hiddenBalls = hiddenBalls.filter(h => h !== hiddenItem);
+                        renderAdminBoard(); 
+                    });
+                } else { playSfx('error'); selectedTube = index; renderAdminBoard(); }
+            }
         }
+    }
 
-        function showCustomModal(title, msg, showCancel, okTxt, cancelTxt, onOk, onCancel) {
-            playSfx('drop'); document.getElementById('custom-modal-title').innerText = title; document.getElementById('custom-modal-msg').innerHTML = msg;
-            const btnOk = document.getElementById('custom-modal-btn-ok'); const btnCancel = document.getElementById('custom-modal-btn-cancel');
-            btnOk.innerText = okTxt; if (showCancel) { btnCancel.style.display = 'inline-flex'; btnCancel.innerText = cancelTxt; } else btnCancel.style.display = 'none';
-            customModalCallback = onOk; customModalCancelCallback = onCancel; document.getElementById('custom-modal').style.display = 'flex';
-        }
-        function handleCustomOk() { playSfx('drop'); document.getElementById('custom-modal').style.display = 'none'; if (customModalCallback) customModalCallback(); }
-        function handleCustomCancel() { playSfx('drop'); document.getElementById('custom-modal').style.display = 'none'; if (customModalCancelCallback) customModalCancelCallback(); }
+    function showToast(msg) { let toast = document.getElementById('toast'); toast.innerText = msg; toast.style.display = 'block'; setTimeout(() => toast.style.display = 'none', 2500); }
 
-    </script>
+    async function saveCurrentSlot() {
+        document.getElementById('btn-save-level').disabled = true;
+        try {
+            await fetch(`${API_URL}/admin/levels`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ matrix: initialMatrix, levelNum: currentLevelNum, slotNum: currentSlotIndex, minMoves: computedMinMoves })
+            });
+            slotsData[currentSlotIndex] = { matrix: initialMatrix, metrics: { minMoves: computedMinMoves } };
+            renderSidebar();
+            showToast(`✅ Đã lưu thành công vào Save 0${currentSlotIndex}!`);
+            document.getElementById('btn-save-level').disabled = false;
+        } catch (error) { alert("❌ Lỗi kết nối Server."); document.getElementById('btn-save-level').disabled = false; }
+    }
+</script>
+
 </body>
 </html>

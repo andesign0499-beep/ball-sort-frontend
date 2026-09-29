@@ -1,189 +1,390 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">Ball Sort Magic</title>
-    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
+    <title>Ball Magic - Sort Puzzle</title>
+    <script src="https://connect.facebook.net/en_US/fbinstant.6.3.js"></script>
     <style>
-        body { font-family: 'Lilita One', cursive; background-color: #1f140e; color: #fff; margin: 0; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: space-between; overflow: hidden; user-select: none; }
-        
-        .header { display: flex; justify-content: space-between; width: 100%; max-width: 500px; padding: 15px 20px; box-sizing: border-box; align-items: center; }
-        .logo { font-size: 24px; color: #ffd700; text-shadow: 0 2px 4px #000; }
-        .info-box { font-size: 18px; color: #a3ffcc; }
-        
-        .level-container select { font-family: 'Lilita One', cursive; background: #ffd700; color: #000; border: 2px solid #fff; padding: 6px 12px; border-radius: 6px; font-size: 16px; cursor: pointer; }
+        @import url('https://fonts.googleapis.com/css2?family=Lilita+One&display=swap');
 
-        .board { display: flex; flex-direction: column; align-items: center; gap: 20px; flex: 1; justify-content: center; width: 100%; }
-        .row { display: flex; justify-content: center; gap: 15px; }
-        
-        .tube { width: 45px; height: 260px; background: rgba(255, 255, 255, 0.05); border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 2px 2px 22px 22px; display: flex; flex-direction: column-reverse; align-items: center; padding-bottom: 6px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-        .tube.selected { border-color: #ffd700; box-shadow: 0 0 15px #ffd700; }
-        
-        .ball { width: 36px; height: 36px; border-radius: 50%; margin-top: 4px; box-shadow: inset -4px -4px 8px rgba(0,0,0,0.5); }
-        .ball.jump { transform: translateY(-18px); }
+        body {
+            margin: 0; font-family: 'Lilita One', cursive; color: #fff; overflow: hidden; touch-action: manipulation;
+            background-color: #1f140e;
+            background-image: 
+                linear-gradient(90deg, rgba(0,0,0,0.7) 2px, transparent 2px, transparent 98px, rgba(255,255,255,0.02) 98px, rgba(255,255,255,0.02) 100px),
+                repeating-linear-gradient(174deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 4px, transparent 4px, transparent 8px),
+                repeating-linear-gradient(6deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 5px, transparent 5px, transparent 10px);
+            background-size: 100px 100%, 100% 100%, 100% 100%;
+        }
 
-        .footer { padding: 15px; font-size: 14px; color: #888; }
-        .loading-text { font-size: 22px; color: #ffd700; margin-top: 50px; }
+        #dynamic-game-title {
+            text-align: center; font-size: 32px; margin: 15px 0 5px 0;
+            text-shadow: 0 4px 6px rgba(0,0,0,0.8); display: none;
+            background: -webkit-linear-gradient(#fff, #ffd700); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .header-section { width: 100%; display: flex; flex-direction: column; align-items: center; margin-bottom: 5px; padding-top: 5px; }
+        .game-info { display: flex; justify-content: space-around; align-items: center; width: 100%; max-width: 420px; font-size: 15px; text-shadow: 0 2px 4px rgba(0,0,0,0.9); padding: 0 5px; box-sizing: border-box; color: #ffd700; }
+        .level-select-wrapper { background: linear-gradient(135deg, #ffe066 0%, #d4af37 100%); border: 2px solid #8c6b14; border-radius: 6px; padding: 2px 8px; color: #3e2700; font-family: 'Lilita One', cursive; font-size: 14px; cursor: pointer; outline: none; box-shadow: 0 2px 6px rgba(0,0,0,0.5); }
+        .level-select-wrapper option:disabled { color: #999; background: #ddd; }
+
+        #game-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100dvh; padding: 10px 0; box-sizing: border-box; }
+        .board-section { flex-grow: 1; display: flex; align-items: center; justify-content: center; width: 100%; }
+
+        .board { display: flex; flex-direction: column; align-items: center; gap: 15px; width: 100%; max-width: 100vw; padding: 0; box-sizing: border-box; }
+        .row { display: flex; justify-content: center; gap: 6px; width: 100%; }
+        
+        .tube {
+            width: 36px; height: 215px; background: rgba(255, 255, 255, 0.1); border: 2px solid rgba(255, 255, 255, 0.3); border-radius: 2px 2px 18px 18px; 
+            display: flex; flex-direction: column-reverse; align-items: center; padding-bottom: 6px; position: relative; cursor: pointer; 
+            box-shadow: inset 0 -8px 15px rgba(0,0,0,0.5); -webkit-tap-highlight-color: transparent; transition: box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+        
+        .tube.selected { border-color: #ffd700; box-shadow: 0 0 12px #ffd700, inset 0 -8px 15px rgba(0,0,0,0.5); }
+        .tube.completed-magic { border-color: #00ffff; box-shadow: 0 0 20px #00ffff, inset 0 -8px 15px rgba(0,255,255,0.4); animation: pulseGlow 1.5s infinite alternate; }
+        @keyframes pulseGlow { 0% { box-shadow: 0 0 10px #00ffff, inset 0 -8px 15px rgba(0,255,255,0.4); } 100% { box-shadow: 0 0 25px #ff77ff, inset 0 -8px 15px rgba(255,119,255,0.6); } }
+
+        .ball { width: 28px; height: 28px; border-radius: 50%; margin-top: 3px; box-shadow: inset -4px -4px 8px rgba(0,0,0,0.5); }
+        .ball.jump { transform: translateY(-14px); }
+
+        .btn-gem { position: relative; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; border: 2px solid; color: #ffffff; cursor: pointer; overflow: hidden; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6); transition: 0.1s ease; -webkit-tap-highlight-color: transparent; font-family: 'Lilita One', cursive;}
+        .btn-gem::before { content: ''; position: absolute; top: 2px; left: 4%; width: 92%; height: 35%; background: linear-gradient(to bottom, rgba(255,255,255,0.7), rgba(255,255,255,0.05)); border-radius: 12px; pointer-events: none; }
+        .btn-gem:active { transform: scale(0.92); }
+        .gem-gold { background: linear-gradient(135deg, #ffe066 0%, #d4af37 100%); border-color: #8c6b14; color: #3e2700; box-shadow: inset 0 -5px 10px rgba(100,50,0,0.5), inset 0 4px 8px rgba(255,255,255,0.6), 0 0 15px rgba(255, 215, 0, 0.4); }
+        .gem-mode { background: linear-gradient(135deg, #444 0%, #222 100%); border-color: #111; color: #888; box-shadow: inset 0 -3px 8px rgba(0,0,0,0.8), inset 0 2px 5px rgba(255,255,255,0.1); }
+
+        #btn-mute { position: fixed; bottom: 20px; right: 20px; z-index: 1000; width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+        #btn-mute img { width: 24px; height: 24px; object-fit: contain; }
+
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 1000; justify-content: center; align-items: center; padding: 24px; box-sizing: border-box; }
+        .modal-content { background: #2a1b12; padding: 25px 20px; border-radius: 16px; width: 100%; max-width: 420px; text-align: center; border: 2px solid #d4af37; box-shadow: 0 10px 30px rgba(0,0,0,0.8); color: #fff; display: flex; flex-direction: column; box-sizing: border-box; }
+        .modal-content h3 { color: #ffd700; margin-top: 0; margin-bottom: 12px; text-shadow: 0 2px 4px #000; font-size: 26px; letter-spacing: 1px;}
     </style>
 </head>
 <body>
 
-<div class="header">
-    <div class="logo" id="game-logo-text">Ball Sort Magic</div>
-    <div class="level-container">
-        LV: <select id="level-select" onchange="loadLevelData()"></select>
+    <div id="game-screen">
+        <h1 id="dynamic-game-title">Ball Sort Magic</h1>
+        <div class="header-section">
+            <div class="game-info">
+                <span>LV: <select id="level-dropdown" class="level-select-wrapper" onchange="onLevelSelectChange(this)"></select></span>
+                <span>MIN: <span id="min-moves" style="color:#a3ffcc;">Load...</span></span>
+                <span>MOVES: <span id="player-moves" style="color:#ffd700;">0</span></span>
+            </div>
+        </div>
+        <div class="board-section">
+            <div class="board" id="board"></div>
+        </div>
     </div>
-    <div class="info-box">MIN: <span id="min-moves">Load...</span></div>
-    <div class="info-box">MOVES: <span id="move-count">0</span></div>
-</div>
 
-<div class="board" id="game-board">
-    <div class="loading-text">Đang tải màn chơi...</div>
-</div>
+    <button id="btn-mute" class="btn-gem gem-mode" onclick="toggleMute()">
+        <img id="mute-icon" src="assets/icons/volume-max.svg" alt="Volume" onerror="this.replaceWith(Object.assign(document.createElement('span'),{id:'mute-icon', innerText:'🔊'}))">
+    </button>
 
-<div class="footer">
-    <span>© Ball Sort Web Game</span>
-</div>
+    <!-- Win Modal MỚI -->
+    <div id="win-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 style="color: #00ffff; text-shadow: 0 0 15px rgba(0,255,255,0.6);">🎉 HOÀN THÀNH!</h3>
+            <div id="win-message" style="margin: 15px 0 25px 0; font-size: 18px; line-height: 1.8; color: #fff;"></div>
+            <div style="display: flex; justify-content: center; gap: 12px; width: 100%;">
+                <button class="btn-gem gem-mode" style="width: 120px; height: 44px; border-radius: 12px; font-size: 16px;" onclick="restartLevelAndCloseWin()">CHƠI LẠI</button>
+                <button class="btn-gem gem-gold" style="width: 140px; height: 44px; border-radius: 12px; font-size: 16px;" onclick="closeWinModalAndNext()">NEXT LEVEL</button>
+            </div>
+        </div>
+    </div>
 
-<div id="flying-ball-container" style="pointer-events: none; position: fixed; top:0; left:0; width:100%; height:100%;"></div>
+    <!-- Alert / Confirm Modal -->
+    <div id="custom-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 id="custom-modal-title">THÔNG BÁO</h3>
+            <div id="custom-modal-msg" style="margin: 15px 0; font-size: 17px; line-height: 1.6; color: #fff;"></div>
+            <div id="custom-modal-actions" style="display: flex; justify-content: center; gap: 12px; margin-top: 15px;">
+                <button id="custom-modal-btn-ok" class="btn-gem gem-gold" style="width: 120px; height: 44px; border-radius: 12px; font-size: 16px;" onclick="handleCustomOk()">OK</button>
+                <button id="custom-modal-btn-cancel" class="btn-gem gem-mode" style="width: 120px; height: 44px; border-radius: 12px; font-size: 16px; border-color: #111;" onclick="handleCustomCancel()">HỦY</button>
+            </div>
+        </div>
+    </div>
 
-<script>
-    const API_URL = 'https://ball-sort-backend.onrender.com/api';
-    let currentLevel = 1;
-    let gameMatrix = [];
-    let initialMatrix = [];
-    let selectedTubeIndex = null;
-    let moveCount = 0;
-    let minMovesNeeded = 0;
-    let customColorsList = [];
+    <div id="flying-ball-container"></div>
 
-    window.onload = async () => {
-        await loadGameConfig();
-        const select = document.getElementById('level-select');
-        for (let i = 1; i <= 80; i++) {
-            select.innerHTML += `<option value="${i}">Level ${i}</option>`;
-        }
-        loadLevelData();
-    };
-
-    async function loadGameConfig() {
-        try {
-            let res = await fetch(`${API_URL}/game/config`);
-            let data = await res.json();
-            if (data.gameTitle) {
-                document.getElementById('page-title').innerText = data.gameTitle;
-                document.getElementById('game-logo-text').innerText = data.gameTitle;
-            }
-            if (data.customColors && Array.isArray(data.customColors)) {
-                customColorsList = data.customColors;
-            }
-        } catch (e) {}
-    }
-
-    async function loadLevelData() {
-        currentLevel = parseInt(document.getElementById('level-select').value);
-        document.getElementById('min-moves').innerText = "Load...";
-        document.getElementById('game-board').innerHTML = `<div class="loading-text">Đang tải màn chơi...</div>`;
+    <script>
+        const API_URL = 'https://ball-sort-backend.onrender.com/api';
+        let currentLevel = 1;
+        let tubes = []; let initialTubesState = []; let undoStack = []; 
+        let selectedTubeIndex = null; let playerMoves = 0; let hiddenBalls = [];
+        const TUBE_CAPACITY = 6; 
         
-        try {
-            let res = await fetch(`${API_URL}/game/level/${currentLevel}`);
-            let data = await res.json();
-            
-            if (data && data.matrix) {
-                initialMatrix = JSON.parse(JSON.stringify(data.matrix));
-                gameMatrix = JSON.parse(JSON.stringify(data.matrix));
-                minMovesNeeded = data.metrics ? data.metrics.minMoves : 0;
-                document.getElementById('min-moves').innerText = minMovesNeeded;
-                moveCount = 0;
-                document.getElementById('move-count').innerText = moveCount;
-                selectedTubeIndex = null;
-                renderBoard();
+        let customModalCallback = null; let customModalCancelCallback = null;
+        let activeLevelList = []; 
+        let isGameWon = false;
+
+        async function loadGameConfig() {
+            try {
+                let res = await fetch(`${API_URL}/game/config`);
+                let config = await res.json();
+                const titleEl = document.getElementById('dynamic-game-title');
+                if (config.showTitle) { titleEl.innerText = config.gameTitle || 'Ball Sort Magic'; titleEl.style.display = 'block'; } 
+                else titleEl.style.display = 'none';
+            } catch(e) {}
+        }
+
+        async function fetchActiveLevels() {
+            try {
+                let res = await fetch(`${API_URL}/game/levels/active`);
+                if(res.ok) activeLevelList = await res.json(); else activeLevelList = [];
+            } catch (e) { activeLevelList = []; }
+
+            const dropdown = document.getElementById('level-dropdown'); dropdown.innerHTML = '';
+            for (let i = 1; i <= 80; i++) {
+                let opt = document.createElement('option'); opt.value = i;
+                if (activeLevelList.includes(i)) opt.innerText = `Level ${i}`;
+                else { opt.innerText = `Level ${i} 🔒`; opt.disabled = true; }
+                dropdown.appendChild(opt);
+            }
+            if (activeLevelList.length > 0 && !activeLevelList.includes(currentLevel)) currentLevel = activeLevelList[0];
+            dropdown.value = currentLevel;
+        }
+
+        async function fetchRandomLevelData(levelNum) {
+            try {
+                let res = await fetch(`${API_URL}/admin/levels/list/${levelNum}`);
+                if(res.ok) {
+                    let list = await res.json();
+                    if (list && list.length > 0) return list[Math.floor(Math.random() * list.length)]; 
+                }
+            } catch (e) { }
+            return null;
+        }
+
+        // ======================= AUDIO =======================
+        let audioCtx = null; let isMuted = false;
+        function initAudio() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (audioCtx.state === 'suspended') audioCtx.resume(); }
+        document.body.addEventListener('pointerdown', initAudio, {once: true});
+        function toggleMute() { initAudio(); isMuted = !isMuted; let muteEl = document.getElementById('mute-icon'); if (muteEl.tagName === 'IMG') muteEl.src = isMuted ? 'assets/icons/volume-x.svg' : 'assets/icons/volume-max.svg'; else muteEl.innerText = isMuted ? '🔇' : '🔊'; }
+        function playSfx(type) {
+            if (isMuted || !audioCtx) return;
+            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.connect(gain); gain.connect(audioCtx.destination); const now = audioCtx.currentTime;
+            if (type === 'jump') { osc.type = 'sine'; osc.frequency.setValueAtTime(400, now); osc.frequency.exponentialRampToValueAtTime(800, now + 0.1); gain.gain.setValueAtTime(0.2, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1); osc.start(now); osc.stop(now + 0.1); } 
+            else if (type === 'drop') { osc.type = 'sine'; osc.frequency.setValueAtTime(800, now); osc.frequency.exponentialRampToValueAtTime(400, now + 0.1); gain.gain.setValueAtTime(0.2, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1); osc.start(now); osc.stop(now + 0.1); } 
+            else if (type === 'error') { osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, now); gain.gain.setValueAtTime(0.1, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2); osc.start(now); osc.stop(now + 0.2); } 
+            else if (type === 'win') { const notes = [261.63, 329.63, 392.00, 523.25]; notes.forEach((freq, i) => { const oscW = audioCtx.createOscillator(); const gainW = audioCtx.createGain(); oscW.connect(gainW); gainW.connect(audioCtx.destination); oscW.type = 'sine'; oscW.frequency.setValueAtTime(freq, now + i * 0.1); gainW.gain.setValueAtTime(0.2, now + i * 0.1); gainW.gain.exponentialRampToValueAtTime(0.01, now + i * 0.1 + 0.2); oscW.start(now + i * 0.1); oscW.stop(now + i * 0.1 + 0.2); }); }
+        }
+
+        // ======================= GAME START =======================
+        window.onload = async function() { 
+            loadGameConfig(); await fetchActiveLevels();
+            if (activeLevelList.length === 0) document.getElementById('board').innerHTML = '<div style="color:#ff5252; font-size: 20px; text-align: center; margin-top:50px;">CHƯA CÓ LEVEL NÀO ĐƯỢC TẠO!<br><span style="font-size:14px; color:#aaa;">Hãy vào Admin CMS để tạo màn chơi đầu tiên.</span></div>';
+            else initLevel(currentLevel);
+        };
+
+        function onLevelSelectChange(select) { initLevel(parseInt(select.value)); }
+
+        async function initLevel(level) {
+            currentLevel = level; document.getElementById('level-dropdown').value = currentLevel;
+            hiddenBalls = []; document.getElementById('flying-ball-container').innerHTML = '';
+            playerMoves = 0; document.getElementById('player-moves').innerText = playerMoves;
+            document.getElementById('min-moves').innerText = 'Load...';
+            document.getElementById('board').innerHTML = '<div style="color:#ffd700; font-size: 20px; margin-top:50px;">Đang tải màn chơi...</div>';
+            isGameWon = false;
+
+            let serverData = await fetchRandomLevelData(currentLevel);
+
+            if (serverData) {
+                tubes = JSON.parse(JSON.stringify(serverData.matrix)); initialTubesState = JSON.parse(JSON.stringify(tubes));
+                undoStack = []; selectedTubeIndex = null; renderBoard();
+                document.getElementById('min-moves').innerText = (serverData.metrics && serverData.metrics.minMoves) ? serverData.metrics.minMoves : '...';
             } else {
-                document.getElementById('game-board').innerHTML = `<div class="loading-text" style="color: #ff5252;">CHƯA CÓ LEVEL NÀO ĐƯỢC TẠO!<br><span style="font-size:14px; color:#aaa;">Hãy vào trang Admin CMS để tạo màn chơi đầu tiên.</span></div>`;
+                document.getElementById('board').innerHTML = '<div style="color:#ff5252; font-size: 22px; text-align: center; margin-top:50px;">MÀN CHƠI CHƯA HOÀN THIỆN</div>';
+                document.getElementById('min-moves').innerText = '-';
             }
-        } catch (e) {
-            document.getElementById('game-board').innerHTML = `<div class="loading-text" style="color: #ff5252;">Lỗi kết nối Server!</div>`;
         }
-    }
 
-    function renderBoard() {
-        const board = document.getElementById('game-board');
-        board.innerHTML = '';
-        const numTubes = gameMatrix.length;
-        const topCount = Math.ceil(numTubes / 2);
-        const rows = [ gameMatrix.slice(0, topCount), gameMatrix.slice(topCount) ];
+        function restartLevel() { playSfx('drop'); initLevel(currentLevel); }
         
-        let globalIdx = 0;
-        rows.forEach(rowTubes => {
-            const rowDiv = document.createElement('div');
-            rowDiv.className = 'row';
-            rowTubes.forEach(tube => {
-                let tubeIdx = globalIdx++;
-                const tubeDiv = document.createElement('div');
-                tubeDiv.className = `tube ${selectedTubeIndex === tubeIdx ? 'selected' : ''}`;
-                tubeDiv.onclick = () => handleTubeClick(tubeIdx);
-                
-                tube.forEach((ballColor, ballIdx) => {
-                    const ballDiv = document.createElement('div');
-                    ballDiv.className = 'ball';
-                    ballDiv.style.background = ballColor.startsWith('#') ? `radial-gradient(circle at 35% 35%, ${ballColor} 0%, #000 80%)` : ballColor;
-                    if (selectedTubeIndex === tubeIdx && ballIdx === tube.length - 1) {
-                        ballDiv.classList.add('jump');
+        // CẬP NHẬT GIAO DIỆN WIN
+        function showWinModal() {
+            let minVal = document.getElementById('min-moves').innerText;
+            let msg = `Chúc mừng bạn đã giải thành công Level ${currentLevel}!<br><br>
+                       <span style="font-size: 22px;">Thành tích: <span style="color:#ffd700; font-weight: bold;">${playerMoves}</span> / ${minVal}</span>`;
+            document.getElementById('win-message').innerHTML = msg; 
+            document.getElementById('win-modal').style.display = 'flex';
+        }
+
+        function restartLevelAndCloseWin() { document.getElementById('win-modal').style.display = 'none'; restartLevel(); }
+        
+        function closeWinModalAndNext() {
+            playSfx('drop'); document.getElementById('win-modal').style.display = 'none';
+            let currentIndexInList = activeLevelList.indexOf(currentLevel);
+            if (currentIndexInList !== -1 && currentIndexInList < activeLevelList.length - 1) {
+                currentLevel = activeLevelList[currentIndexInList + 1]; initLevel(currentLevel);
+            } else showCustomModal("CHÚC MỪNG", "Bạn đã phá đảo tất cả các Level hiện có!", false, "ĐÓNG", "", null, null);
+        }
+
+        // ======================= THUẬT TOÁN CHECK SOLVABILITY =======================
+        function isWonState(state) { return state.every(t => t.length === 0 || (t.length === TUBE_CAPACITY && new Set(t).size === 1)); }
+        function getCanonicalSignature(state) { let copies = state.map(t => [...t]); copies.sort((a, b) => a.join(',').localeCompare(b.join(','))); return JSON.stringify(copies); }
+        
+        async function checkSolvability(tubesState) {
+            if (isWonState(tubesState)) return true;
+            let queue = [JSON.parse(JSON.stringify(tubesState))]; 
+            let visited = new Set(); visited.add(getCanonicalSignature(tubesState));
+            let iterations = 0; const MAX_ITERATIONS = 50000; // Giới hạn an toàn để không đơ game
+
+            while (queue.length > 0) {
+                if (iterations % 1000 === 0) await new Promise(resolve => setTimeout(resolve, 0));
+                iterations++; let current = queue.shift();
+                if (isWonState(current)) return true;
+                for (let i = 0; i < current.length; i++) {
+                    if (current[i].length === 0) continue;
+                    let topColor = current[i][current[i].length - 1];
+                    for (let j = 0; j < current.length; j++) {
+                        if (i === j) continue;
+                        let target = current[j]; let space = TUBE_CAPACITY - target.length;
+                        if (space > 0 && (target.length === 0 || target[target.length - 1] === topColor)) {
+                            let nextState = JSON.parse(JSON.stringify(current));
+                            while (nextState[i].length > 0 && nextState[i][nextState[i].length - 1] === topColor && nextState[j].length < TUBE_CAPACITY) nextState[j].push(nextState[i].pop());
+                            let sig = getCanonicalSignature(nextState);
+                            if (!visited.has(sig)) { visited.add(sig); queue.push(nextState); }
+                        }
                     }
-                    tubeDiv.appendChild(ballDiv);
+                }
+                if (iterations > MAX_ITERATIONS) return true; // Quá rộng, mặc định cho qua
+            }
+            return false; // Hết đường đi
+        }
+
+        function checkWin() {
+            if (isGameWon) return false;
+            let win = tubes.every(tube => tube.length === 0 || (tube.length === TUBE_CAPACITY && new Set(tube).size === 1));
+            if (win) { isGameWon = true; playSfx('win'); setTimeout(() => { showWinModal(); }, 400); return true; }
+            return false;
+        }
+
+        function checkGameOver() {
+            if (isGameWon) return; let canMove = false;
+            for (let i = 0; i < tubes.length; i++) {
+                if (tubes[i].length === 0) continue; 
+                let topColor = tubes[i][tubes[i].length - 1]; let consecutiveCount = 0;
+                for(let k = tubes[i].length - 1; k >= 0; k--) { if(tubes[i][k] === topColor) consecutiveCount++; else break; }
+                for (let j = 0; j < tubes.length; j++) {
+                    if (i === j) continue; 
+                    let targetSpace = TUBE_CAPACITY - tubes[j].length;
+                    if (targetSpace > 0) {
+                        if (tubes[j].length > 0 && tubes[j][tubes[j].length - 1] === topColor) { canMove = true; break; } 
+                        else if (tubes[j].length === 0) { if (tubes[i].length > consecutiveCount) { canMove = true; break; } }
+                    }
+                }
+                if (canMove) break;
+            }
+            if (!canMove) { playSfx('error'); showCustomModal("ĐƯỜNG CỤT!", "Nước đi này dẫn đến thế cờ không thể giải!<br>Bạn muốn quay lại hay chơi lại từ đầu?", true, "QUAY LẠI", "CHƠI LẠI", () => { undoMove(); }, () => { restartLevel(); }); }
+        }
+
+        // ======================= RENDER BOARD & PLAY LOGIC =======================
+        function renderBoard() {
+            const board = document.getElementById('board'); board.innerHTML = '';
+            const numTubes = tubes.length; const topCount = Math.ceil(numTubes / 2);
+            const rows = [ tubes.slice(0, topCount), tubes.slice(topCount) ];
+            
+            let globalIndex = 0;
+            rows.forEach((rowTubes) => {
+                if (rowTubes.length === 0) return;
+                const rowDiv = document.createElement('div'); rowDiv.className = 'row';
+                rowTubes.forEach((tube) => {
+                    let currentIndex = globalIndex++; const tubeDiv = document.createElement('div');
+                    let isComplete = (tube.length === TUBE_CAPACITY && new Set(tube).size === 1);
+                    let isWaitingForBall = hiddenBalls.some(h => h.tube === currentIndex);
+                    
+                    tubeDiv.className = `tube ${selectedTubeIndex === currentIndex ? 'selected' : ''} ${isComplete && !isWaitingForBall ? 'completed-magic' : ''}`;
+                    tubeDiv.setAttribute('data-index', currentIndex);
+                    tubeDiv.onclick = () => handleTubeClick(currentIndex);
+                    
+                    tube.forEach((ballColor, ballIndex) => {
+                        const ballDiv = document.createElement('div'); ballDiv.className = 'ball'; ballDiv.style.background = ballColor;
+                        let isHidden = hiddenBalls.some(h => h.tube === currentIndex && h.index === ballIndex);
+                        if (isHidden) ballDiv.style.opacity = '0';
+                        if (selectedTubeIndex === currentIndex && ballIndex === tube.length - 1 && !isHidden) ballDiv.classList.add('jump');
+                        tubeDiv.appendChild(ballDiv);
+                    });
+                    rowDiv.appendChild(tubeDiv);
                 });
-                rowDiv.appendChild(tubeDiv);
+                board.appendChild(rowDiv);
             });
-            board.appendChild(rowDiv);
-        });
-    }
+        }
 
-    function handleTubeClick(index) {
-        if (selectedTubeIndex === null) {
-            if (gameMatrix[index].length > 0) {
-                selectedTubeIndex = index;
-                renderBoard();
-            }
-        } else {
-            if (selectedTubeIndex === index) {
-                selectedTubeIndex = null;
-                renderBoard();
+        function handleTubeClick(index) {
+            initAudio(); 
+            if (selectedTubeIndex === null) {
+                if (tubes[index].length > 0) { selectedTubeIndex = index; playSfx('jump'); renderBoard(); }
             } else {
-                let srcTube = gameMatrix[selectedTubeIndex];
-                let destTube = gameMatrix[index];
-                let topBall = srcTube[srcTube.length - 1];
-                const TUBE_CAPACITY = 6;
+                if (selectedTubeIndex === index) { selectedTubeIndex = null; playSfx('drop'); renderBoard(); } 
+                else {
+                    let sourceTube = tubes[selectedTubeIndex]; let targetTube = tubes[index];
+                    let topBall = sourceTube[sourceTube.length - 1];
 
-                if (destTube.length < TUBE_CAPACITY && (destTube.length === 0 || destTube[destTube.length - 1] === topBall)) {
-                    selectedTubeIndex = null;
-                    let movingBall = srcTube.pop();
-                    destTube.push(movingBall);
-                    moveCount++;
-                    document.getElementById('move-count').innerText = moveCount;
-                    renderBoard();
-                    checkWinCondition();
-                } else {
-                    selectedTubeIndex = index;
-                    renderBoard();
+                    if (targetTube.length < TUBE_CAPACITY && (targetTube.length === 0 || targetTube[targetTube.length - 1] === topBall)) {
+                        const sourceRect = document.querySelector(`.tube[data-index='${selectedTubeIndex}']`).lastElementChild.getBoundingClientRect();
+                        
+                        undoStack.push(JSON.parse(JSON.stringify(tubes)));
+                        selectedTubeIndex = null; 
+                        let movingBall = sourceTube.pop(); targetTube.push(movingBall);
+                        playerMoves++; document.getElementById('player-moves').innerText = playerMoves;
+                        
+                        let hiddenItem = { tube: index, index: targetTube.length - 1 }; hiddenBalls.push(hiddenItem); renderBoard(); 
+                        
+                        const targetRect = document.querySelector(`.tube[data-index='${index}']`).lastElementChild.getBoundingClientRect(); 
+                        
+                        const flyingBall = document.createElement('div'); flyingBall.className = 'ball';
+                        flyingBall.style.position = 'fixed'; flyingBall.style.margin = '0'; flyingBall.style.background = movingBall; flyingBall.style.zIndex = '9999';
+                        const jumpHeight = Math.min(sourceRect.top, targetRect.top) - 40;
+                        flyingBall.style.left = '0px'; flyingBall.style.top = '0px';
+                        document.getElementById('flying-ball-container').appendChild(flyingBall);
+
+                        const anim = flyingBall.animate([
+                            { transform: `translate(${sourceRect.left}px, ${sourceRect.top}px)` },
+                            { transform: `translate(${sourceRect.left}px, ${jumpHeight}px)`, easing: 'ease-out', offset: 0.25 },
+                            { transform: `translate(${targetRect.left}px, ${jumpHeight}px)`, easing: 'ease-in-out', offset: 0.65 },
+                            { transform: `translate(${targetRect.left}px, ${targetRect.top}px)`, easing: 'ease-in', offset: 0.85 },
+                            { transform: `translate(${targetRect.left}px, ${targetRect.top - 12}px)`, easing: 'ease-out', offset: 0.92 },
+                            { transform: `translate(${targetRect.left}px, ${targetRect.top}px)`, easing: 'ease-in', offset: 1.0 }
+                        ], { duration: 350, fill: 'forwards' });
+                        
+                        // SAU KHI BÓNG RƠI XUỐNG XONG THÌ KIỂM TRA ĐƯỜNG CỤT & CHIẾN THẮNG
+                        anim.onfinish = () => {
+                            flyingBall.remove(); playSfx('drop'); hiddenBalls = hiddenBalls.filter(h => h !== hiddenItem); renderBoard(); 
+                            
+                            if (!checkWin()) {
+                                setTimeout(() => {
+                                    checkSolvability(tubes).then(isSolvable => {
+                                        if (!isSolvable) {
+                                            playSfx('error');
+                                            showCustomModal("ĐƯỜNG CỤT!", "Nước đi này dẫn đến thế cờ không thể giải!<br>Bạn muốn quay lại hay chơi lại từ đầu?", true, "QUAY LẠI", "CHƠI LẠI", () => { undoMove(); }, () => { restartLevel(); });
+                                        } else {
+                                            checkGameOver(); // Double check
+                                        }
+                                    });
+                                }, 50); // Delay nhẹ để UI kịp render bóng
+                            }
+                        };
+                    } else { playSfx('error'); if (targetTube.length > 0) { selectedTubeIndex = index; renderBoard(); } }
                 }
             }
         }
-    }
 
-    function checkWinCondition() {
-        let isWon = gameMatrix.every(tube => tube.length === 0 || (tube.length === 6 && new Set(tube).size === 1));
-        if (isWon) {
-            setTimeout(() => {
-                alert(`🎉 Chúc mừng bạn đã vượt qua Level ${currentLevel}!`);
-                if (currentLevel < 80) {
-                    document.getElementById('level-select').value = currentLevel + 1;
-                    loadLevelData();
-                }
-            }, 100);
+        function undoMove() {
+            playSfx('drop'); hiddenBalls = []; document.getElementById('flying-ball-container').innerHTML = ''; 
+            if (undoStack.length > 0) { tubes = undoStack.pop(); selectedTubeIndex = null; playerMoves = Math.max(0, playerMoves - 1); document.getElementById('player-moves').innerText = playerMoves; renderBoard(); } 
         }
-    }
-</script>
 
+        function showCustomModal(title, msg, showCancel, okTxt, cancelTxt, onOk, onCancel) {
+            playSfx('drop'); document.getElementById('custom-modal-title').innerText = title; document.getElementById('custom-modal-msg').innerHTML = msg;
+            const btnOk = document.getElementById('custom-modal-btn-ok'); const btnCancel = document.getElementById('custom-modal-btn-cancel');
+            btnOk.innerText = okTxt; if (showCancel) { btnCancel.style.display = 'inline-flex'; btnCancel.innerText = cancelTxt; } else btnCancel.style.display = 'none';
+            customModalCallback = onOk; customModalCancelCallback = onCancel; document.getElementById('custom-modal').style.display = 'flex';
+        }
+        function handleCustomOk() { playSfx('drop'); document.getElementById('custom-modal').style.display = 'none'; if (customModalCallback) customModalCallback(); }
+        function handleCustomCancel() { playSfx('drop'); document.getElementById('custom-modal').style.display = 'none'; if (customModalCancelCallback) customModalCancelCallback(); }
+
+    </script>
 </body>
 </html>

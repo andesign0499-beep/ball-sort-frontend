@@ -103,23 +103,24 @@
         .val-blue { color: #3baaf8; }
         .val-orange { color: #e65134; }
 
-        /* Đã chỉnh lại khoảng cách 2 nút bấm cho sát nhau hơn */
         .modal-buttons { display: flex; gap: 12px; margin-top: 15px; justify-content: center; width: 100%; }
         
         .btn-custom {
             background-color: transparent; border: none; outline: none;
             background-size: contain; background-repeat: no-repeat; background-position: center;
-            
-            /* Thu gọn width lại để 2 nút có thể xích gần nhau */
-            width: 135px; height: 50px;
+            width: 140px; height: 50px;
             color: white; font-family: "Comic Relief", system-ui; font-weight: 700; 
-            font-size: 19px; /* Vẫn giữ nguyên cỡ font 19px */
+            
+            /* Đã giảm font xuống 16px */
+            font-size: 16px; 
             
             display: flex; align-items: center; justify-content: center;
-            cursor: pointer; padding: 0 0 5px 0; 
-            transition: transform 0.1s; letter-spacing: 0.5px;
+            cursor: pointer; 
             
-            /* SỬ DỤNG CHUẨN STROKE CỦA CSS - Viền đen 2px độ mờ 68% */
+            /* Xóa padding để chữ nằm trọn ở giữa nút */
+            padding: 0; 
+            
+            transition: transform 0.1s; letter-spacing: 0.5px;
             -webkit-text-stroke: 2px rgba(0,0,0,0.68);
             paint-order: stroke fill;
         }

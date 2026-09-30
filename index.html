@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ball Magic - Sort Puzzle</title>
+    <script src="https://connect.facebook.net/en_US/fbinstant.6.3.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Comic+Relief:wght@700&display=swap');
 
@@ -239,11 +240,11 @@
             let serverData = getRandomLevelData(currentLevel);
 
             if (serverData) {
-                // ĐÂY LÀ PHẦN TỰ ĐỘNG MAP BỘ 12 MÀU TỪ ẢNH BẠN CUNG CẤP
+                // BỘ MÀU MỚI: 12 MÀU ĐẶC BIỆT RỰC RỠ TỪ ẢNH MỚI NHẤT
                 const newPalette = [
-                    '#a4d3e6', '#2078b5', '#b2df91', '#33a12e', 
-                    '#f5a4a9', '#e32422', '#f7c078', '#ff8200', 
-                    '#cbb3d8', '#663e9a', '#fcf6a4', '#a7592c'
+                    '#ff4141', '#10c278', '#0068ff', '#ff8c00', 
+                    '#ffd000', '#00d0eb', '#6100ed', '#6c6c6c', 
+                    '#7dd800', '#d30756', '#c600cc', '#cacaca'
                 ];
                 let levelColorMap = {};
                 let paletteIdx = 0;
@@ -252,7 +253,7 @@
                     tube.map(color => {
                         if (/^[0-9A-Fa-f]{6}$/.test(color)) color = '#' + color;
                         
-                        // Tự động thay thế màu cũ bằng màu mới
+                        // Tự động thay thế màu cũ bằng màu rực rỡ mới
                         if (!levelColorMap[color]) {
                             levelColorMap[color] = newPalette[paletteIdx % newPalette.length];
                             paletteIdx++;

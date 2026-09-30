@@ -8,13 +8,10 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Comic+Relief:wght@700&display=swap');
 
-        /* KHAI BÁO BIẾN CSS ĐỂ THAY ĐỔI ĐỘNG */
         :root {
             --bg-color: #1f140e;
-            /* ĐÃ SỬA: Chèn link ảnh bg.jpg làm nền mặc định */
-            --bg-pattern: url('https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/main/bg.jpg');
-            /* ĐÃ SỬA: Để auto để ảnh giữ nguyên kích thước gốc và tự động lặp lại (tile) kín màn hình */
-            --bg-size: auto; 
+            --bg-pattern: linear-gradient(90deg, rgba(0,0,0,0.7) 2px, transparent 2px, transparent 98px, rgba(255,255,255,0.02) 98px, rgba(255,255,255,0.02) 100px), repeating-linear-gradient(174deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 4px, transparent 4px, transparent 8px), repeating-linear-gradient(6deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 5px, transparent 5px, transparent 10px);
+            --bg-size: 100px 100%, 100% 100%, 100% 100%;
             --tube-border: rgba(255, 255, 255, 0.3);
             --tube-bg: rgba(255, 255, 255, 0.1);
         }
@@ -60,18 +57,6 @@
             width: 28px; height: 28px; border-radius: 50%; margin-top: 3px; 
             box-shadow: inset -4px -4px 8px rgba(0,0,0,0.5); 
         }
-        
-        .ball::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-image: url('https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/main/icons/bongbong.png');
-            background-size: 100% 100%;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 10;
-        }
-        }
         .ball.jump { transform: translateY(-14px); }
 
         .btn-gem { position: relative; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; border: 2px solid; color: #ffffff; cursor: pointer; overflow: hidden; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6); transition: 0.1s ease; -webkit-tap-highlight-color: transparent; font-family: "Comic Relief", system-ui; font-weight: 700; letter-spacing: 0.5px;}
@@ -110,7 +95,7 @@
         <div class="header-section">
             <div class="game-info">
                 <span>LV: <select id="level-dropdown" class="level-select-wrapper" onchange="onLevelSelectChange(this)"></select></span>
-                <span>MIN: <span id="min-moves" style="color:#a3ffcc;">Load...</span></span>
+                <span>MIN: <span id="min-moves" style="color:#a3ffcc;">...</span></span>
                 <span>MOVES: <span id="player-moves" style="color:#ffd700;">0</span></span>
             </div>
         </div>
@@ -150,7 +135,8 @@
     <div id="flying-ball-container"></div>
 
     <script>
-        const API_URL = 'https://ball-sort-backend.onrender.com/api';
+        // HỆ THỐNG OFFLINE SIÊU TỐC KHÔNG CẦN BACKEND
+        let gameData = null;
         let currentLevel = parseInt(localStorage.getItem('ballmagic_current_level')) || 1;
         let tubes = []; let initialTubesState = []; let undoStack = []; 
         let selectedTubeIndex = null; let playerMoves = 0; let hiddenBalls = [];
@@ -160,39 +146,34 @@
         let activeLevelList = []; 
         let isGameWon = false;
 
-        async function loadGameConfig() {
+        async function loadOfflineData() {
             try {
-                let res = await fetch(`${API_URL}/game/config`);
-                let config = await res.json();
-                
-                const logoImg = document.getElementById('game-logo-img');
-                if (config.showTitle) { logoImg.style.display = 'block'; } else { logoImg.style.display = 'none'; }
-
-                if (config.bgColor) document.documentElement.style.setProperty('--bg-color', config.bgColor);
-                
-                if (config.bgPattern) {
-                    let pattern = config.bgPattern;
-                    if (!pattern.startsWith('url') && !pattern.startsWith('linear')) {
-                        pattern = `url('${pattern}')`;
-                    }
-                    document.documentElement.style.setProperty('--bg-pattern', pattern);
-                    document.documentElement.style.setProperty('--bg-size', 'auto'); 
-                }
-
-                if (config.tubeBorder) document.documentElement.style.setProperty('--tube-border', config.tubeBorder);
-                if (config.tubeBg) document.documentElement.style.setProperty('--tube-bg', config.tubeBg);
-
-            } catch(e) {
-                document.getElementById('game-logo-img').style.display = 'block';
+                // Đọc trực tiếp từ file data.json chứa trong thư mục gốc (hoạt động siêu tốc)
+                let res = await fetch('data.json');
+                gameData = await res.json();
+            } catch (e) {
+                console.error("Lỗi tải data.json:", e);
+                gameData = { config: {}, activeLevels: [], levels: {} };
             }
         }
 
-        async function fetchActiveLevels() {
-            try {
-                let res = await fetch(`${API_URL}/game/levels/active`);
-                if(res.ok) activeLevelList = await res.json(); else activeLevelList = [];
-            } catch (e) { activeLevelList = []; }
+        function applyGameConfig() {
+            let config = gameData.config || {};
+            const logoImg = document.getElementById('game-logo-img');
+            if (config.showTitle) { logoImg.style.display = 'block'; } else { logoImg.style.display = 'none'; }
+            if (config.bgColor) document.documentElement.style.setProperty('--bg-color', config.bgColor);
+            if (config.bgPattern) {
+                let pattern = config.bgPattern;
+                if (!pattern.startsWith('url') && !pattern.startsWith('linear')) pattern = `url('${pattern}')`;
+                document.documentElement.style.setProperty('--bg-pattern', pattern);
+                document.documentElement.style.setProperty('--bg-size', 'auto'); 
+            }
+            if (config.tubeBorder) document.documentElement.style.setProperty('--tube-border', config.tubeBorder);
+            if (config.tubeBg) document.documentElement.style.setProperty('--tube-bg', config.tubeBg);
+        }
 
+        function setupActiveLevels() {
+            activeLevelList = gameData.activeLevels || [];
             const dropdown = document.getElementById('level-dropdown'); dropdown.innerHTML = '';
             for (let i = 1; i <= 80; i++) {
                 let opt = document.createElement('option'); opt.value = i;
@@ -204,14 +185,9 @@
             dropdown.value = currentLevel;
         }
 
-        async function fetchRandomLevelData(levelNum) {
-            try {
-                let res = await fetch(`${API_URL}/admin/levels/list/${levelNum}`);
-                if(res.ok) {
-                    let list = await res.json();
-                    if (list && list.length > 0) return list[Math.floor(Math.random() * list.length)]; 
-                }
-            } catch (e) { }
+        function getRandomLevelData(levelNum) {
+            let list = gameData.levels[levelNum];
+            if (list && list.length > 0) return list[Math.floor(Math.random() * list.length)]; 
             return null;
         }
 
@@ -238,8 +214,13 @@
         }
 
         window.onload = async function() { 
-            loadGameConfig(); await fetchActiveLevels();
-            if (activeLevelList.length === 0) document.getElementById('board').innerHTML = '<div style="color:#ff5252; font-size: 18px; text-align: center; margin-top:50px;">NO LEVELS CREATED YET!<br><span style="font-size:14px; color:#aaa;">Please go to Admin CMS to create levels.</span></div>';
+            document.getElementById('board').innerHTML = '<div style="color:#ffd700; font-size: 18px; margin-top:50px;">Loading Magic...</div>';
+            
+            await loadOfflineData();
+            applyGameConfig();
+            setupActiveLevels();
+
+            if (activeLevelList.length === 0) document.getElementById('board').innerHTML = '<div style="color:#ff5252; font-size: 18px; text-align: center; margin-top:50px;">NO LEVELS FOUND!<br><span style="font-size:14px; color:#aaa;">(data.json is missing or empty)</span></div>';
             else initLevel(currentLevel);
         };
 
@@ -249,24 +230,21 @@
             initLevel(currentLevel); 
         }
 
-        async function initLevel(level) {
+        function initLevel(level) {
             currentLevel = level; 
             localStorage.setItem('ballmagic_current_level', currentLevel);
             document.getElementById('level-dropdown').value = currentLevel;
             hiddenBalls = []; document.getElementById('flying-ball-container').innerHTML = '';
             playerMoves = 0; document.getElementById('player-moves').innerText = playerMoves;
             document.getElementById('min-moves').innerText = 'Load...';
-            document.getElementById('board').innerHTML = '<div style="color:#ffd700; font-size: 18px; margin-top:50px;">Loading level...</div>';
             isGameWon = false;
 
-            let serverData = await fetchRandomLevelData(currentLevel);
+            let serverData = getRandomLevelData(currentLevel);
 
             if (serverData) {
                 let fixedMatrix = serverData.matrix.map(tube => 
                     tube.map(color => {
-                        if (/^[0-9A-Fa-f]{6}$/.test(color)) {
-                            return '#' + color;
-                        }
+                        if (/^[0-9A-Fa-f]{6}$/.test(color)) return '#' + color;
                         return color;
                     })
                 );
@@ -380,7 +358,6 @@
                     tube.forEach((ballColor, ballIndex) => {
                         const ballDiv = document.createElement('div'); ballDiv.className = 'ball'; ballDiv.style.background = ballColor;
                         
-                        // LỚP PHỦ ẢNH ĐƯỢC CHÈN VÀO ĐÂY
                         const overlayImg = document.createElement('img');
                         overlayImg.src = 'https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/main/icons/bongbong.png';
                         overlayImg.style.cssText = 'position:absolute; top:0; left:0; width:100%; height:100%; border-radius:50%; pointer-events:none; z-index:2; object-fit:cover;';

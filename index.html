@@ -9,9 +9,11 @@
         @import url('https://fonts.googleapis.com/css2?family=Comic+Relief:wght@700&display=swap');
 
         :root {
-            --bg-color: #1f140e;
-            --bg-pattern: linear-gradient(90deg, rgba(0,0,0,0.7) 2px, transparent 2px, transparent 98px, rgba(255,255,255,0.02) 98px, rgba(255,255,255,0.02) 100px), repeating-linear-gradient(174deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 4px, transparent 4px, transparent 8px), repeating-linear-gradient(6deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 5px, transparent 5px, transparent 10px);
-            --bg-size: 100px 100%, 100% 100%, 100% 100%;
+           --bg-color: #1f140e;
+            /* ĐÃ SỬA: Chèn link ảnh bg.jpg làm nền mặc định */
+            --bg-pattern: url('https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/main/bg.jpg');
+            /* ĐÃ SỬA: Để auto để ảnh giữ nguyên kích thước gốc và tự động lặp lại (tile) kín màn hình */
+            --bg-size: auto; 
             --tube-border: rgba(255, 255, 255, 0.3);
             --tube-bg: rgba(255, 255, 255, 0.1);
         }

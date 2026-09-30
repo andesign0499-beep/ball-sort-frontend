@@ -69,51 +69,54 @@
         #btn-mute:active { transform: scale(0.85); }
         #btn-mute img { width: 32px; height: 32px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6)); }
 
-        /* ================= GIAO DIỆN POPUP ẢNH CUSTOM (CẬP NHẬT TỶ LỆ LỚN) ================= */
+        /* ================= GIAO DIỆN POPUP ẢNH CUSTOM (CẬP NHẬT TỶ LỆ) ================= */
         .modal-overlay { 
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: rgba(0, 0, 0, 0.85); z-index: 2000; justify-content: center; align-items: center; padding: 24px; box-sizing: border-box; 
         }
         
         .modal-orb {
-            width: 400px; height: 400px; /* Phóng to kích thước để hiển thị trọn vẹn chi tiết */
+            width: 350px; height: 350px; /* Đã hạ xuống 350px để an toàn cho màn hình Mobile */
             background-image: url('https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/main/icons/popup-bg.png');
             background-size: contain; background-position: center; background-repeat: no-repeat;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             text-align: center; position: relative;
             font-family: "Comic Relief", system-ui; font-weight: 700;
-            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.9)); /* Thêm bóng đổ cho quả bóng */
+            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.9)); 
         }
 
-        /* Chữ Title nhô lên khỏi quả bóng và được kéo lên cao hơn */
+        /* Chữ Title */
         .modal-title-img {
-            position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
-            width: 82%; height: auto; object-fit: contain;
+            position: absolute; top: 15px; left: 50%; transform: translateX(-50%);
+            width: 85%; height: auto; object-fit: contain;
             pointer-events: none;
         }
 
-        /* Vùng nội dung chữ màu Nâu bên trong được nới rộng xuống dưới */
+        /* Vùng nội dung chữ màu Nâu */
         .modal-content-area {
-            margin-top: 50px; 
+            margin-top: 45px; /* Giảm margin một xíu để nhường chỗ cho nút bấm to ra */
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             color: #4a2f1d; width: 100%;
         }
 
-        .modal-subtitle { font-size: 22px; font-weight: 700; margin-bottom: 8px; line-height: 1.3;}
-        .score-large { font-size: 68px; color: #e65134; margin: -5px 0 10px 0; line-height: 1; text-shadow: 1px 1px 0px rgba(0,0,0,0.1); }
-        .score-small { font-size: 18px; margin: 4px 0; }
+        .modal-subtitle { font-size: 20px; font-weight: 700; margin-bottom: 5px; line-height: 1.3;}
+        .score-large { font-size: 60px; color: #e65134; margin: -5px 0 5px 0; line-height: 1; text-shadow: 1px 1px 0px rgba(0,0,0,0.1); }
+        .score-small { font-size: 17px; margin: 3px 0; }
         .val-blue { color: #3baaf8; }
         .val-orange { color: #e65134; }
 
-        .modal-buttons { display: flex; gap: 15px; margin-top: 20px; }
+        .modal-buttons { display: flex; gap: 12px; margin-top: 15px; }
         
         .btn-custom {
             background-color: transparent; border: none; outline: none;
             background-size: contain; background-repeat: no-repeat; background-position: center;
-            width: 140px; height: 52px;
-            color: white; font-family: "Comic Relief", system-ui; font-weight: 700; font-size: 19px;
+            /* Đã phóng to nút bấm */
+            width: 155px; height: 58px;
+            color: white; font-family: "Comic Relief", system-ui; font-weight: 700; 
+            /* Giữ nguyên font-size 19px */
+            font-size: 19px;
             display: flex; align-items: center; justify-content: center;
-            cursor: pointer; padding: 0 0 4px 0; 
+            cursor: pointer; padding: 0 0 5px 0; 
             transition: transform 0.1s; letter-spacing: 0.5px;
             text-shadow: 
                 2px 2px 0 rgba(0,0,0,0.68), -2px -2px 0 rgba(0,0,0,0.68), 

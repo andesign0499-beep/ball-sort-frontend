@@ -51,10 +51,30 @@
         .ball { width: 28px; height: 28px; border-radius: 50%; margin-top: 3px; box-shadow: inset -4px -4px 8px rgba(0,0,0,0.5); }
         .ball.jump { transform: translateY(-14px); }
 
-     
+        .btn-gem { position: relative; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; border: 2px solid; color: #ffffff; cursor: pointer; overflow: hidden; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6); transition: 0.1s ease; -webkit-tap-highlight-color: transparent; font-family: "Comic Relief", system-ui; font-weight: 700; letter-spacing: 0.5px;}
+        .btn-gem::before { content: ''; position: absolute; top: 2px; left: 4%; width: 92%; height: 35%; background: linear-gradient(to bottom, rgba(255,255,255,0.7), rgba(255,255,255,0.05)); border-radius: 12px; pointer-events: none; }
+        .btn-gem:active { transform: scale(0.92); }
+        .gem-gold { background: linear-gradient(135deg, #ffe066 0%, #d4af37 100%); border-color: #8c6b14; color: #3e2700; box-shadow: inset 0 -5px 10px rgba(100,50,0,0.5), inset 0 4px 8px rgba(255,255,255,0.6), 0 0 15px rgba(255, 215, 0, 0.4); }
+        .gem-mode { background: linear-gradient(135deg, #444 0%, #222 100%); border-color: #111; color: #ccc; box-shadow: inset 0 -3px 8px rgba(0,0,0,0.8), inset 0 2px 5px rgba(255,255,255,0.1); }
 
-        #btn-mute { position: fixed; bottom: 20px; right: 20px; z-index: 1000; width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
-        #btn-mute img { width: 24px; height: 24px; object-fit: contain; }
+        /* ĐÃ SỬA: NÚT ÂM THANH TRONG SUỐT HOÀN TOÀN */
+        #btn-mute { 
+            position: fixed; bottom: 20px; right: 20px; z-index: 1000; 
+            width: 44px; height: 44px; 
+            background: transparent; 
+            border: none; 
+            cursor: pointer; 
+            display: flex; align-items: center; justify-content: center; 
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            transition: transform 0.1s ease;
+        }
+        #btn-mute:active { transform: scale(0.85); }
+        #btn-mute img { 
+            width: 32px; height: 32px; 
+            object-fit: contain; 
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6)); 
+        }
 
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 1000; justify-content: center; align-items: center; padding: 24px; box-sizing: border-box; }
         .modal-content { background: #2a1b12; padding: 30px 24px; border-radius: 16px; width: 100%; max-width: 420px; text-align: center; border: 2px solid #d4af37; box-shadow: 0 10px 30px rgba(0,0,0,0.8); color: #fff; display: flex; flex-direction: column; box-sizing: border-box; font-family: "Comic Relief", system-ui; font-weight: 700; }
@@ -77,7 +97,8 @@
         </div>
     </div>
 
-    <button id="btn-mute" class="btn-gem gem-mode" onclick="toggleMute()">
+    <!-- ĐÃ SỬA: Xóa class btn-gem gem-mode để bỏ hoàn toàn hiệu ứng nút -->
+    <button id="btn-mute" onclick="toggleMute()">
         <img id="mute-icon" src="https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/793769bb23b082a65acbed9695d021840dd1cc67/icons/volume-max.svg" alt="Volume">
     </button>
 
@@ -165,13 +186,24 @@
         let audioCtx = null; let isMuted = false;
         function initAudio() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (audioCtx.state === 'suspended') audioCtx.resume(); }
         document.body.addEventListener('pointerdown', initAudio, {once: true});
-       function toggleMute() { 
+        
+        // ĐÃ SỬA: Hàm đổi ảnh loa mượt mà
+        function toggleMute() { 
             initAudio(); 
             isMuted = !isMuted; 
             let muteEl = document.getElementById('mute-icon'); 
             muteEl.src = isMuted 
                 ? 'https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/793769bb23b082a65acbed9695d021840dd1cc67/icons/volume-x.svg' 
                 : 'https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/793769bb23b082a65acbed9695d021840dd1cc67/icons/volume-max.svg'; 
+        }
+
+        function playSfx(type) {
+            if (isMuted || !audioCtx) return;
+            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.connect(gain); gain.connect(audioCtx.destination); const now = audioCtx.currentTime;
+            if (type === 'jump') { osc.type = 'sine'; osc.frequency.setValueAtTime(400, now); osc.frequency.exponentialRampToValueAtTime(800, now + 0.1); gain.gain.setValueAtTime(0.2, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1); osc.start(now); osc.stop(now + 0.1); } 
+            else if (type === 'drop') { osc.type = 'sine'; osc.frequency.setValueAtTime(800, now); osc.frequency.exponentialRampToValueAtTime(400, now + 0.1); gain.gain.setValueAtTime(0.2, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1); osc.start(now); osc.stop(now + 0.1); } 
+            else if (type === 'error') { osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, now); gain.gain.setValueAtTime(0.1, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2); osc.start(now); osc.stop(now + 0.2); } 
+            else if (type === 'win') { const notes = [261.63, 329.63, 392.00, 523.25]; notes.forEach((freq, i) => { const oscW = audioCtx.createOscillator(); const gainW = audioCtx.createGain(); oscW.connect(gainW); gainW.connect(audioCtx.destination); oscW.type = 'sine'; oscW.frequency.setValueAtTime(freq, now + i * 0.1); gainW.gain.setValueAtTime(0.2, now + i * 0.1); gainW.gain.exponentialRampToValueAtTime(0.01, now + i * 0.1 + 0.2); oscW.start(now + i * 0.1); oscW.stop(now + i * 0.1 + 0.2); }); }
         }
 
         // ======================= GAME START =======================

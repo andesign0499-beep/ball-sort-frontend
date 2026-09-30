@@ -6,11 +6,10 @@
     <title>Ball Magic - Sort Puzzle</title>
     <script src="https://connect.facebook.net/en_US/fbinstant.6.3.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Lilita+One&display=swap');
-        @import url('https://api.fontshare.com/v2/css?f[]=cal-sans@400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Relief:wght@700&display=swap');
 
         body {
-            margin: 0; font-family: "Cal Sans", sans-serif; color: #fff; overflow: hidden; touch-action: manipulation;
+            margin: 0; font-family: "Comic Relief", system-ui; font-weight: 700; color: #fff; overflow: hidden; touch-action: manipulation;
             background-color: #1f140e;
             background-image: 
                 linear-gradient(90deg, rgba(0,0,0,0.7) 2px, transparent 2px, transparent 98px, rgba(255,255,255,0.02) 98px, rgba(255,255,255,0.02) 100px),
@@ -29,8 +28,8 @@
         }
 
         .header-section { width: 100%; display: flex; flex-direction: column; align-items: center; margin-bottom: 5px; padding-top: 5px; }
-        .game-info { display: flex; justify-content: space-around; align-items: center; width: 100%; max-width: 420px; font-size: 15px; text-shadow: 0 2px 4px rgba(0,0,0,0.9); padding: 0 5px; box-sizing: border-box; color: #ffd700; font-family: "Cal Sans", sans-serif; }
-        .level-select-wrapper { background: linear-gradient(135deg, #ffe066 0%, #d4af37 100%); border: 2px solid #8c6b14; border-radius: 6px; padding: 2px 8px; color: #3e2700; font-family: "Cal Sans", sans-serif; font-size: 14px; cursor: pointer; outline: none; box-shadow: 0 2px 6px rgba(0,0,0,0.5); }
+        .game-info { display: flex; justify-content: space-around; align-items: center; width: 100%; max-width: 420px; font-size: 15px; text-shadow: 0 2px 4px rgba(0,0,0,0.9); padding: 0 5px; box-sizing: border-box; color: #ffd700; font-family: "Comic Relief", system-ui; font-weight: 700; }
+        .level-select-wrapper { background: linear-gradient(135deg, #ffe066 0%, #d4af37 100%); border: 2px solid #8c6b14; border-radius: 6px; padding: 2px 8px; color: #3e2700; font-family: "Comic Relief", system-ui; font-weight: 700; font-size: 14px; cursor: pointer; outline: none; box-shadow: 0 2px 6px rgba(0,0,0,0.5); }
         .level-select-wrapper option:disabled { color: #999; background: #ddd; }
 
         #game-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100dvh; padding: 10px 0; box-sizing: border-box; }
@@ -52,7 +51,7 @@
         .ball { width: 28px; height: 28px; border-radius: 50%; margin-top: 3px; box-shadow: inset -4px -4px 8px rgba(0,0,0,0.5); }
         .ball.jump { transform: translateY(-14px); }
 
-        .btn-gem { position: relative; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; border: 2px solid; color: #ffffff; cursor: pointer; overflow: hidden; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6); transition: 0.1s ease; -webkit-tap-highlight-color: transparent; font-family: "Cal Sans", sans-serif; font-weight: 600; letter-spacing: 0.5px;}
+        .btn-gem { position: relative; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; border: 2px solid; color: #ffffff; cursor: pointer; overflow: hidden; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6); transition: 0.1s ease; -webkit-tap-highlight-color: transparent; font-family: "Comic Relief", system-ui; font-weight: 700; letter-spacing: 0.5px;}
         .btn-gem::before { content: ''; position: absolute; top: 2px; left: 4%; width: 92%; height: 35%; background: linear-gradient(to bottom, rgba(255,255,255,0.7), rgba(255,255,255,0.05)); border-radius: 12px; pointer-events: none; }
         .btn-gem:active { transform: scale(0.92); }
         .gem-gold { background: linear-gradient(135deg, #ffe066 0%, #d4af37 100%); border-color: #8c6b14; color: #3e2700; box-shadow: inset 0 -5px 10px rgba(100,50,0,0.5), inset 0 4px 8px rgba(255,255,255,0.6), 0 0 15px rgba(255, 215, 0, 0.4); }
@@ -62,7 +61,7 @@
         #btn-mute img { width: 24px; height: 24px; object-fit: contain; }
 
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 1000; justify-content: center; align-items: center; padding: 24px; box-sizing: border-box; }
-        .modal-content { background: #2a1b12; padding: 30px 24px; border-radius: 16px; width: 100%; max-width: 420px; text-align: center; border: 2px solid #d4af37; box-shadow: 0 10px 30px rgba(0,0,0,0.8); color: #fff; display: flex; flex-direction: column; box-sizing: border-box; font-family: "Cal Sans", sans-serif; }
+        .modal-content { background: #2a1b12; padding: 30px 24px; border-radius: 16px; width: 100%; max-width: 420px; text-align: center; border: 2px solid #d4af37; box-shadow: 0 10px 30px rgba(0,0,0,0.8); color: #fff; display: flex; flex-direction: column; box-sizing: border-box; font-family: "Comic Relief", system-ui; font-weight: 700; }
         .modal-content h3 { color: #ffd700; margin-top: 0; margin-bottom: 16px; text-shadow: 0 2px 4px #000; font-size: 28px; letter-spacing: 1px;}
     </style>
 </head>
@@ -92,7 +91,7 @@
             <h3 style="color: #00ffff; text-shadow: 0 0 15px rgba(0,255,255,0.6);">VICTORY!</h3>
             <div id="win-message" style="margin: 10px 0 25px 0; font-size: 18px; line-height: 1.6; color: #fff;"></div>
             <div style="display: flex; justify-content: center; gap: 12px; width: 100%;">
-                <button class="btn-gem gem-mode" style="width: 130px; height: 46px; border-radius: 12px; font-size: 15px;" onclick="REPLAYLevelAndCloseWin()">REPLAY</button>
+                <button class="btn-gem gem-mode" style="width: 130px; height: 46px; border-radius: 12px; font-size: 15px;" onclick="restartLevelAndCloseWin()">REPLAY</button>
                 <button class="btn-gem gem-gold" style="width: 140px; height: 46px; border-radius: 12px; font-size: 15px;" onclick="closeWinModalAndNext()">NEXT LEVEL</button>
             </div>
         </div>
@@ -114,7 +113,7 @@
 
     <script>
         const API_URL = 'https://ball-sort-backend.onrender.com/api';
-        let currentLevel = 1;
+        let currentLevel = parseInt(localStorage.getItem('ballmagic_current_level')) || 1;
         let tubes = []; let initialTubesState = []; let undoStack = []; 
         let selectedTubeIndex = null; let playerMoves = 0; let hiddenBalls = [];
         const TUBE_CAPACITY = 6; 
@@ -187,10 +186,16 @@
             else initLevel(currentLevel);
         };
 
-        function onLevelSelectChange(select) { initLevel(parseInt(select.value)); }
+        function onLevelSelectChange(select) { 
+            currentLevel = parseInt(select.value);
+            localStorage.setItem('ballmagic_current_level', currentLevel);
+            initLevel(currentLevel); 
+        }
 
         async function initLevel(level) {
-            currentLevel = level; document.getElementById('level-dropdown').value = currentLevel;
+            currentLevel = level; 
+            localStorage.setItem('ballmagic_current_level', currentLevel);
+            document.getElementById('level-dropdown').value = currentLevel;
             hiddenBalls = []; document.getElementById('flying-ball-container').innerHTML = '';
             playerMoves = 0; document.getElementById('player-moves').innerText = playerMoves;
             document.getElementById('min-moves').innerText = 'Load...';
@@ -209,7 +214,7 @@
             }
         }
 
-        function REPLAYLevel() { playSfx('drop'); initLevel(currentLevel); }
+        function restartLevel() { playSfx('drop'); initLevel(currentLevel); }
         
         function showWinModal() {
             let minVal = document.getElementById('min-moves').innerText;
@@ -219,7 +224,7 @@
             document.getElementById('win-modal').style.display = 'flex';
         }
 
-        function REPLAYLevelAndCloseWin() { document.getElementById('win-modal').style.display = 'none'; REPLAYLevel(); }
+        function restartLevelAndCloseWin() { document.getElementById('win-modal').style.display = 'none'; restartLevel(); }
         
         function closeWinModalAndNext() {
             playSfx('drop'); document.getElementById('win-modal').style.display = 'none';
@@ -285,7 +290,7 @@
                 }
                 if (canMove) break;
             }
-            if (!canMove) { playSfx('error'); showCustomModal("DEAD END!", "This move leads to an unsolvable state!<br>Would you like to undo or REPLAY?", true, "UNDO", "REPLAY", () => { undoMove(); }, () => { REPLAYLevel(); }); }
+            if (!canMove) { playSfx('error'); showCustomModal("DEAD END!", "This move leads to an unsolvable state!<br>Would you like to undo or replay?", true, "UNDO", "REPLAY", () => { undoMove(); }, () => { restartLevel(); }); }
         }
 
         // ======================= RENDER BOARD & PLAY LOGIC =======================
@@ -365,7 +370,7 @@
                                     checkSolvability(tubes).then(isSolvable => {
                                         if (!isSolvable) {
                                             playSfx('error');
-                                            showCustomModal("DEAD END!", "This move leads to an unsolvable state!<br>Would you like to undo or REPLAY?", true, "UNDO", "REPLAY", () => { undoMove(); }, () => { REPLAYLevel(); });
+                                            showCustomModal("DEAD END!", "This move leads to an unsolvable state!<br>Would you like to undo or replay?", true, "UNDO", "REPLAY", () => { undoMove(); }, () => { restartLevel(); });
                                         } else {
                                             checkGameOver();
                                         }

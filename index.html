@@ -92,7 +92,7 @@
             <h3 style="color: #00ffff; text-shadow: 0 0 15px rgba(0,255,255,0.6);">VICTORY!</h3>
             <div id="win-message" style="margin: 10px 0 25px 0; font-size: 18px; line-height: 1.6; color: #fff;"></div>
             <div style="display: flex; justify-content: center; gap: 12px; width: 100%;">
-                <button class="btn-gem gem-mode" style="width: 130px; height: 46px; border-radius: 12px; font-size: 15px;" onclick="ReplayLevelAndCloseWin()">Replay</button>
+                <button class="btn-gem gem-mode" style="width: 130px; height: 46px; border-radius: 12px; font-size: 15px;" onclick="REPLAYLevelAndCloseWin()">REPLAY</button>
                 <button class="btn-gem gem-gold" style="width: 140px; height: 46px; border-radius: 12px; font-size: 15px;" onclick="closeWinModalAndNext()">NEXT LEVEL</button>
             </div>
         </div>
@@ -209,7 +209,7 @@
             }
         }
 
-        function ReplayLevel() { playSfx('drop'); initLevel(currentLevel); }
+        function REPLAYLevel() { playSfx('drop'); initLevel(currentLevel); }
         
         function showWinModal() {
             let minVal = document.getElementById('min-moves').innerText;
@@ -219,7 +219,7 @@
             document.getElementById('win-modal').style.display = 'flex';
         }
 
-        function ReplayLevelAndCloseWin() { document.getElementById('win-modal').style.display = 'none'; ReplayLevel(); }
+        function REPLAYLevelAndCloseWin() { document.getElementById('win-modal').style.display = 'none'; REPLAYLevel(); }
         
         function closeWinModalAndNext() {
             playSfx('drop'); document.getElementById('win-modal').style.display = 'none';
@@ -285,7 +285,7 @@
                 }
                 if (canMove) break;
             }
-            if (!canMove) { playSfx('error'); showCustomModal("DEAD END!", "This move leads to an unsolvable state!<br>Would you like to undo or Replay?", true, "UNDO", "Replay", () => { undoMove(); }, () => { ReplayLevel(); }); }
+            if (!canMove) { playSfx('error'); showCustomModal("DEAD END!", "This move leads to an unsolvable state!<br>Would you like to undo or REPLAY?", true, "UNDO", "REPLAY", () => { undoMove(); }, () => { REPLAYLevel(); }); }
         }
 
         // ======================= RENDER BOARD & PLAY LOGIC =======================
@@ -365,7 +365,7 @@
                                     checkSolvability(tubes).then(isSolvable => {
                                         if (!isSolvable) {
                                             playSfx('error');
-                                            showCustomModal("DEAD END!", "This move leads to an unsolvable state!<br>Would you like to undo or Replay?", true, "UNDO", "Replay", () => { undoMove(); }, () => { ReplayLevel(); });
+                                            showCustomModal("DEAD END!", "This move leads to an unsolvable state!<br>Would you like to undo or REPLAY?", true, "UNDO", "REPLAY", () => { undoMove(); }, () => { REPLAYLevel(); });
                                         } else {
                                             checkGameOver();
                                         }

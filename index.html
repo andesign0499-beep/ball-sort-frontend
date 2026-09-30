@@ -59,33 +59,69 @@
         }
         .ball.jump { transform: translateY(-14px); }
 
-        .btn-gem { position: relative; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; border: 2px solid; color: #ffffff; cursor: pointer; overflow: hidden; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6); transition: 0.1s ease; -webkit-tap-highlight-color: transparent; font-family: "Comic Relief", system-ui; font-weight: 700; letter-spacing: 0.5px;}
-        .btn-gem::before { content: ''; position: absolute; top: 2px; left: 4%; width: 92%; height: 35%; background: linear-gradient(to bottom, rgba(255,255,255,0.7), rgba(255,255,255,0.05)); border-radius: 12px; pointer-events: none; }
-        .btn-gem:active { transform: scale(0.92); }
-        .gem-gold { background: linear-gradient(135deg, #ffe066 0%, #d4af37 100%); border-color: #8c6b14; color: #3e2700; box-shadow: inset 0 -5px 10px rgba(100,50,0,0.5), inset 0 4px 8px rgba(255,255,255,0.6), 0 0 15px rgba(255, 215, 0, 0.4); }
-        .gem-mode { background: linear-gradient(135deg, #444 0%, #222 100%); border-color: #111; color: #ccc; box-shadow: inset 0 -3px 8px rgba(0,0,0,0.8), inset 0 2px 5px rgba(255,255,255,0.1); }
-
         #btn-mute { 
             position: fixed; bottom: 20px; right: 20px; z-index: 1000; 
             width: 44px; height: 44px; 
-            background: transparent; 
-            border: none; 
-            cursor: pointer; 
-            display: flex; align-items: center; justify-content: center; 
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-            transition: transform 0.1s ease;
+            background: transparent; border: none; cursor: pointer; 
+            display: flex; align-items: center; justify-content: center; padding: 0;
+            -webkit-tap-highlight-color: transparent; transition: transform 0.1s ease;
         }
         #btn-mute:active { transform: scale(0.85); }
-        #btn-mute img { 
-            width: 32px; height: 32px; 
-            object-fit: contain; 
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6)); 
+        #btn-mute img { width: 32px; height: 32px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6)); }
+
+        /* ================= GIAO DIỆN POPUP BONG BÓNG MỚI ================= */
+        .modal-overlay { 
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0, 0, 0, 0.85); z-index: 2000; justify-content: center; align-items: center; padding: 24px; box-sizing: border-box; 
+        }
+        
+        /* Quả cầu bóng kính */
+        .modal-orb {
+            width: 330px; height: 330px; border-radius: 50%;
+            background: radial-gradient(circle at 50% 20%, #ffffff 0%, #fef3db 40%, #ebd0a0 100%);
+            box-shadow: 
+                inset 0 15px 30px rgba(255,255,255,0.9), 
+                inset 0 -15px 30px rgba(0,0,0,0.15),
+                0 15px 40px rgba(0,0,0,0.8),
+                0 0 30px rgba(255,255,255,0.2);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; color: #4a2f1d; 
+            font-family: "Comic Relief", system-ui; font-weight: 700; position: relative;
         }
 
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 1000; justify-content: center; align-items: center; padding: 24px; box-sizing: border-box; }
-        .modal-content { background: #2a1b12; padding: 30px 24px; border-radius: 16px; width: 100%; max-width: 420px; text-align: center; border: 2px solid #d4af37; box-shadow: 0 10px 30px rgba(0,0,0,0.8); color: #fff; display: flex; flex-direction: column; box-sizing: border-box; font-family: "Comic Relief", system-ui; font-weight: 700; }
-        .modal-content h3 { color: #ffd700; margin-top: 0; margin-bottom: 16px; text-shadow: 0 2px 4px #000; font-size: 28px; letter-spacing: 1px;}
+        /* Chữ Title có viền glow */
+        .modal-title { font-size: 42px; margin: 0 0 5px 0; letter-spacing: 1px; }
+        .title-win { 
+            color: #ffccff; 
+            text-shadow: 
+                -2px -2px 0 #fff, 2px -2px 0 #fff, -2px 2px 0 #fff, 2px 2px 0 #fff, 
+                0 0 15px #d30756, 0 0 25px #d30756; 
+        }
+        .title-lose { 
+            color: #ffffff; 
+            text-shadow: 
+                -2px -2px 0 #bbb, 2px -2px 0 #bbb, -2px 2px 0 #bbb, 2px 2px 0 #bbb, 
+                0 0 15px #fff, 0 0 25px #fff; 
+        }
+
+        .modal-subtitle { font-size: 18px; margin-bottom: 5px; font-weight: 700; line-height: 1.3;}
+        .score-large { font-size: 54px; color: #ff5722; margin: 0 0 10px 0; line-height: 1; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
+        .score-small { font-size: 16px; margin: 3px 0; }
+        .val-blue { color: #0088cc; }
+        .val-orange { color: #ff5722; }
+
+        .modal-buttons { display: flex; gap: 15px; margin-top: 15px; }
+        .btn-pill {
+            border-radius: 25px; border: 2px solid rgba(255,255,255,0.7);
+            color: white; font-family: "Comic Relief", system-ui; font-weight: 700; font-size: 15px;
+            padding: 10px 22px; cursor: pointer; text-shadow: 0 2px 3px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3), inset 0 6px 10px rgba(255,255,255,0.5);
+            transition: transform 0.1s; letter-spacing: 0.5px;
+        }
+        .btn-pill:active { transform: scale(0.92); }
+        .btn-blue { background: linear-gradient(to bottom, #4fc3f7, #0288d1); }
+        .btn-green { background: linear-gradient(to bottom, #aed581, #558b2f); }
+
     </style>
 </head>
 <body>
@@ -108,26 +144,21 @@
         <img id="mute-icon" src="https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/main/icons/volume-max.svg" alt="Volume">
     </button>
 
-    <!-- Win Modal -->
-    <div id="win-modal" class="modal-overlay">
-        <div class="modal-content">
-            <h3 style="color: #00ffff; text-shadow: 0 0 15px rgba(0,255,255,0.6);">VICTORY!</h3>
-            <div id="win-message" style="margin: 10px 0 25px 0; font-size: 18px; line-height: 1.6; color: #fff;"></div>
-            <div style="display: flex; justify-content: center; gap: 12px; width: 100%;">
-                <button class="btn-gem gem-mode" style="width: 130px; height: 46px; border-radius: 12px; font-size: 15px;" onclick="restartLevelAndCloseWin()">REPLAY</button>
-                <button class="btn-gem gem-gold" style="width: 140px; height: 46px; border-radius: 12px; font-size: 15px;" onclick="closeWinModalAndNext()">NEXT LEVEL</button>
+    <!-- Modal Popup Gộp Chung (Orb Style) -->
+    <div id="result-modal" class="modal-overlay">
+        <div class="modal-orb">
+            <h2 id="modal-title" class="modal-title"></h2>
+            <div id="modal-subtitle" class="modal-subtitle"></div>
+            <div id="modal-score" class="score-large"></div>
+            
+            <div id="modal-metrics-box">
+                <div class="score-small">Min Moves level <span id="modal-lvl-text"></span>: <span id="modal-min-moves" class="val-blue"></span></div>
+                <div class="score-small">Best Moves: <span id="modal-best-moves" class="val-orange"></span></div>
             </div>
-        </div>
-    </div>
 
-    <!-- Alert / Confirm Modal -->
-    <div id="custom-modal" class="modal-overlay">
-        <div class="modal-content">
-            <h3 id="custom-modal-title">NOTICE</h3>
-            <div id="custom-modal-msg" style="margin: 10px 0 20px 0; font-size: 17px; line-height: 1.6; color: #fff;"></div>
-            <div id="custom-modal-actions" style="display: flex; justify-content: center; gap: 12px; margin-top: 10px;">
-                <button id="custom-modal-btn-ok" class="btn-gem gem-gold" style="width: 130px; height: 46px; border-radius: 12px; font-size: 15px;" onclick="handleCustomOk()">OK</button>
-                <button id="custom-modal-btn-cancel" class="btn-gem gem-mode" style="width: 130px; height: 46px; border-radius: 12px; font-size: 15px; border-color: #111;" onclick="handleCustomCancel()">CANCEL</button>
+            <div class="modal-buttons">
+                <button id="modal-btn-left" class="btn-pill btn-blue"></button>
+                <button id="modal-btn-right" class="btn-pill btn-green"></button>
             </div>
         </div>
     </div>
@@ -140,8 +171,6 @@
         let tubes = []; let initialTubesState = []; let undoStack = []; 
         let selectedTubeIndex = null; let playerMoves = 0; let hiddenBalls = [];
         const TUBE_CAPACITY = 6; 
-        
-        let customModalCallback = null; let customModalCancelCallback = null;
         let activeLevelList = []; 
         let isGameWon = false;
 
@@ -240,7 +269,6 @@
             let serverData = getRandomLevelData(currentLevel);
 
             if (serverData) {
-                // BỘ MÀU MỚI: 12 MÀU ĐẶC BIỆT RỰC RỠ TỪ ẢNH MỚI NHẤT
                 const newPalette = [
                     '#ff4141', '#10c278', '#0068ff', '#ff8c00', 
                     '#ffd000', '#00d0eb', '#6100ed', '#6c6c6c', 
@@ -252,8 +280,6 @@
                 let fixedMatrix = serverData.matrix.map(tube => 
                     tube.map(color => {
                         if (/^[0-9A-Fa-f]{6}$/.test(color)) color = '#' + color;
-                        
-                        // Tự động thay thế màu cũ bằng màu rực rỡ mới
                         if (!levelColorMap[color]) {
                             levelColorMap[color] = newPalette[paletteIdx % newPalette.length];
                             paletteIdx++;
@@ -274,23 +300,95 @@
 
         function restartLevel() { playSfx('drop'); initLevel(currentLevel); }
         
-        function showWinModal() {
-            let minVal = document.getElementById('min-moves').innerText;
-            let msg = `You have successfully completed Level ${currentLevel}!<br><br>
-                       <span style="font-size: 20px;">Score: <span style="color:#ffd700; font-weight: bold;">${playerMoves}</span> / ${minVal}</span>`;
-            document.getElementById('win-message').innerHTML = msg; 
-            document.getElementById('win-modal').style.display = 'flex';
+        // ================= HỆ THỐNG POPUP & KỶ LỤC =================
+        function closeResultModal() {
+            playSfx('drop');
+            document.getElementById('result-modal').style.display = 'none';
         }
 
-        function restartLevelAndCloseWin() { document.getElementById('win-modal').style.display = 'none'; restartLevel(); }
-        
-        function closeWinModalAndNext() {
-            playSfx('drop'); document.getElementById('win-modal').style.display = 'none';
+        function showWinModal() {
+            let minVal = document.getElementById('min-moves').innerText;
+            
+            // Xử lý lưu và lấy Best Moves từ Trình duyệt (vĩnh viễn)
+            let bestKey = 'ballmagic_best_lv_' + currentLevel;
+            let savedBest = localStorage.getItem(bestKey);
+            
+            if (!savedBest || playerMoves < parseInt(savedBest)) {
+                savedBest = playerMoves; // Cập nhật kỷ lục mới
+                localStorage.setItem(bestKey, savedBest);
+            }
+
+            document.getElementById('modal-title').innerText = "YOU WIN!";
+            document.getElementById('modal-title').className = "modal-title title-win";
+            document.getElementById('modal-subtitle').innerText = "Your moves";
+            document.getElementById('modal-score').style.display = 'block';
+            document.getElementById('modal-score').innerText = playerMoves;
+
+            document.getElementById('modal-metrics-box').style.display = 'block';
+            document.getElementById('modal-lvl-text').innerText = currentLevel;
+            document.getElementById('modal-min-moves').innerText = minVal;
+            document.getElementById('modal-best-moves').innerText = savedBest;
+
+            let btnLeft = document.getElementById('modal-btn-left');
+            btnLeft.style.display = 'inline-flex';
+            btnLeft.innerText = "REPLAY";
+            btnLeft.onclick = () => { closeResultModal(); restartLevel(); };
+
+            let btnRight = document.getElementById('modal-btn-right');
+            btnRight.innerText = "NEXT LEVEL";
+            btnRight.onclick = () => { closeResultModal(); nextLevelLogic(); };
+
+            document.getElementById('result-modal').style.display = 'flex';
+        }
+
+        function showLoseModal() {
+            let minVal = document.getElementById('min-moves').innerText;
+            let bestKey = 'ballmagic_best_lv_' + currentLevel;
+            let savedBest = localStorage.getItem(bestKey) || "..."; // Nếu chưa thắng bao giờ thì hiện "..."
+
+            document.getElementById('modal-title').innerText = "YOU LOST!";
+            document.getElementById('modal-title').className = "modal-title title-lose";
+            document.getElementById('modal-subtitle').innerHTML = "Try going back<br>or resetting the game.";
+            document.getElementById('modal-score').style.display = 'none';
+
+            document.getElementById('modal-metrics-box').style.display = 'block';
+            document.getElementById('modal-lvl-text').innerText = currentLevel;
+            document.getElementById('modal-min-moves').innerText = minVal;
+            document.getElementById('modal-best-moves').innerText = savedBest;
+
+            let btnLeft = document.getElementById('modal-btn-left');
+            btnLeft.style.display = 'inline-flex';
+            btnLeft.innerText = "RETURN"; 
+            btnLeft.onclick = () => { closeResultModal(); undoMove(); };
+
+            let btnRight = document.getElementById('modal-btn-right');
+            btnRight.innerText = "RESET";
+            btnRight.onclick = () => { closeResultModal(); restartLevel(); };
+
+            document.getElementById('result-modal').style.display = 'flex';
+        }
+
+        function nextLevelLogic() {
             let currentIndexInList = activeLevelList.indexOf(currentLevel);
             if (currentIndexInList !== -1 && currentIndexInList < activeLevelList.length - 1) {
-                currentLevel = activeLevelList[currentIndexInList + 1]; initLevel(currentLevel);
-            } else showCustomModal("CONGRATULATIONS", "You have beaten all available levels!", false, "CLOSE", "", null, null);
+                currentLevel = activeLevelList[currentIndexInList + 1]; 
+                initLevel(currentLevel);
+            } else {
+                // Tái sử dụng Orb cho thông báo Phá Đảo Game
+                document.getElementById('modal-title').innerText = "WOW!";
+                document.getElementById('modal-title').className = "modal-title title-win";
+                document.getElementById('modal-subtitle').innerHTML = "You have beaten<br>all available levels!";
+                document.getElementById('modal-score').style.display = 'none';
+                document.getElementById('modal-metrics-box').style.display = 'none';
+                
+                document.getElementById('modal-btn-left').style.display = 'none';
+                document.getElementById('modal-btn-right').innerText = "CLOSE";
+                document.getElementById('modal-btn-right').onclick = closeResultModal;
+                
+                document.getElementById('result-modal').style.display = 'flex';
+            }
         }
+        // ===========================================================
 
         function isWonState(state) { return state.every(t => t.length === 0 || (t.length === TUBE_CAPACITY && new Set(t).size === 1)); }
         function getCanonicalSignature(state) { let copies = state.map(t => [...t]); copies.sort((a, b) => a.join(',').localeCompare(b.join(','))); return JSON.stringify(copies); }
@@ -347,7 +445,7 @@
                 }
                 if (canMove) break;
             }
-            if (!canMove) { playSfx('error'); showCustomModal("DEAD END!", "This move leads to an unsolvable state!<br>Would you like to undo or replay?", true, "UNDO", "REPLAY", () => { undoMove(); }, () => { restartLevel(); }); }
+            if (!canMove) { playSfx('error'); showLoseModal(); }
         }
 
         function renderBoard() {
@@ -438,7 +536,7 @@
                                     checkSolvability(tubes).then(isSolvable => {
                                         if (!isSolvable) {
                                             playSfx('error');
-                                            showCustomModal("DEAD END!", "This move leads to an unsolvable state!<br>Would you like to undo or replay?", true, "UNDO", "REPLAY", () => { undoMove(); }, () => { restartLevel(); });
+                                            showLoseModal();
                                         } else {
                                             checkGameOver();
                                         }
@@ -455,15 +553,6 @@
             playSfx('drop'); hiddenBalls = []; document.getElementById('flying-ball-container').innerHTML = ''; 
             if (undoStack.length > 0) { tubes = undoStack.pop(); selectedTubeIndex = null; playerMoves = Math.max(0, playerMoves - 1); document.getElementById('player-moves').innerText = playerMoves; renderBoard(); } 
         }
-
-        function showCustomModal(title, msg, showCancel, okTxt, cancelTxt, onOk, onCancel) {
-            playSfx('drop'); document.getElementById('custom-modal-title').innerText = title; document.getElementById('custom-modal-msg').innerHTML = msg;
-            const btnOk = document.getElementById('custom-modal-btn-ok'); const btnCancel = document.getElementById('custom-modal-btn-cancel');
-            btnOk.innerText = okTxt; if (showCancel) { btnCancel.style.display = 'inline-flex'; btnCancel.innerText = cancelTxt; } else btnCancel.style.display = 'none';
-            customModalCallback = onOk; customModalCancelCallback = onCancel; document.getElementById('custom-modal').style.display = 'flex';
-        }
-        function handleCustomOk() { playSfx('drop'); document.getElementById('custom-modal').style.display = 'none'; if (customModalCallback) customModalCallback(); }
-        function handleCustomCancel() { playSfx('drop'); document.getElementById('custom-modal').style.display = 'none'; if (customModalCancelCallback) customModalCancelCallback(); }
 
     </script>
 </body>

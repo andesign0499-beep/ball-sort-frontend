@@ -57,6 +57,18 @@
             width: 28px; height: 28px; border-radius: 50%; margin-top: 3px; 
             box-shadow: inset -4px -4px 8px rgba(0,0,0,0.5); 
         }
+        
+        .ball::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url('https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/main/icons/bongbong.png');
+            background-size: 100% 100%;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10;
+        }
+        }
         .ball.jump { transform: translateY(-14px); }
 
         .btn-gem { position: relative; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; border: 2px solid; color: #ffffff; cursor: pointer; overflow: hidden; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6); transition: 0.1s ease; -webkit-tap-highlight-color: transparent; font-family: "Comic Relief", system-ui; font-weight: 700; letter-spacing: 0.5px;}

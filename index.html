@@ -205,7 +205,19 @@
             let serverData = await fetchRandomLevelData(currentLevel);
 
             if (serverData) {
-                tubes = JSON.parse(JSON.stringify(serverData.matrix)); initialTubesState = JSON.parse(JSON.stringify(tubes));
+                // TỰ ĐỘNG SỬA LỖI MÀU THIẾU DẤU '#' TỪ DATABASE
+                let fixedMatrix = serverData.matrix.map(tube => 
+                    tube.map(color => {
+                        // Nếu mã màu có đúng 6 ký tự (VD: e040fb) mà chưa có dấu # thì tự ghép thêm vào
+                        if (/^[0-9A-Fa-f]{6}$/.test(color)) {
+                            return '#' + color;
+                        }
+                        return color;
+                    })
+                );
+
+                tubes = JSON.parse(JSON.stringify(fixedMatrix)); 
+                initialTubesState = JSON.parse(JSON.stringify(tubes));
                 undoStack = []; selectedTubeIndex = null; renderBoard();
                 document.getElementById('min-moves').innerText = (serverData.metrics && serverData.metrics.minMoves) ? serverData.metrics.minMoves : '...';
             } else {

@@ -56,7 +56,6 @@
             position: relative; 
             width: 28px; height: 28px; border-radius: 50%; margin-top: 3px; 
             box-shadow: inset -4px -4px 8px rgba(0,0,0,0.5); 
-            /* Xóa css ::after để dùng thẻ img trực tiếp */
         }
         .ball.jump { transform: translateY(-14px); }
 
@@ -92,7 +91,7 @@
 <body>
 
     <div id="game-screen">
-        <img id="game-logo-img" src="https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/refs/heads/main/logo_ballmagic.png" alt="Ball Magic Logo">
+        <img id="game-logo-img" src="https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/main/logo_ballmagic.png" alt="Ball Magic Logo">
         <div class="header-section">
             <div class="game-info">
                 <span>LV: <select id="level-dropdown" class="level-select-wrapper" onchange="onLevelSelectChange(this)"></select></span>
@@ -106,7 +105,7 @@
     </div>
 
     <button id="btn-mute" onclick="toggleMute()">
-        <img id="mute-icon" src="https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/793769bb23b082a65acbed9695d021840dd1cc67/icons/volume-max.svg" alt="Volume">
+        <img id="mute-icon" src="https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/main/icons/volume-max.svg" alt="Volume">
     </button>
 
     <!-- Win Modal -->
@@ -210,8 +209,8 @@
             isMuted = !isMuted; 
             let muteEl = document.getElementById('mute-icon'); 
             muteEl.src = isMuted 
-                ? 'https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/793769bb23b082a65acbed9695d021840dd1cc67/icons/volume-x.svg' 
-                : 'https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/793769bb23b082a65acbed9695d021840dd1cc67/icons/volume-max.svg'; 
+                ? 'https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/main/icons/volume-x.svg' 
+                : 'https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/main/icons/volume-max.svg'; 
         }
 
         function playSfx(type) {
@@ -366,10 +365,10 @@
                     tube.forEach((ballColor, ballIndex) => {
                         const ballDiv = document.createElement('div'); ballDiv.className = 'ball'; ballDiv.style.background = ballColor;
                         
-                        // ĐÃ SỬA: Chèn trực tiếp thẻ IMG bóng bẩy vào quả bóng
+                        // LỚP PHỦ ẢNH ĐƯỢC CHÈN VÀO ĐÂY
                         const overlayImg = document.createElement('img');
-                        overlayImg.src = 'https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/refs/heads/main/icons/bongbong.png';
-                        overlayImg.style.cssText = 'position:absolute; top:0; left:0; width:100%; height:100%; border-radius:50%; pointer-events:none; z-index:2;';
+                        overlayImg.src = 'https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/main/icons/bongbong.png';
+                        overlayImg.style.cssText = 'position:absolute; top:0; left:0; width:100%; height:100%; border-radius:50%; pointer-events:none; z-index:2; object-fit:cover;';
                         ballDiv.appendChild(overlayImg);
 
                         let isHidden = hiddenBalls.some(h => h.tube === currentIndex && h.index === ballIndex);
@@ -408,10 +407,9 @@
                         const flyingBall = document.createElement('div'); flyingBall.className = 'ball';
                         flyingBall.style.position = 'fixed'; flyingBall.style.margin = '0'; flyingBall.style.background = movingBall; flyingBall.style.zIndex = '9999';
                         
-                        // ĐÃ SỬA: Chèn IMG bóng bẩy vào cả lúc quả bóng đang bay
                         const flyingOverlay = document.createElement('img');
-                        flyingOverlay.src = 'https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/refs/heads/main/icons/bongbong.png';
-                        flyingOverlay.style.cssText = 'position:absolute; top:0; left:0; width:100%; height:100%; border-radius:50%; pointer-events:none; z-index:2;';
+                        flyingOverlay.src = 'https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/main/icons/bongbong.png';
+                        flyingOverlay.style.cssText = 'position:absolute; top:0; left:0; width:100%; height:100%; border-radius:50%; pointer-events:none; z-index:2; object-fit:cover;';
                         flyingBall.appendChild(flyingOverlay);
 
                         const jumpHeight = Math.min(sourceRect.top, targetRect.top) - 40;

@@ -8,14 +8,21 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Comic+Relief:wght@700&display=swap');
 
+        /* KHAI BÁO BIẾN CSS ĐỂ THAY ĐỔI ĐỘNG */
+        :root {
+            --bg-color: #1f140e;
+            --bg-pattern: linear-gradient(90deg, rgba(0,0,0,0.7) 2px, transparent 2px, transparent 98px, rgba(255,255,255,0.02) 98px, rgba(255,255,255,0.02) 100px), repeating-linear-gradient(174deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 4px, transparent 4px, transparent 8px), repeating-linear-gradient(6deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 5px, transparent 5px, transparent 10px);
+            --bg-size: 100px 100%, 100% 100%, 100% 100%;
+            --tube-border: rgba(255, 255, 255, 0.3);
+            --tube-bg: rgba(255, 255, 255, 0.1);
+        }
+
         body {
             margin: 0; font-family: "Comic Relief", system-ui; font-weight: 700; color: #fff; overflow: hidden; touch-action: manipulation;
-            background-color: #1f140e;
-            background-image: 
-                linear-gradient(90deg, rgba(0,0,0,0.7) 2px, transparent 2px, transparent 98px, rgba(255,255,255,0.02) 98px, rgba(255,255,255,0.02) 100px),
-                repeating-linear-gradient(174deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 4px, transparent 4px, transparent 8px),
-                repeating-linear-gradient(6deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 5px, transparent 5px, transparent 10px);
-            background-size: 100px 100%, 100% 100%, 100% 100%;
+            background-color: var(--bg-color);
+            background-image: var(--bg-pattern);
+            background-size: var(--bg-size);
+            background-repeat: repeat;
         }
 
         #game-logo-img {
@@ -39,16 +46,36 @@
         .row { display: flex; justify-content: center; gap: 6px; width: 100%; }
         
         .tube {
-            width: 36px; height: 215px; background: rgba(255, 255, 255, 0.1); border: 2px solid rgba(255, 255, 255, 0.3); border-radius: 2px 2px 18px 18px; 
+            width: 36px; height: 215px; border-radius: 2px 2px 18px 18px; 
             display: flex; flex-direction: column-reverse; align-items: center; padding-bottom: 6px; position: relative; cursor: pointer; 
             box-shadow: inset 0 -8px 15px rgba(0,0,0,0.5); -webkit-tap-highlight-color: transparent; transition: box-shadow 0.3s ease, border-color 0.3s ease;
+            background: var(--tube-bg);
+            border: 2px solid var(--tube-border);
         }
         
         .tube.selected { border-color: #ffd700; box-shadow: 0 0 12px #ffd700, inset 0 -8px 15px rgba(0,0,0,0.5); }
         .tube.completed-magic { border-color: #00ffff; box-shadow: 0 0 20px #00ffff, inset 0 -8px 15px rgba(0,255,255,0.4); animation: pulseGlow 1.5s infinite alternate; }
         @keyframes pulseGlow { 0% { box-shadow: 0 0 10px #00ffff, inset 0 -8px 15px rgba(0,255,255,0.4); } 100% { box-shadow: 0 0 25px #ff77ff, inset 0 -8px 15px rgba(255,119,255,0.6); } }
 
-        .ball { width: 28px; height: 28px; border-radius: 50%; margin-top: 3px; box-shadow: inset -4px -4px 8px rgba(0,0,0,0.5); }
+        /* ĐÃ SỬA: Bổ sung lớp overlay ảnh PNG lên trên quả bóng */
+        .ball { 
+            position: relative; /* Quan trọng để lớp phủ PNG ăn theo quả bóng */
+            width: 28px; height: 28px; border-radius: 50%; margin-top: 3px; 
+            box-shadow: inset -4px -4px 8px rgba(0,0,0,0.5); 
+        }
+        
+        /* Lớp phủ ảnh bong bóng */
+        .ball::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/refs/heads/main/icons/bongbong.png');
+            background-size: cover;
+            background-position: center;
+            border-radius: 50%;
+            pointer-events: none; /* Tránh cản trở thao tác click của người chơi */
+        }
+        
         .ball.jump { transform: translateY(-14px); }
 
         .btn-gem { position: relative; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; border: 2px solid; color: #ffffff; cursor: pointer; overflow: hidden; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6); transition: 0.1s ease; -webkit-tap-highlight-color: transparent; font-family: "Comic Relief", system-ui; font-weight: 700; letter-spacing: 0.5px;}
@@ -57,7 +84,6 @@
         .gem-gold { background: linear-gradient(135deg, #ffe066 0%, #d4af37 100%); border-color: #8c6b14; color: #3e2700; box-shadow: inset 0 -5px 10px rgba(100,50,0,0.5), inset 0 4px 8px rgba(255,255,255,0.6), 0 0 15px rgba(255, 215, 0, 0.4); }
         .gem-mode { background: linear-gradient(135deg, #444 0%, #222 100%); border-color: #111; color: #ccc; box-shadow: inset 0 -3px 8px rgba(0,0,0,0.8), inset 0 2px 5px rgba(255,255,255,0.1); }
 
-        /* ĐÃ SỬA: NÚT ÂM THANH TRONG SUỐT HOÀN TOÀN */
         #btn-mute { 
             position: fixed; bottom: 20px; right: 20px; z-index: 1000; 
             width: 44px; height: 44px; 
@@ -97,7 +123,6 @@
         </div>
     </div>
 
-    <!-- ĐÃ SỬA: Xóa class btn-gem gem-mode để bỏ hoàn toàn hiệu ứng nút -->
     <button id="btn-mute" onclick="toggleMute()">
         <img id="mute-icon" src="https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/793769bb23b082a65acbed9695d021840dd1cc67/icons/volume-max.svg" alt="Volume">
     </button>
@@ -143,12 +168,24 @@
             try {
                 let res = await fetch(`${API_URL}/game/config`);
                 let config = await res.json();
+                
                 const logoImg = document.getElementById('game-logo-img');
-                if (config.showTitle) { 
-                    logoImg.style.display = 'block'; 
-                } else {
-                    logoImg.style.display = 'none';
+                if (config.showTitle) { logoImg.style.display = 'block'; } else { logoImg.style.display = 'none'; }
+
+                if (config.bgColor) document.documentElement.style.setProperty('--bg-color', config.bgColor);
+                
+                if (config.bgPattern) {
+                    let pattern = config.bgPattern;
+                    if (!pattern.startsWith('url') && !pattern.startsWith('linear')) {
+                        pattern = `url('${pattern}')`;
+                    }
+                    document.documentElement.style.setProperty('--bg-pattern', pattern);
+                    document.documentElement.style.setProperty('--bg-size', 'auto'); 
                 }
+
+                if (config.tubeBorder) document.documentElement.style.setProperty('--tube-border', config.tubeBorder);
+                if (config.tubeBg) document.documentElement.style.setProperty('--tube-bg', config.tubeBg);
+
             } catch(e) {
                 document.getElementById('game-logo-img').style.display = 'block';
             }
@@ -182,12 +219,10 @@
             return null;
         }
 
-        // ======================= AUDIO =======================
         let audioCtx = null; let isMuted = false;
         function initAudio() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (audioCtx.state === 'suspended') audioCtx.resume(); }
         document.body.addEventListener('pointerdown', initAudio, {once: true});
         
-        // ĐÃ SỬA: Hàm đổi ảnh loa mượt mà
         function toggleMute() { 
             initAudio(); 
             isMuted = !isMuted; 
@@ -206,7 +241,6 @@
             else if (type === 'win') { const notes = [261.63, 329.63, 392.00, 523.25]; notes.forEach((freq, i) => { const oscW = audioCtx.createOscillator(); const gainW = audioCtx.createGain(); oscW.connect(gainW); gainW.connect(audioCtx.destination); oscW.type = 'sine'; oscW.frequency.setValueAtTime(freq, now + i * 0.1); gainW.gain.setValueAtTime(0.2, now + i * 0.1); gainW.gain.exponentialRampToValueAtTime(0.01, now + i * 0.1 + 0.2); oscW.start(now + i * 0.1); oscW.stop(now + i * 0.1 + 0.2); }); }
         }
 
-        // ======================= GAME START =======================
         window.onload = async function() { 
             loadGameConfig(); await fetchActiveLevels();
             if (activeLevelList.length === 0) document.getElementById('board').innerHTML = '<div style="color:#ff5252; font-size: 18px; text-align: center; margin-top:50px;">NO LEVELS CREATED YET!<br><span style="font-size:14px; color:#aaa;">Please go to Admin CMS to create levels.</span></div>';
@@ -232,10 +266,8 @@
             let serverData = await fetchRandomLevelData(currentLevel);
 
             if (serverData) {
-                // TỰ ĐỘNG SỬA LỖI MÀU THIẾU DẤU '#' TỪ DATABASE
                 let fixedMatrix = serverData.matrix.map(tube => 
                     tube.map(color => {
-                        // Nếu mã màu có đúng 6 ký tự (VD: e040fb) mà chưa có dấu # thì tự ghép thêm vào
                         if (/^[0-9A-Fa-f]{6}$/.test(color)) {
                             return '#' + color;
                         }
@@ -273,7 +305,6 @@
             } else showCustomModal("CONGRATULATIONS", "You have beaten all available levels!", false, "CLOSE", "", null, null);
         }
 
-        // ======================= ALGORITHM & CHECKS =======================
         function isWonState(state) { return state.every(t => t.length === 0 || (t.length === TUBE_CAPACITY && new Set(t).size === 1)); }
         function getCanonicalSignature(state) { let copies = state.map(t => [...t]); copies.sort((a, b) => a.join(',').localeCompare(b.join(','))); return JSON.stringify(copies); }
         
@@ -332,7 +363,6 @@
             if (!canMove) { playSfx('error'); showCustomModal("DEAD END!", "This move leads to an unsolvable state!<br>Would you like to undo or replay?", true, "UNDO", "REPLAY", () => { undoMove(); }, () => { restartLevel(); }); }
         }
 
-        // ======================= RENDER BOARD & PLAY LOGIC =======================
         function renderBoard() {
             const board = document.getElementById('board'); board.innerHTML = '';
             const numTubes = tubes.length; const topCount = Math.ceil(numTubes / 2);

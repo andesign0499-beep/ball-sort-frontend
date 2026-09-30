@@ -10,8 +10,8 @@
 
         :root {
             --bg-color: #1f140e;
-            --bg-pattern: linear-gradient(90deg, rgba(0,0,0,0.7) 2px, transparent 2px, transparent 98px, rgba(255,255,255,0.02) 98px, rgba(255,255,255,0.02) 100px), repeating-linear-gradient(174deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 4px, transparent 4px, transparent 8px), repeating-linear-gradient(6deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 5px, transparent 5px, transparent 10px);
-            --bg-size: 100px 100%, 100% 100%, 100% 100%;
+            --bg-pattern: url('https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/main/bg.jpg');
+            --bg-size: auto; 
             --tube-border: rgba(255, 255, 255, 0.3);
             --tube-bg: rgba(255, 255, 255, 0.1);
         }
@@ -135,7 +135,6 @@
     <div id="flying-ball-container"></div>
 
     <script>
-        // HỆ THỐNG OFFLINE SIÊU TỐC KHÔNG CẦN BACKEND
         let gameData = null;
         let currentLevel = parseInt(localStorage.getItem('ballmagic_current_level')) || 1;
         let tubes = []; let initialTubesState = []; let undoStack = []; 
@@ -148,7 +147,6 @@
 
         async function loadOfflineData() {
             try {
-                // Đọc trực tiếp từ file data.json chứa trong thư mục gốc (hoạt động siêu tốc)
                 let res = await fetch('data.json');
                 gameData = await res.json();
             } catch (e) {
@@ -242,10 +240,25 @@
             let serverData = getRandomLevelData(currentLevel);
 
             if (serverData) {
+                // ĐÂY LÀ PHẦN TỰ ĐỘNG MAP BỘ 12 MÀU TỪ ẢNH BẠN CUNG CẤP
+                const newPalette = [
+                    '#a4d3e6', '#2078b5', '#b2df91', '#33a12e', 
+                    '#f5a4a9', '#e32422', '#f7c078', '#ff8200', 
+                    '#cbb3d8', '#663e9a', '#fcf6a4', '#a7592c'
+                ];
+                let levelColorMap = {};
+                let paletteIdx = 0;
+
                 let fixedMatrix = serverData.matrix.map(tube => 
                     tube.map(color => {
-                        if (/^[0-9A-Fa-f]{6}$/.test(color)) return '#' + color;
-                        return color;
+                        if (/^[0-9A-Fa-f]{6}$/.test(color)) color = '#' + color;
+                        
+                        // Tự động thay thế màu cũ bằng màu mới
+                        if (!levelColorMap[color]) {
+                            levelColorMap[color] = newPalette[paletteIdx % newPalette.length];
+                            paletteIdx++;
+                        }
+                        return levelColorMap[color];
                     })
                 );
 

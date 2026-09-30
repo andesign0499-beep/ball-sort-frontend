@@ -69,14 +69,14 @@
         #btn-mute:active { transform: scale(0.85); }
         #btn-mute img { width: 32px; height: 32px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6)); }
 
-        /* ================= GIAO DIỆN POPUP ẢNH CUSTOM (CẬP NHẬT TỶ LỆ) ================= */
+        /* ================= GIAO DIỆN POPUP ẢNH CUSTOM ================= */
         .modal-overlay { 
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: rgba(0, 0, 0, 0.85); z-index: 2000; justify-content: center; align-items: center; padding: 24px; box-sizing: border-box; 
         }
         
         .modal-orb {
-            width: 350px; height: 350px; /* Đã hạ xuống 350px để an toàn cho màn hình Mobile */
+            width: 350px; height: 350px; 
             background-image: url('https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/main/icons/popup-bg.png');
             background-size: contain; background-position: center; background-repeat: no-repeat;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -85,16 +85,14 @@
             filter: drop-shadow(0 20px 40px rgba(0,0,0,0.9)); 
         }
 
-        /* Chữ Title */
         .modal-title-img {
             position: absolute; top: 15px; left: 50%; transform: translateX(-50%);
             width: 85%; height: auto; object-fit: contain;
             pointer-events: none;
         }
 
-        /* Vùng nội dung chữ màu Nâu */
         .modal-content-area {
-            margin-top: 45px; /* Giảm margin một xíu để nhường chỗ cho nút bấm to ra */
+            margin-top: 45px; 
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             color: #4a2f1d; width: 100%;
         }
@@ -105,24 +103,25 @@
         .val-blue { color: #3baaf8; }
         .val-orange { color: #e65134; }
 
-        .modal-buttons { display: flex; gap: 12px; margin-top: 15px; }
+        /* Đã chỉnh lại khoảng cách 2 nút bấm cho sát nhau hơn */
+        .modal-buttons { display: flex; gap: 12px; margin-top: 15px; justify-content: center; width: 100%; }
         
         .btn-custom {
             background-color: transparent; border: none; outline: none;
             background-size: contain; background-repeat: no-repeat; background-position: center;
-            /* Đã phóng to nút bấm */
-            width: 155px; height: 58px;
+            
+            /* Thu gọn width lại để 2 nút có thể xích gần nhau */
+            width: 135px; height: 50px;
             color: white; font-family: "Comic Relief", system-ui; font-weight: 700; 
-            /* Giữ nguyên font-size 19px */
-            font-size: 19px;
+            font-size: 19px; /* Vẫn giữ nguyên cỡ font 19px */
+            
             display: flex; align-items: center; justify-content: center;
             cursor: pointer; padding: 0 0 5px 0; 
             transition: transform 0.1s; letter-spacing: 0.5px;
-            text-shadow: 
-                2px 2px 0 rgba(0,0,0,0.68), -2px -2px 0 rgba(0,0,0,0.68), 
-                2px -2px 0 rgba(0,0,0,0.68), -2px 2px 0 rgba(0,0,0,0.68), 
-                2px 0 0 rgba(0,0,0,0.68), -2px 0 0 rgba(0,0,0,0.68), 
-                0 2px 0 rgba(0,0,0,0.68), 0 -2px 0 rgba(0,0,0,0.68);
+            
+            /* SỬ DỤNG CHUẨN STROKE CỦA CSS - Viền đen 2px độ mờ 68% */
+            -webkit-text-stroke: 2px rgba(0,0,0,0.68);
+            paint-order: stroke fill;
         }
         .btn-custom:active { transform: scale(0.92); }
         .btn-blue { background-image: url('https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/main/icons/bt_blue.png'); }
@@ -150,7 +149,7 @@
         <img id="mute-icon" src="https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/main/icons/volume-max.svg" alt="Volume">
     </button>
 
-    <!-- Modal Popup Sử Dụng Ảnh Ảnh Đã Cắt -->
+    <!-- Modal Popup -->
     <div id="result-modal" class="modal-overlay">
         <div class="modal-orb">
             <!-- Ảnh Title Win/Lose chèn bên trên bóng -->
@@ -310,7 +309,7 @@
 
         function restartLevel() { playSfx('drop'); initLevel(currentLevel); }
         
-        // ================= HỆ THỐNG POPUP CUSTOM ẢNH =================
+        // ================= HỆ THỐNG POPUP =================
         function closeResultModal() {
             playSfx('drop');
             document.getElementById('result-modal').style.display = 'none';

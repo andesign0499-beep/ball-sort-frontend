@@ -140,7 +140,6 @@
         .val-blue { color: #3baaf8; }
         .val-orange { color: #e65134; }
 
-        /* Đã thu hẹp khoảng cách (gap) giữa 2 nút */
         .modal-buttons { display: flex; gap: 5px; margin-top: 15px; justify-content: center; width: 100%; }
         
         .btn-custom {
@@ -165,67 +164,61 @@
             100% { transform: translateY(110vh) rotate(720deg) rotateX(360deg); opacity: 0; }
         }
 
-        /* ================= Modal Chọn Level MỚI ================= */
+        /* ================= Modal Chọn Level & CSS Chấm Sao ================= */
         .level-modal-box {
-            width: 92%;
-            max-width: 360px; 
-            max-height: 700px; 
-            background-color: var(--bg-color);
-            background-image: var(--bg-pattern); 
-            background-size: var(--bg-size);
-            border: 2px solid #ffb22a; 
-            border-radius: 36px; 
-            padding: 25px 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            box-sizing: border-box;
+            width: 92%; max-width: 360px; max-height: 700px; 
+            background-color: var(--bg-color); background-image: var(--bg-pattern); background-size: var(--bg-size);
+            border: 2px solid #ffb22a; border-radius: 36px; padding: 25px 15px;
+            display: flex; flex-direction: column; align-items: center; box-sizing: border-box;
             box-shadow: 0 15px 40px rgba(0,0,0,0.8);
         }
-        .level-modal-title {
-            font-size: 22px; font-weight: 700; color: #fff; margin: 0 0 20px 0; text-shadow: 0 2px 4px rgba(0,0,0,0.8);
-        }
+        .level-modal-title { font-size: 22px; font-weight: 700; color: #fff; margin: 0 0 20px 0; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+        
         .level-grid-wrapper {
-            width: 100%; 
-            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%);
-            border-radius: 24px; 
-            padding: 20px 10px; 
-            box-sizing: border-box; 
-            margin-bottom: 0px; 
+            width: 100%; background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%);
+            border-radius: 24px; padding: 20px 10px; box-sizing: border-box; margin-bottom: 0px; 
         }
         .level-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr); 
-            gap: 20px 5px;
-            max-height: 450px; 
-            overflow-y: auto;
-            
-            scrollbar-width: none; 
-            -ms-overflow-style: none;  
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px 5px;
+            max-height: 450px; overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none;  
         }
-        .level-grid::-webkit-scrollbar { 
-            display: none; 
-        }
+        .level-grid::-webkit-scrollbar { display: none; }
         
-        .level-item {
-            display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.1s;
-        }
+        .level-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.1s; }
         .level-item:active { transform: scale(0.9); }
+        
+        /* Chỉnh CSS Vòng Tròn Level */
         .level-icon {
             width: 48px; height: 48px; 
             background-size: contain; background-repeat: no-repeat; background-position: center;
-            display: flex; align-items: center; justify-content: center;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
             font-size: 15px; font-weight: 700; margin-bottom: 5px;
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+            line-height: 1; /* Để thẻ chữ MIN không bị cách xa số */
         }
         .level-icon-active { background-image: url('./assets/icon/bg_level_active.png'); color: #000; }
         .level-icon-none { background-image: url('./assets/icon/bg_level_none.png'); color: #fff; }
+        /* Box Min Tím */
+        .level-icon-min { background-image: url('./assets/icon/bg_level_min.png'); color: #fff; }
         
         .level-text { font-size: 12px; color: #fff; white-space: nowrap; text-shadow: 0 1px 2px rgba(0,0,0,0.8); }
 
-        .level-modal-box .btn-green {
-            margin-bottom: -50px; 
+        /* Container chứa Ngôi Sao */
+        .stars-container {
+            position: absolute; top: -11px; display: flex; justify-content: center; gap: 0px; 
+            width: 100%; pointer-events: none; z-index: 2;
         }
+        .star {
+            width: 16px; height: 16px; background-image: url('./assets/icon/icon_star.png');
+            background-size: contain; background-repeat: no-repeat; background-position: center;
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.8));
+        }
+        /* Hiệu ứng tạo vòng cung cho ngôi sao ở giữa nếu có 3 sao */
+        .three-stars .star:nth-child(2) {
+            transform: translateY(-4px);
+        }
+
+        .level-modal-box .btn-green { margin-bottom: -50px; }
 
     </style>
 </head>
@@ -324,11 +317,9 @@
 
         function setupActiveLevels() {
             activeLevelList = gameData.activeLevels || [];
-            
             if (activeLevelList.length === 0) {
                 for (let i = 1; i <= 80; i++) activeLevelList.push(i);
             }
-            
             if (activeLevelList.length > 0 && !activeLevelList.includes(currentLevel)) currentLevel = activeLevelList[0];
         }
 
@@ -346,9 +337,7 @@
             initAudio(); 
             isMuted = !isMuted; 
             let muteEl = document.getElementById('mute-icon'); 
-            muteEl.src = isMuted 
-                ? './assets/icon/volume-x.svg' 
-                : './assets/icon/volume-max.svg'; 
+            muteEl.src = isMuted ? './assets/icon/volume-x.svg' : './assets/icon/volume-max.svg'; 
         }
 
         function playSfx(type) {
@@ -368,15 +357,11 @@
                 conf.className = 'confetti';
                 conf.style.left = Math.random() * 100 + 'vw';
                 conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                // Kích thước ngẫu nhiên
                 conf.style.width = (Math.random() * 8 + 6) + 'px';
                 conf.style.height = (Math.random() * 12 + 8) + 'px';
-                // Thời gian rơi ngẫu nhiên
                 conf.style.animationDuration = (Math.random() * 2 + 2) + 's';
                 conf.style.animationDelay = Math.random() * 1 + 's';
                 document.body.appendChild(conf);
-                
-                // Dọn dẹp pháo giấy sau 5 giây
                 setTimeout(() => conf.remove(), 5000);
             }
         }
@@ -412,15 +397,60 @@
                 let bestKey = 'ballmagic_best_lv_' + levelNum;
                 let bestScore = localStorage.getItem(bestKey);
                 
-                let iconClass = bestScore ? 'level-icon-active' : 'level-icon-none';
-                let iconText = bestScore ? bestScore : '...';
+                // Lấy Min Moves từ Game Data
+                let minMoves = 9999;
+                if (gameData && gameData.levels && gameData.levels[levelNum] && gameData.levels[levelNum].length > 0) {
+                    minMoves = gameData.levels[levelNum][0].metrics.minMoves || 9999;
+                }
+
+                let iconClass = 'level-icon-none';
+                let iconText = '...';
+                let starsHtml = '';
+
+                if (bestScore) {
+                    let pMoves = parseInt(bestScore);
+                    let stars = 0;
+                    let isPerfect = false;
+
+                    // CÔNG THỨC CHẤM ĐIỂM
+                    if (pMoves <= minMoves) {
+                        stars = 3; isPerfect = true;
+                    } else if (pMoves <= Math.ceil(minMoves * 1.2)) {
+                        stars = 3;
+                    } else if (pMoves <= Math.ceil(minMoves * 1.5)) {
+                        stars = 2;
+                    } else {
+                        stars = 1;
+                    }
+
+                    // HIỂN THỊ GIAO DIỆN ICON
+                    if (isPerfect) {
+                        iconClass = 'level-icon-min';
+                        // Số to ở trên, chữ MIN nhỏ ở dưới
+                        iconText = `<div style="font-size: 16px; margin-top: 2px;">${pMoves}</div><div style="font-size: 9px; margin-top: -2px;">MIN</div>`;
+                    } else {
+                        iconClass = 'level-icon-active';
+                        iconText = `<span style="font-size: 16px;">${pMoves}</span>`;
+                    }
+
+                    // TẠO SAO
+                    let threeStarsClass = stars === 3 ? 'three-stars' : '';
+                    starsHtml = `<div class="stars-container ${threeStarsClass}">`;
+                    for(let i = 0; i < stars; i++) {
+                        starsHtml += '<div class="star"></div>';
+                    }
+                    starsHtml += '</div>';
+                }
 
                 let item = document.createElement('div');
                 item.className = 'level-item';
                 item.onclick = () => { selectLevelFromModal(levelNum); };
 
                 item.innerHTML = `
-                    <div class="level-icon ${iconClass}">${iconText}</div>
+                    <div style="position: relative; display: flex; flex-direction: column; align-items: center;">
+                        ${starsHtml}
+                        <div class="level-icon ${iconClass}">${iconText}</div>
+                    </div>
                     <div class="level-text">Level ${levelNum}</div>
                 `;
                 container.appendChild(item);
@@ -438,11 +468,8 @@
         function initLevel(level) {
             currentLevel = level; 
             localStorage.setItem('ballmagic_current_level', currentLevel);
-            
             document.getElementById('level-btn').innerText = `Level ${currentLevel}`;
-            
             hiddenBalls = []; document.getElementById('flying-ball-container').innerHTML = '';
-            
             playerMoves = 0; document.getElementById('player-moves').innerText = playerMoves;
             
             let bestKey = 'ballmagic_best_lv_' + currentLevel;
@@ -455,21 +482,13 @@
             let serverData = getRandomLevelData(currentLevel);
 
             if (serverData) {
-                const newPalette = [
-                    '#ff4141', '#10c278', '#0068ff', '#ff8c00', 
-                    '#ffd000', '#00d0eb', '#6100ed', '#6c6c6c', 
-                    '#7dd800', '#d30756', '#c600cc', '#cacaca'
-                ];
-                let levelColorMap = {};
-                let paletteIdx = 0;
+                const newPalette = ['#ff4141', '#10c278', '#0068ff', '#ff8c00', '#ffd000', '#00d0eb', '#6100ed', '#6c6c6c', '#7dd800', '#d30756', '#c600cc', '#cacaca'];
+                let levelColorMap = {}; let paletteIdx = 0;
 
                 let fixedMatrix = serverData.matrix.map(tube => 
                     tube.map(color => {
                         if (/^[0-9A-Fa-f]{6}$/.test(color)) color = '#' + color;
-                        if (!levelColorMap[color]) {
-                            levelColorMap[color] = newPalette[paletteIdx % newPalette.length];
-                            paletteIdx++;
-                        }
+                        if (!levelColorMap[color]) { levelColorMap[color] = newPalette[paletteIdx % newPalette.length]; paletteIdx++; }
                         return levelColorMap[color];
                     })
                 );
@@ -512,12 +531,9 @@
                 
                 document.getElementById('modal-score').style.display = 'block';
                 document.getElementById('modal-score').innerText = playerMoves;
+                document.getElementById('modal-metrics-box').style.display = 'none'; // Ẩn thông số phụ
                 
-                // Ẩn bảng thống kê phụ
-                document.getElementById('modal-metrics-box').style.display = 'none';
-                
-                // Bắn pháo giấy
-                triggerConfetti();
+                triggerConfetti(); // Bắn pháo giấy
             } else {
                 document.getElementById('modal-title-img').src = './assets/icon/title-win.png';
                 document.getElementById('modal-subtitle').innerHTML = "Your moves";
@@ -549,11 +565,9 @@
             let savedBest = localStorage.getItem(bestKey) || "...";
 
             document.getElementById('modal-title-img').src = './assets/icon/title-lose.png';
-            
             document.getElementById('modal-subtitle').innerHTML = "Try going back<br>or resetting the game.";
             document.getElementById('modal-score').style.display = 'none';
 
-            // Phải hiện lại box nếu trước đó vừa ẩn ở màn Perfect
             document.getElementById('modal-metrics-box').style.display = 'block';
             document.getElementById('modal-lvl-text').innerText = currentLevel;
             document.getElementById('modal-min-moves').innerText = minVal;

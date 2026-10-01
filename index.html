@@ -10,7 +10,6 @@
 
         :root {
             --bg-color: #1f140e;
-            /* Đã sửa đường dẫn ảnh nền */
             --bg-pattern: url('./assets/bg.jpg');
             --bg-size: auto; 
             --tube-border: rgba(255, 255, 255, 0.3);
@@ -26,17 +25,63 @@
         }
 
         #game-logo-img {
-            height: 88px; width: auto; object-fit: contain; margin: 10px 0 2px 0;
+            height: 88px; width: auto; object-fit: contain; margin: 15px 0 10px 0;
             filter: drop-shadow(0 4px 6px rgba(0,0,0,0.8)); display: none;
         }
 
-        .header-section { width: 100%; display: flex; flex-direction: column; align-items: center; margin-bottom: 5px; padding-top: 5px; }
-        .game-info { display: flex; justify-content: space-around; align-items: center; width: 100%; max-width: 420px; font-size: 15px; text-shadow: 0 2px 4px rgba(0,0,0,0.9); padding: 0 5px; box-sizing: border-box; color: #ffd700; font-family: "Comic Relief", system-ui; font-weight: 700; }
-        .level-select-wrapper { background: linear-gradient(135deg, #ffe066 0%, #d4af37 100%); border: 2px solid #8c6b14; border-radius: 6px; padding: 2px 8px; color: #3e2700; font-family: "Comic Relief", system-ui; font-weight: 700; font-size: 14px; cursor: pointer; outline: none; box-shadow: 0 2px 6px rgba(0,0,0,0.5); }
-        .level-select-wrapper option:disabled { color: #999; background: #ddd; }
+        /* ================= HEADER MỚI ================= */
+        .header-section { width: 100%; display: flex; flex-direction: column; align-items: center; margin-bottom: 20px; padding-top: 15px; z-index: 10; }
+        
+        .game-info-top { 
+            display: flex; justify-content: space-between; align-items: center; 
+            width: 100%; max-width: 380px; padding: 0 20px; box-sizing: border-box;
+            font-family: "Comic Relief", system-ui; font-weight: 700;
+        }
+        
+        .info-text { font-size: 18px; text-shadow: 0 2px 4px rgba(0,0,0,0.9); display: flex; gap: 5px; }
+        .info-label { color: #ffd700; }
+        #best-moves { color: #ffffff; }
+        #min-moves { color: #00ffff; }
 
-        #game-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100dvh; padding: 10px 0; box-sizing: border-box; }
-        .board-section { flex-grow: 1; display: flex; align-items: center; justify-content: center; width: 100%; }
+        /* Nút chọn Level với background tĩnh */
+        .level-select-custom { 
+            background-color: transparent;
+            background-image: url('./assets/icon/bt_level.png');
+            background-size: 100% 100%; 
+            background-repeat: no-repeat;
+            background-position: center;
+            border: none; outline: none;
+            width: 110px; height: 40px; 
+            color: #3e2700; 
+            font-family: "Comic Relief", system-ui; font-weight: 700; font-size: 16px; 
+            cursor: pointer; 
+            
+            /* Căn giữa chữ và ẩn mũi tên mặc định của trình duyệt */
+            text-align: center;
+            text-align-last: center;
+            appearance: none; 
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            padding: 0 10px;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+        }
+        .level-select-custom option { background: #ffe066; color: #3e2700; }
+
+        .game-info-moves {
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        
+        #player-moves {
+            font-size: 48px;
+            color: #ffe066; /* Màu vàng sáng giống ảnh */
+            text-shadow: 0 4px 8px rgba(0,0,0,0.8);
+            line-height: 1;
+        }
+        /* ============================================= */
+
+        #game-screen { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; width: 100%; height: 100dvh; padding: 10px 0; box-sizing: border-box; }
+        .board-section { flex-grow: 1; display: flex; align-items: center; justify-content: center; width: 100%; margin-top: -30px;}
 
         .board { display: flex; flex-direction: column; align-items: center; gap: 15px; width: 100%; max-width: 100vw; padding: 0; box-sizing: border-box; }
         .row { display: flex; justify-content: center; gap: 6px; width: 100%; }
@@ -78,7 +123,6 @@
         
         .modal-orb {
             width: 350px; height: 350px; 
-            /* Đã sửa đường dẫn ảnh popup */
             background-image: url('./assets/icon/popup-bg.png');
             background-size: contain; background-position: center; background-repeat: no-repeat;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -112,20 +156,15 @@
             background-size: contain; background-repeat: no-repeat; background-position: center;
             width: 140px; height: 50px;
             color: white; font-family: "Comic Relief", system-ui; font-weight: 700; 
-            
             font-size: 16px; 
-            
             display: flex; align-items: center; justify-content: center;
             cursor: pointer; 
-            
             padding: 0; 
-            
             transition: transform 0.1s; letter-spacing: 0.5px;
             -webkit-text-stroke: 2px rgba(0,0,0,0.68);
             paint-order: stroke fill;
         }
         .btn-custom:active { transform: scale(0.92); }
-        /* Đã sửa đường dẫn ảnh nút bấm */
         .btn-blue { background-image: url('./assets/icon/bt_blue.png'); }
         .btn-green { background-image: url('./assets/icon/bt_green.png'); }
 
@@ -134,22 +173,28 @@
 <body>
 
     <div id="game-screen">
-        <!-- Đã sửa đường dẫn ảnh logo -->
         <img id="game-logo-img" src="./assets/logo_ballmagic.png" alt="Ball Magic Logo">
+        
+        <!-- CẤU TRÚC HEADER MỚI THEO ẢNH -->
         <div class="header-section">
-            <div class="game-info">
-                <span>LV: <select id="level-dropdown" class="level-select-wrapper" onchange="onLevelSelectChange(this)"></select></span>
-                <span>MIN: <span id="min-moves" style="color:#a3ffcc;">...</span></span>
-                <span>MOVES: <span id="player-moves" style="color:#ffd700;">0</span></span>
+            <div class="game-info-top">
+                <span class="info-text"><span class="info-label">Best:</span> <span id="best-moves">...</span></span>
+                
+                <select id="level-dropdown" class="level-select-custom" onchange="onLevelSelectChange(this)"></select>
+                
+                <span class="info-text"><span class="info-label">Min:</span> <span id="min-moves">...</span></span>
+            </div>
+            <div class="game-info-moves">
+                <span id="player-moves">0</span>
             </div>
         </div>
+        
         <div class="board-section">
             <div class="board" id="board"></div>
         </div>
     </div>
 
     <button id="btn-mute" onclick="toggleMute()">
-        <!-- Đã sửa đường dẫn icon loa -->
         <img id="mute-icon" src="./assets/icon/volume-max.svg" alt="Volume">
     </button>
 
@@ -239,7 +284,6 @@
             initAudio(); 
             isMuted = !isMuted; 
             let muteEl = document.getElementById('mute-icon'); 
-            /* Đã sửa đường dẫn icon loa trong Javascript */
             muteEl.src = isMuted 
                 ? './assets/icon/volume-x.svg' 
                 : './assets/icon/volume-max.svg'; 
@@ -276,8 +320,16 @@
             localStorage.setItem('ballmagic_current_level', currentLevel);
             document.getElementById('level-dropdown').value = currentLevel;
             hiddenBalls = []; document.getElementById('flying-ball-container').innerHTML = '';
+            
+            // Xử lý điểm MOVES
             playerMoves = 0; document.getElementById('player-moves').innerText = playerMoves;
-            document.getElementById('min-moves').innerText = 'Load...';
+            
+            // Xử lý điểm BEST từ LocalStorage
+            let bestKey = 'ballmagic_best_lv_' + currentLevel;
+            let savedBest = localStorage.getItem(bestKey);
+            document.getElementById('best-moves').innerText = savedBest ? savedBest : '...';
+
+            document.getElementById('min-moves').innerText = '...';
             isGameWon = false;
 
             let serverData = getRandomLevelData(currentLevel);
@@ -330,7 +382,6 @@
                 localStorage.setItem(bestKey, savedBest);
             }
 
-            /* Đã sửa đường dẫn ảnh title-win */
             document.getElementById('modal-title-img').src = './assets/icon/title-win.png';
             
             document.getElementById('modal-subtitle').innerHTML = "Your moves";
@@ -359,7 +410,6 @@
             let bestKey = 'ballmagic_best_lv_' + currentLevel;
             let savedBest = localStorage.getItem(bestKey) || "...";
 
-            /* Đã sửa đường dẫn ảnh title-lose */
             document.getElementById('modal-title-img').src = './assets/icon/title-lose.png';
             
             document.getElementById('modal-subtitle').innerHTML = "Try going back<br>or resetting the game.";
@@ -388,7 +438,6 @@
                 currentLevel = activeLevelList[currentIndexInList + 1]; 
                 initLevel(currentLevel);
             } else {
-                /* Đã sửa đường dẫn ảnh title-win */
                 document.getElementById('modal-title-img').src = './assets/icon/title-win.png';
                 document.getElementById('modal-subtitle').innerHTML = "You have beaten<br>all available levels!";
                 document.getElementById('modal-score').style.display = 'none';
@@ -483,7 +532,6 @@
                         const ballDiv = document.createElement('div'); ballDiv.className = 'ball'; ballDiv.style.background = ballColor;
                         
                         const overlayImg = document.createElement('img');
-                        /* Đã sửa đường dẫn ảnh bongbong.png */
                         overlayImg.src = './assets/icon/bongbong.png';
                         overlayImg.style.cssText = 'position:absolute; top:0; left:0; width:100%; height:100%; border-radius:50%; pointer-events:none; z-index:2; object-fit:cover;';
                         ballDiv.appendChild(overlayImg);
@@ -525,7 +573,6 @@
                         flyingBall.style.position = 'fixed'; flyingBall.style.margin = '0'; flyingBall.style.background = movingBall; flyingBall.style.zIndex = '9999';
                         
                         const flyingOverlay = document.createElement('img');
-                        /* Đã sửa đường dẫn ảnh bongbong.png */
                         flyingOverlay.src = './assets/icon/bongbong.png';
                         flyingOverlay.style.cssText = 'position:absolute; top:0; left:0; width:100%; height:100%; border-radius:50%; pointer-events:none; z-index:2; object-fit:cover;';
                         flyingBall.appendChild(flyingOverlay);

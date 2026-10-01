@@ -140,7 +140,8 @@
         .val-blue { color: #3baaf8; }
         .val-orange { color: #e65134; }
 
-        .modal-buttons { display: flex; gap: 12px; margin-top: 15px; justify-content: center; width: 100%; }
+        /* Đã thu hẹp khoảng cách (gap) giữa 2 nút */
+        .modal-buttons { display: flex; gap: 5px; margin-top: 15px; justify-content: center; width: 100%; }
         
         .btn-custom {
             background-color: transparent; border: none; outline: none;
@@ -153,11 +154,22 @@
         .btn-blue { background-image: url('./assets/icon/bt_blue.png'); }
         .btn-green { background-image: url('./assets/icon/bt_green.png'); }
 
-        /* ================= Modal Chọn Level MỚI (Đã Fix cứng Chiều Cao) ================= */
+        /* ================= HIỆU ỨNG PHÁO GIẤY ================= */
+        .confetti {
+            position: fixed; width: 10px; height: 20px; z-index: 9999; top: -20px; pointer-events: none;
+            animation: confettiFall linear forwards; border-radius: 2px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        @keyframes confettiFall {
+            0% { transform: translateY(-10vh) rotate(0deg) rotateX(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(720deg) rotateX(360deg); opacity: 0; }
+        }
+
+        /* ================= Modal Chọn Level MỚI ================= */
         .level-modal-box {
             width: 92%;
-            max-width: 360px; /* Rộng tối đa 360px */
-            max-height: 700px; /* Cố định chiều cao tổng thể tối đa không quá 700px */
+            max-width: 360px; 
+            max-height: 700px; 
             background-color: var(--bg-color);
             background-image: var(--bg-pattern); 
             background-size: var(--bg-size);
@@ -185,7 +197,7 @@
             display: grid;
             grid-template-columns: repeat(4, 1fr); 
             gap: 20px 5px;
-            max-height: 450px; /* Fix vùng cuộn danh sách không bao giờ dài hơn 450px */
+            max-height: 450px; 
             overflow-y: auto;
             
             scrollbar-width: none; 
@@ -255,7 +267,7 @@
         </div>
     </div>
 
-    <!-- Modal Popup Win/Lose -->
+    <!-- Modal Popup Win/Lose/Perfect -->
     <div id="result-modal" class="modal-overlay">
         <div class="modal-orb">
             <img id="modal-title-img" src="" class="modal-title-img">
@@ -346,6 +358,27 @@
             else if (type === 'drop') { osc.type = 'sine'; osc.frequency.setValueAtTime(800, now); osc.frequency.exponentialRampToValueAtTime(400, now + 0.1); gain.gain.setValueAtTime(0.2, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1); osc.start(now); osc.stop(now + 0.1); } 
             else if (type === 'error') { osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, now); gain.gain.setValueAtTime(0.1, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2); osc.start(now); osc.stop(now + 0.2); } 
             else if (type === 'win') { const notes = [261.63, 329.63, 392.00, 523.25]; notes.forEach((freq, i) => { const oscW = audioCtx.createOscillator(); const gainW = audioCtx.createGain(); oscW.connect(gainW); gainW.connect(audioCtx.destination); oscW.type = 'sine'; oscW.frequency.setValueAtTime(freq, now + i * 0.1); gainW.gain.setValueAtTime(0.2, now + i * 0.1); gainW.gain.exponentialRampToValueAtTime(0.01, now + i * 0.1 + 0.2); oscW.start(now + i * 0.1); oscW.stop(now + i * 0.1 + 0.2); }); }
+        }
+
+        // ================= HÀM TẠO PHÁO GIẤY =================
+        function triggerConfetti() {
+            const colors = ['#ff5252', '#448aff', '#76ff03', '#ffd740', '#e040fb', '#ffab40'];
+            for (let i = 0; i < 70; i++) {
+                let conf = document.createElement('div');
+                conf.className = 'confetti';
+                conf.style.left = Math.random() * 100 + 'vw';
+                conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                // Kích thước ngẫu nhiên
+                conf.style.width = (Math.random() * 8 + 6) + 'px';
+                conf.style.height = (Math.random() * 12 + 8) + 'px';
+                // Thời gian rơi ngẫu nhiên
+                conf.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                conf.style.animationDelay = Math.random() * 1 + 's';
+                document.body.appendChild(conf);
+                
+                // Dọn dẹp pháo giấy sau 5 giây
+                setTimeout(() => conf.remove(), 5000);
+            }
         }
 
         window.onload = async function() { 
@@ -453,14 +486,15 @@
 
         function restartLevel() { playSfx('drop'); initLevel(currentLevel); }
         
-        // ================= HỆ THỐNG POPUP WIN / LOSE =================
+        // ================= HỆ THỐNG POPUP WIN / LOSE / PERFECT =================
         function closeResultModal() {
             playSfx('drop');
             document.getElementById('result-modal').style.display = 'none';
         }
 
         function showWinModal() {
-            let minVal = document.getElementById('min-moves').innerText;
+            let minValStr = document.getElementById('min-moves').innerText;
+            let minVal = parseInt(minValStr) || 9999;
             let bestKey = 'ballmagic_best_lv_' + currentLevel;
             let savedBest = localStorage.getItem(bestKey);
             
@@ -469,16 +503,33 @@
                 localStorage.setItem(bestKey, savedBest);
             }
 
-            document.getElementById('modal-title-img').src = './assets/icon/title-win.png';
-            
-            document.getElementById('modal-subtitle').innerHTML = "Your moves";
-            document.getElementById('modal-score').style.display = 'block';
-            document.getElementById('modal-score').innerText = playerMoves;
+            // KIỂM TRA TRẠNG THÁI PERFECT
+            let isPerfect = (playerMoves <= minVal);
 
-            document.getElementById('modal-metrics-box').style.display = 'block';
-            document.getElementById('modal-lvl-text').innerText = currentLevel;
-            document.getElementById('modal-min-moves').innerText = minVal;
-            document.getElementById('modal-best-moves').innerText = savedBest;
+            if (isPerfect) {
+                document.getElementById('modal-title-img').src = './assets/icon/title-perfect.png';
+                document.getElementById('modal-subtitle').innerHTML = `<span style="font-size: 15px;">You have found the minimum number<br>of moves for Level ${currentLevel}.</span>`;
+                
+                document.getElementById('modal-score').style.display = 'block';
+                document.getElementById('modal-score').innerText = playerMoves;
+                
+                // Ẩn bảng thống kê phụ
+                document.getElementById('modal-metrics-box').style.display = 'none';
+                
+                // Bắn pháo giấy
+                triggerConfetti();
+            } else {
+                document.getElementById('modal-title-img').src = './assets/icon/title-win.png';
+                document.getElementById('modal-subtitle').innerHTML = "Your moves";
+                
+                document.getElementById('modal-score').style.display = 'block';
+                document.getElementById('modal-score').innerText = playerMoves;
+
+                document.getElementById('modal-metrics-box').style.display = 'block';
+                document.getElementById('modal-lvl-text').innerText = currentLevel;
+                document.getElementById('modal-min-moves').innerText = minValStr;
+                document.getElementById('modal-best-moves').innerText = savedBest;
+            }
 
             let btnLeft = document.getElementById('modal-btn-left');
             btnLeft.style.display = 'flex';
@@ -502,6 +553,7 @@
             document.getElementById('modal-subtitle').innerHTML = "Try going back<br>or resetting the game.";
             document.getElementById('modal-score').style.display = 'none';
 
+            // Phải hiện lại box nếu trước đó vừa ẩn ở màn Perfect
             document.getElementById('modal-metrics-box').style.display = 'block';
             document.getElementById('modal-lvl-text').innerText = currentLevel;
             document.getElementById('modal-min-moves').innerText = minVal;

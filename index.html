@@ -68,15 +68,14 @@
         .level-select-custom option { background: #ffe066; color: #3e2700; }
 
         .game-info-moves {
-            margin-top: 25px;
+            margin-top: 15px;
             margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
         }
         
         #player-moves {
-            font-size: 48px;
-            color: #ffe066; /* Màu vàng sáng giống ảnh */
-            text-shadow: 0 4px 8px rgba(0,0,0,0.8);
-            line-height: 1;
+            color: #ffffff; /* Số bước đi màu trắng đồng bộ với chữ Best */
         }
         /* ============================================= */
 
@@ -185,7 +184,7 @@
                 <span class="info-text"><span class="info-label">Min:</span> <span id="min-moves">...</span></span>
             </div>
             <div class="game-info-moves">
-                <span id="player-moves">0</span>
+                <span class="info-text"><span class="info-label">Moves:</span> <span id="player-moves">0</span></span>
             </div>
         </div>
         

@@ -43,7 +43,6 @@
         #best-moves { color: #ffffff; }
         #min-moves { color: #00ffff; }
 
-        /* Nút chọn Level ở Header */
         .level-select-custom { 
             background-color: transparent;
             background-image: url('./assets/icon/bt_level.png');
@@ -70,8 +69,8 @@
         }
         
         #player-moves { color: #ffffff; }
-        /* ============================================= */
 
+        /* ================= BÀN CHƠI ================= */
         #game-screen { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; width: 100%; height: 100dvh; padding: 10px 0; box-sizing: border-box; }
         .board-section { flex-grow: 1; display: flex; align-items: center; justify-content: center; width: 100%; margin-top: -30px;}
 
@@ -154,16 +153,16 @@
         .btn-blue { background-image: url('./assets/icon/bt_blue.png'); }
         .btn-green { background-image: url('./assets/icon/bt_green.png'); }
 
-        /* Modal Chọn Level (Đã tối ưu rộng & bo góc mạnh) */
+        /* ================= Modal Chọn Level MỚI ================= */
         .level-modal-box {
-            width: 92%;
-            max-width: 420px; 
+            width: 100%;
+            max-width: 360px; /* Fix cứng 360px theo yêu cầu */
             background-color: var(--bg-color);
             background-image: var(--bg-pattern); 
             background-size: var(--bg-size);
             border: 2px solid #ffb22a; 
             border-radius: 36px; 
-            padding: 25px 20px;
+            padding: 25px 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -174,19 +173,28 @@
             font-size: 22px; font-weight: 700; color: #fff; margin: 0 0 20px 0; text-shadow: 0 2px 4px rgba(0,0,0,0.8);
         }
         .level-grid-wrapper {
-            width: 100%; background: rgba(0, 0, 0, 0.45); 
-            border-radius: 24px; padding: 20px 10px; box-sizing: border-box; margin-bottom: 25px;
+            width: 100%; 
+            /* Đã chuyển sang nền mờ dần (Linear Gradient) từ đen đậm xuống trong suốt */
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%);
+            border-radius: 24px; 
+            padding: 20px 10px; 
+            box-sizing: border-box; 
+            margin-bottom: 0px; /* Bỏ margin để nút xanh đè lên viền */
         }
         .level-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr); 
             gap: 20px 5px;
-            max-height: 65vh; 
+            max-height: 70vh; /* Nâng chiều cao lên 70% màn hình */
             overflow-y: auto;
+            
+            /* Ẩn thanh cuộn cho tất cả trình duyệt nhưng vẫn vuốt được */
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none;  /* IE and Edge */
         }
-        
-        .level-grid::-webkit-scrollbar { width: 6px; }
-        .level-grid::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 6px; }
+        .level-grid::-webkit-scrollbar { 
+            display: none; /* Chrome, Safari, Opera */
+        }
         
         .level-item {
             display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.1s;
@@ -204,6 +212,11 @@
         
         .level-text { font-size: 12px; color: #fff; white-space: nowrap; text-shadow: 0 1px 2px rgba(0,0,0,0.8); }
 
+        /* Đẩy nút Close nằm đè lên viền dưới của box */
+        .level-modal-box .btn-green {
+            margin-bottom: -50px; 
+        }
+
     </style>
 </head>
 <body>
@@ -214,9 +227,7 @@
         <div class="header-section">
             <div class="game-info-top">
                 <span class="info-text"><span class="info-label">Best:</span> <span id="best-moves">...</span></span>
-                
                 <button id="level-btn" class="level-select-custom" onclick="openLevelModal()">Level 1</button>
-                
                 <span class="info-text"><span class="info-label">Min:</span> <span id="min-moves">...</span></span>
             </div>
             <div class="game-info-moves">

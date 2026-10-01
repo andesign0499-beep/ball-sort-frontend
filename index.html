@@ -153,10 +153,11 @@
         .btn-blue { background-image: url('./assets/icon/bt_blue.png'); }
         .btn-green { background-image: url('./assets/icon/bt_green.png'); }
 
-        /* ================= Modal Chọn Level MỚI ================= */
+        /* ================= Modal Chọn Level MỚI (Đã Fix cứng Chiều Cao) ================= */
         .level-modal-box {
-            width: 100%;
-            max-width: 360px; /* Fix cứng 360px theo yêu cầu */
+            width: 92%;
+            max-width: 360px; /* Rộng tối đa 360px */
+            max-height: 700px; /* Cố định chiều cao tổng thể tối đa không quá 700px */
             background-color: var(--bg-color);
             background-image: var(--bg-pattern); 
             background-size: var(--bg-size);
@@ -174,26 +175,24 @@
         }
         .level-grid-wrapper {
             width: 100%; 
-            /* Đã chuyển sang nền mờ dần (Linear Gradient) từ đen đậm xuống trong suốt */
             background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%);
             border-radius: 24px; 
             padding: 20px 10px; 
             box-sizing: border-box; 
-            margin-bottom: 0px; /* Bỏ margin để nút xanh đè lên viền */
+            margin-bottom: 0px; 
         }
         .level-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr); 
             gap: 20px 5px;
-            max-height: 70vh; /* Nâng chiều cao lên 70% màn hình */
+            max-height: 450px; /* Fix vùng cuộn danh sách không bao giờ dài hơn 450px */
             overflow-y: auto;
             
-            /* Ẩn thanh cuộn cho tất cả trình duyệt nhưng vẫn vuốt được */
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none; 
+            -ms-overflow-style: none;  
         }
         .level-grid::-webkit-scrollbar { 
-            display: none; /* Chrome, Safari, Opera */
+            display: none; 
         }
         
         .level-item {
@@ -212,7 +211,6 @@
         
         .level-text { font-size: 12px; color: #fff; white-space: nowrap; text-shadow: 0 1px 2px rgba(0,0,0,0.8); }
 
-        /* Đẩy nút Close nằm đè lên viền dưới của box */
         .level-modal-box .btn-green {
             margin-bottom: -50px; 
         }

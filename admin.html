@@ -269,7 +269,6 @@
         } catch (e) { alert("Lỗi kết nối Server"); }
     }
 
-    // Các hàm xử lý level cũ giữ nguyên bên dưới...
     let currentLevelNum = 1; let currentSlotIndex = 1; let slotsData = {}; 
     let currentMatrix = []; let initialMatrix = []; let computedMinMoves = null;
     let selectedTube = null; let playtestMoves = 0; let hiddenBalls = [];
@@ -392,31 +391,69 @@
         let copies = state.map(t => [...t]); copies.sort((a, b) => a.join(',').localeCompare(b.join(','))); return JSON.stringify(copies);
     }
     
+    // ==========================================
+    // HÀM TÍNH TOÁN MIN MOVES MỚI (CHUẨN XÁC 100%)
+    // ==========================================
     async function calculateMinMoves(stateMatrix) {
-        let queue = [{ state: JSON.parse(JSON.stringify(stateMatrix)), dist: 0 }];
-        let visited = new Set(); visited.add(getCanonicalSignature(stateMatrix));
+        let startSig = getCanonicalSignature(stateMatrix);
+        let visited = new Map();
+        visited.set(startSig, 0);
+        
+        let buckets = [];
+        buckets[0] = [JSON.parse(JSON.stringify(stateMatrix))];
+        
+        let currentCost = 0;
+        let capacity = 6;
         let iterations = 0;
-        const TUBE_CAPACITY = 6;
-
-        while (queue.length > 0) {
-            if (iterations % 1000 === 0) { await new Promise(resolve => setTimeout(resolve, 0)); }
-            if (iterations++ > 150000) return null; 
+        
+        while (currentCost < 1000) {
+            if (!buckets[currentCost] || buckets[currentCost].length === 0) {
+                currentCost++;
+                continue;
+            }
             
-            let { state, dist } = queue.shift();
-            let isWon = state.every(t => t.length === 0 || (t.length === TUBE_CAPACITY && new Set(t).size === 1));
-            if (isWon) return dist;
+            if (iterations % 1000 === 0) { await new Promise(resolve => setTimeout(resolve, 0)); }
+            if (iterations++ > 150000) return null;
+            
+            let current = buckets[currentCost].pop();
+            
+            let isWon = current.every(t => t.length === 0 || (t.length === capacity && new Set(t).size === 1));
+            if (isWon) return currentCost;
+            
+            if (visited.get(getCanonicalSignature(current)) < currentCost) continue;
 
-            for (let i = 0; i < state.length; i++) {
-                if (state[i].length === 0) continue;
-                let topColor = state[i][state[i].length - 1];
-                for (let j = 0; j < state.length; j++) {
+            for (let i = 0; i < current.length; i++) {
+                if (current[i].length === 0) continue;
+                let topColor = current[i][current[i].length - 1];
+                
+                let count = 0;
+                for (let k = current[i].length - 1; k >= 0; k--) {
+                    if (current[i][k] === topColor) count++;
+                    else break;
+                }
+                
+                for (let j = 0; j < current.length; j++) {
                     if (i === j) continue;
-                    let target = state[j];
-                    if (TUBE_CAPACITY - target.length > 0 && (target.length === 0 || target[target.length - 1] === topColor)) {
-                        let nextState = JSON.parse(JSON.stringify(state));
-                        while (nextState[i].length > 0 && nextState[i][nextState[i].length - 1] === topColor && nextState[j].length < TUBE_CAPACITY) { nextState[j].push(nextState[i].pop()); }
+                    let target = current[j];
+                    let space = capacity - target.length;
+                    
+                    if (space > 0 && (target.length === 0 || target[target.length - 1] === topColor)) {
+                        let maxMove = Math.min(count, space);
+                        let nextState = JSON.parse(JSON.stringify(current));
+                        
+                        for(let m = 0; m < maxMove; m++) {
+                            nextState[j].push(nextState[i].pop());
+                        }
+                        
+                        // ĐIỂM SỬA QUAN TRỌNG: Tính phí = Số quả bóng được di chuyển
+                        let newCost = currentCost + maxMove; 
                         let sig = getCanonicalSignature(nextState);
-                        if (!visited.has(sig)) { visited.add(sig); queue.push({ state: nextState, dist: dist + 1 }); }
+                        
+                        if (!visited.has(sig) || newCost < visited.get(sig)) {
+                            visited.set(sig, newCost);
+                            if (!buckets[newCost]) buckets[newCost] = [];
+                            buckets[newCost].push(nextState);
+                        }
                     }
                 }
             }

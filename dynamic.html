@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ball Magic - CMS Preview</title>
+    <title>Ball Magic - DYNAMIC PREVIEW</title>
     <script src="https://connect.facebook.net/en_US/fbinstant.6.3.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Comic+Relief:wght@700&display=swap');
 
         :root {
             --bg-color: #1f140e;
-            --bg-pattern: url('https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/main/bg.jpg');
+            --bg-pattern: url('./assets/bg.jpg');
             --bg-size: auto; 
             --tube-border: rgba(255, 255, 255, 0.3);
             --tube-bg: rgba(255, 255, 255, 0.1);
@@ -25,17 +25,54 @@
         }
 
         #game-logo-img {
-            height: 88px; width: auto; object-fit: contain; margin: 10px 0 2px 0;
+            height: 60px; width: auto; object-fit: contain; margin: 10px 0 5px 0;
             filter: drop-shadow(0 4px 6px rgba(0,0,0,0.8)); display: none;
         }
 
-        .header-section { width: 100%; display: flex; flex-direction: column; align-items: center; margin-bottom: 5px; padding-top: 5px; }
-        .game-info { display: flex; justify-content: space-around; align-items: center; width: 100%; max-width: 420px; font-size: 15px; text-shadow: 0 2px 4px rgba(0,0,0,0.9); padding: 0 5px; box-sizing: border-box; color: #ffd700; font-family: "Comic Relief", system-ui; font-weight: 700; }
-        .level-select-wrapper { background: linear-gradient(135deg, #ffe066 0%, #d4af37 100%); border: 2px solid #8c6b14; border-radius: 6px; padding: 2px 8px; color: #3e2700; font-family: "Comic Relief", system-ui; font-weight: 700; font-size: 14px; cursor: pointer; outline: none; box-shadow: 0 2px 6px rgba(0,0,0,0.5); }
-        .level-select-wrapper option:disabled { color: #999; background: #ddd; }
+        /* ================= HEADER ================= */
+        .header-section { width: 100%; display: flex; flex-direction: column; align-items: center; margin-bottom: 20px; padding-top: 10px; z-index: 10; }
+        
+        .game-info-top { 
+            display: flex; justify-content: space-between; align-items: center; 
+            width: 100%; max-width: 380px; padding: 0 20px; box-sizing: border-box;
+            font-family: "Comic Relief", system-ui; font-weight: 700;
+        }
+        
+        .info-text { font-size: 18px; text-shadow: 0 2px 4px rgba(0,0,0,0.9); display: flex; gap: 5px; }
+        .info-label { color: #ffd700; }
+        #best-moves { color: #ffffff; }
+        #min-moves { color: #00ffff; }
 
-        #game-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100dvh; padding: 10px 0; box-sizing: border-box; }
-        .board-section { flex-grow: 1; display: flex; align-items: center; justify-content: center; width: 100%; }
+        .level-select-custom { 
+            background-color: transparent;
+            background-image: url('./assets/icon/bt_level.png');
+            background-size: 100% 100%; 
+            background-repeat: no-repeat;
+            background-position: center;
+            border: none; outline: none;
+            width: 115px; height: 40px; 
+            color: #3e2700; 
+            font-family: "Comic Relief", system-ui; font-weight: 700; font-size: 16px; 
+            cursor: pointer; 
+            text-align: right;
+            padding: 0 28px 0 10px;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+            transition: transform 0.1s;
+        }
+        .level-select-custom:active { transform: scale(0.95); }
+
+        .game-info-moves {
+            margin-top: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+        }
+        
+        #player-moves { color: #ffffff; }
+
+        /* ================= BÀN CHƠI ================= */
+        #game-screen { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; width: 100%; height: 100dvh; padding: 10px 0; box-sizing: border-box; }
+        .board-section { flex-grow: 1; display: flex; align-items: center; justify-content: center; width: 100%; margin-top: -30px;}
 
         .board { display: flex; flex-direction: column; align-items: center; gap: 15px; width: 100%; max-width: 100vw; padding: 0; box-sizing: border-box; }
         .row { display: flex; justify-content: center; gap: 6px; width: 100%; }
@@ -69,15 +106,25 @@
         #btn-mute:active { transform: scale(0.85); }
         #btn-mute img { width: 32px; height: 32px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6)); }
 
-        /* ================= GIAO DIỆN POPUP ẢNH CUSTOM ================= */
+        /* Nút xuất Data dành riêng cho dynamic.html */
+        #btn-export {
+            position: fixed; top: 15px; left: 15px; z-index: 9999;
+            background: #ff5252; color: white; border: 2px solid #fff; border-radius: 8px;
+            padding: 8px 15px; font-family: "Comic Relief", system-ui; font-weight: 700; cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+        }
+        #btn-export:active { transform: scale(0.95); }
+
+        /* ================= GIAO DIỆN MODALS ================= */
         .modal-overlay { 
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0, 0, 0, 0.85); z-index: 2000; justify-content: center; align-items: center; padding: 24px; box-sizing: border-box; 
+            background: rgba(0, 0, 0, 0.85); z-index: 2000; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; 
         }
         
+        /* Modal Result Orb (Win/Lose) */
         .modal-orb {
             width: 350px; height: 350px; 
-            background-image: url('https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/main/icons/popup-bg.png');
+            background-image: url('./assets/icon/popup-bg.png');
             background-size: contain; background-position: center; background-repeat: no-repeat;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             text-align: center; position: relative;
@@ -87,8 +134,7 @@
 
         .modal-title-img {
             position: absolute; top: 15px; left: 50%; transform: translateX(-50%);
-            width: 85%; height: auto; object-fit: contain;
-            pointer-events: none;
+            width: 85%; height: auto; object-fit: contain; pointer-events: none;
         }
 
         .modal-content-area {
@@ -108,57 +154,130 @@
         .btn-custom {
             background-color: transparent; border: none; outline: none;
             background-size: contain; background-repeat: no-repeat; background-position: center;
-            width: 140px; height: 50px;
-            color: white; font-family: "Comic Relief", system-ui; font-weight: 700; 
-            font-size: 16px; 
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; 
-            padding: 0; 
-            transition: transform 0.1s; letter-spacing: 0.5px;
-            -webkit-text-stroke: 2px rgba(0,0,0,0.68);
-            paint-order: stroke fill;
+            width: 140px; height: 50px; color: white; font-family: "Comic Relief", system-ui; font-weight: 700; 
+            font-size: 16px; display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; 
+            transition: transform 0.1s; letter-spacing: 0.5px; -webkit-text-stroke: 2px rgba(0,0,0,0.68); paint-order: stroke fill;
         }
         .btn-custom:active { transform: scale(0.92); }
-        .btn-blue { background-image: url('https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/main/icons/bt_blue.png'); }
-        .btn-green { background-image: url('https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/main/icons/bt_green.png'); }
+        .btn-blue { background-image: url('./assets/icon/bt_blue.png'); }
+        .btn-green { background-image: url('./assets/icon/bt_green.png'); }
+
+        /* ================= Modal Chọn Level MỚI (Đã Fix cứng Chiều Cao) ================= */
+        .level-modal-box {
+            width: 92%;
+            max-width: 360px; /* Rộng tối đa 360px */
+            max-height: 700px; /* Cố định chiều cao tổng thể tối đa không quá 700px */
+            background-color: var(--bg-color);
+            background-image: var(--bg-pattern); 
+            background-size: var(--bg-size);
+            border: 2px solid #ffb22a; 
+            border-radius: 36px; 
+            padding: 25px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-sizing: border-box;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+        }
+        .level-modal-title {
+            font-size: 22px; font-weight: 700; color: #fff; margin: 0 0 20px 0; text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        }
+        .level-grid-wrapper {
+            width: 100%; 
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%);
+            border-radius: 24px; 
+            padding: 20px 10px; 
+            box-sizing: border-box; 
+            margin-bottom: 0px; 
+        }
+        .level-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 20px 5px;
+            max-height: 450px; /* Fix vùng cuộn danh sách không bao giờ dài hơn 450px */
+            overflow-y: auto;
+            
+            scrollbar-width: none; 
+            -ms-overflow-style: none;  
+        }
+        .level-grid::-webkit-scrollbar { 
+            display: none; 
+        }
+        
+        .level-item {
+            display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.1s;
+        }
+        .level-item:active { transform: scale(0.9); }
+        .level-icon {
+            width: 48px; height: 48px; 
+            background-size: contain; background-repeat: no-repeat; background-position: center;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 15px; font-weight: 700; margin-bottom: 5px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+        }
+        .level-icon-active { background-image: url('./assets/icon/bg_level_active.png'); color: #000; }
+        .level-icon-none { background-image: url('./assets/icon/bg_level_none.png'); color: #fff; }
+        
+        .level-text { font-size: 12px; color: #fff; white-space: nowrap; text-shadow: 0 1px 2px rgba(0,0,0,0.8); }
+
+        .level-modal-box .btn-green {
+            margin-bottom: -50px; 
+        }
 
     </style>
 </head>
 <body>
 
+    <!-- NÚT XUẤT FILE SIÊU TỐC -->
+    <button id="btn-export" onclick="exportDataJson()">🚀 XUẤT DATA.JSON</button>
+
     <div id="game-screen">
-        <img id="game-logo-img" src="https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/main/logo_ballmagic.png" alt="Ball Magic Logo">
+        <img id="game-logo-img" src="./assets/logo_ballmagic.png" alt="Ball Magic Logo">
+        
         <div class="header-section">
-            <div class="game-info">
-                <span>LV: <select id="level-dropdown" class="level-select-wrapper" onchange="onLevelSelectChange(this)"></select></span>
-                <span>MIN: <span id="min-moves" style="color:#a3ffcc;">...</span></span>
-                <span>MOVES: <span id="player-moves" style="color:#ffd700;">0</span></span>
+            <div class="game-info-top">
+                <span class="info-text"><span class="info-label">Best:</span> <span id="best-moves">...</span></span>
+                <button id="level-btn" class="level-select-custom" onclick="openLevelModal()">Level 1</button>
+                <span class="info-text"><span class="info-label">Min:</span> <span id="min-moves">...</span></span>
+            </div>
+            <div class="game-info-moves">
+                <span class="info-text"><span class="info-label">Moves:</span> <span id="player-moves">0</span></span>
             </div>
         </div>
+        
         <div class="board-section">
             <div class="board" id="board"></div>
         </div>
     </div>
 
     <button id="btn-mute" onclick="toggleMute()">
-        <img id="mute-icon" src="https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/main/icons/volume-max.svg" alt="Volume">
+        <img id="mute-icon" src="./assets/icon/volume-max.svg" alt="Volume">
     </button>
 
-    <!-- Modal Popup -->
+    <!-- Modal Level Select -->
+    <div id="level-select-modal" class="modal-overlay">
+        <div class="level-modal-box">
+            <h2 class="level-modal-title">Choose level and play</h2>
+            <div class="level-grid-wrapper">
+                <div class="level-grid" id="level-grid">
+                    <!-- Javascript điền level vào đây -->
+                </div>
+            </div>
+            <button class="btn-custom btn-green" onclick="closeLevelModal()">CLOSE</button>
+        </div>
+    </div>
+
+    <!-- Modal Popup Win/Lose -->
     <div id="result-modal" class="modal-overlay">
         <div class="modal-orb">
-            <!-- Ảnh Title Win/Lose chèn bên trên bóng -->
             <img id="modal-title-img" src="" class="modal-title-img">
-            
             <div class="modal-content-area">
                 <div id="modal-subtitle" class="modal-subtitle"></div>
                 <div id="modal-score" class="score-large"></div>
-                
                 <div id="modal-metrics-box">
                     <div class="score-small">Min Moves level <span id="modal-lvl-text"></span>: <span id="modal-min-moves" class="val-blue"></span></div>
                     <div class="score-small">Best Moves: <span id="modal-best-moves" class="val-orange"></span></div>
                 </div>
-
                 <div class="modal-buttons">
                     <button id="modal-btn-left" class="btn-custom btn-blue"></button>
                     <button id="modal-btn-right" class="btn-custom btn-green"></button>
@@ -170,42 +289,57 @@
     <div id="flying-ball-container"></div>
 
     <script>
-        // ==============================================================
-        // CẤU HÌNH API CMS
-        // BẮT BUỘC THAY ĐỔI ĐỊA CHỈ NÀY THÀNH LINK API THỰC TẾ CỦA BẠN
-        // ==============================================================
-        const API_BASE_URL = "https://ball-sort-backend.onrender.com/api"; 
-
-        let gameData = { config: {}, activeLevels: [] };
-        let currentLevel = parseInt(localStorage.getItem('ballmagic_preview_level')) || 1;
+        const API_URL = 'https://ball-sort-backend.onrender.com/api';
+        let gameData = { config: {}, activeLevels: [], levels: {} };
+        
+        let currentLevel = parseInt(localStorage.getItem('ballmagic_current_level')) || 1;
         let tubes = []; let initialTubesState = []; let undoStack = []; 
         let selectedTubeIndex = null; let playerMoves = 0; let hiddenBalls = [];
         const TUBE_CAPACITY = 6; 
         let activeLevelList = []; 
         let isGameWon = false;
 
-        async function fetchGameConfig() {
+        window.onload = async function() { 
+            document.getElementById('board').innerHTML = '<div style="color:#ffd700; font-size: 18px; margin-top:50px;">Đang tải từ Backend... Vui lòng đợi (có thể mất 50s nếu server ngủ)</div>';
+            
+            await loadLiveBackendData();
+            applyGameConfig();
+            setupActiveLevels();
+
+            if (activeLevelList.length === 0) document.getElementById('board').innerHTML = '<div style="color:#ff5252; font-size: 18px; text-align: center; margin-top:50px;">NO LEVELS FOUND!<br><span style="font-size:14px; color:#aaa;">(Chưa có màn chơi nào trên hệ thống)</span></div>';
+            else initLevel(currentLevel);
+        };
+
+        // HÀM TẢI TRỰC TIẾP TỪ RENDER CHO DYNAMIC.HTML
+        async function loadLiveBackendData() {
             try {
-                let res = await fetch(`${API_BASE_URL}/game-config`);
-                if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
-                let data = await res.json();
-                gameData.config = data.config || {};
-                gameData.activeLevels = data.activeLevels || [];
+                gameData.config = await (await fetch(`${API_URL}/game/config`)).json();
+                gameData.activeLevels = await (await fetch(`${API_URL}/game/levels/active`)).json();
+                
+                for (let lvl of gameData.activeLevels) {
+                    let res = await fetch(`${API_URL}/admin/levels/list/${lvl}`);
+                    if (res.ok) {
+                        gameData.levels[lvl] = await res.json();
+                    }
+                }
+                console.log("✅ Đã tải xong toàn bộ Data từ Backend");
             } catch (e) {
-                console.error("Lỗi lấy config từ CMS:", e);
-                throw e; // Ném lỗi để window.onload xử lý hiển thị UI
+                console.error("Lỗi tải API:", e);
+                document.getElementById('board').innerHTML = '<div style="color:#ff5252;">Lỗi kết nối Backend. Server có thể đang ngủ. Hãy F5 lại sau 1 phút.</div>';
             }
         }
 
-        async function fetchLevelDataFromCMS(levelNum) {
-            try {
-                let res = await fetch(`${API_BASE_URL}/levels/${levelNum}`);
-                if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
-                return await res.json();
-            } catch (e) {
-                console.error("Lỗi lấy data level từ CMS:", e);
-                return null;
+        // HÀM XUẤT FILE CHO NÚT BẤM TRÊN UI
+        function exportDataJson() {
+            if(gameData.activeLevels.length === 0) {
+                alert("Chưa tải xong dữ liệu, vui lòng đợi!"); return;
             }
+            const blob = new Blob([JSON.stringify(gameData)], { type: "application/json" });
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "data.json";
+            a.click();
+            alert("✅ Xuất file thành công! Bạn hãy đưa file data.json này lên GitHub đè lên file cũ nhé.");
         }
 
         function applyGameConfig() {
@@ -225,15 +359,18 @@
 
         function setupActiveLevels() {
             activeLevelList = gameData.activeLevels || [];
-            const dropdown = document.getElementById('level-dropdown'); dropdown.innerHTML = '';
-            for (let i = 1; i <= 80; i++) {
-                let opt = document.createElement('option'); opt.value = i;
-                if (activeLevelList.includes(i)) opt.innerText = `Level ${i}`;
-                else { opt.innerText = `Level ${i} 🔒`; opt.disabled = true; }
-                dropdown.appendChild(opt);
+            
+            if (activeLevelList.length === 0) {
+                for (let i = 1; i <= 80; i++) activeLevelList.push(i);
             }
+            
             if (activeLevelList.length > 0 && !activeLevelList.includes(currentLevel)) currentLevel = activeLevelList[0];
-            dropdown.value = currentLevel;
+        }
+
+        function getRandomLevelData(levelNum) {
+            let list = gameData.levels ? gameData.levels[levelNum] : null;
+            if (list && list.length > 0) return list[Math.floor(Math.random() * list.length)]; 
+            return null;
         }
 
         let audioCtx = null; let isMuted = false;
@@ -245,8 +382,8 @@
             isMuted = !isMuted; 
             let muteEl = document.getElementById('mute-icon'); 
             muteEl.src = isMuted 
-                ? 'https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/main/icons/volume-x.svg' 
-                : 'https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/main/icons/volume-max.svg'; 
+                ? './assets/icon/volume-x.svg' 
+                : './assets/icon/volume-max.svg'; 
         }
 
         function playSfx(type) {
@@ -258,44 +395,69 @@
             else if (type === 'win') { const notes = [261.63, 329.63, 392.00, 523.25]; notes.forEach((freq, i) => { const oscW = audioCtx.createOscillator(); const gainW = audioCtx.createGain(); oscW.connect(gainW); gainW.connect(audioCtx.destination); oscW.type = 'sine'; oscW.frequency.setValueAtTime(freq, now + i * 0.1); gainW.gain.setValueAtTime(0.2, now + i * 0.1); gainW.gain.exponentialRampToValueAtTime(0.01, now + i * 0.1 + 0.2); oscW.start(now + i * 0.1); oscW.stop(now + i * 0.1 + 0.2); }); }
         }
 
-        window.onload = async function() { 
-            document.getElementById('board').innerHTML = '<div style="color:#ffd700; font-size: 18px; margin-top:50px;">Connecting to CMS API...</div>';
-            
-            try {
-                await fetchGameConfig();
-                applyGameConfig();
-                setupActiveLevels();
-
-                if (activeLevelList.length === 0) {
-                    document.getElementById('board').innerHTML = '<div style="color:#ff5252; font-size: 18px; text-align: center; margin-top:50px;">NO LEVELS FOUND ON CMS!</div>';
-                } else {
-                    await initLevel(currentLevel);
-                }
-            } catch(e) {
-                document.getElementById('board').innerHTML = '<div style="color:#ff5252; font-size: 18px; text-align: center; margin-top:50px; line-height: 1.5;">Lỗi kết nối CMS Config<br><span style="font-size:14px; color:#aaa;">Hãy chắc chắn bạn đã đổi link API_BASE_URL<br>và mở game bằng Live Server!</span></div>';
-            }
-        };
-
-        async function onLevelSelectChange(select) { 
-            currentLevel = parseInt(select.value);
-            localStorage.setItem('ballmagic_preview_level', currentLevel);
-            await initLevel(currentLevel); 
+        // ================= XỬ LÝ POPUP CHỌN LEVEL =================
+        function openLevelModal() {
+            playSfx('jump');
+            renderLevelGrid(); 
+            document.getElementById('level-select-modal').style.display = 'flex';
         }
 
-        async function initLevel(level) {
+        function closeLevelModal() {
+            playSfx('drop');
+            document.getElementById('level-select-modal').style.display = 'none';
+        }
+
+        function renderLevelGrid() {
+            const container = document.getElementById('level-grid');
+            container.innerHTML = '';
+            
+            activeLevelList.forEach(levelNum => {
+                let bestKey = 'ballmagic_best_lv_' + levelNum;
+                let bestScore = localStorage.getItem(bestKey);
+                
+                let iconClass = bestScore ? 'level-icon-active' : 'level-icon-none';
+                let iconText = bestScore ? bestScore : '...';
+
+                let item = document.createElement('div');
+                item.className = 'level-item';
+                item.onclick = () => { selectLevelFromModal(levelNum); };
+
+                item.innerHTML = `
+                    <div class="level-icon ${iconClass}">${iconText}</div>
+                    <div class="level-text">Level ${levelNum}</div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function selectLevelFromModal(levelNum) {
+            closeLevelModal();
+            currentLevel = levelNum;
+            localStorage.setItem('ballmagic_current_level', currentLevel);
+            initLevel(currentLevel);
+        }
+        // ==========================================================
+
+        function initLevel(level) {
             currentLevel = level; 
-            localStorage.setItem('ballmagic_preview_level', currentLevel);
-            document.getElementById('level-dropdown').value = currentLevel;
+            localStorage.setItem('ballmagic_current_level', currentLevel);
+            
+            document.getElementById('level-btn').innerText = `Level ${currentLevel}`;
+            
             hiddenBalls = []; document.getElementById('flying-ball-container').innerHTML = '';
+            
             playerMoves = 0; document.getElementById('player-moves').innerText = playerMoves;
-            document.getElementById('min-moves').innerText = 'Load...';
+            
+            let bestKey = 'ballmagic_best_lv_' + currentLevel;
+            let savedBest = localStorage.getItem(bestKey);
+            document.getElementById('best-moves').innerText = savedBest ? savedBest : '...';
+
+            document.getElementById('min-moves').innerText = '...';
             isGameWon = false;
 
-            document.getElementById('board').innerHTML = `<div style="color:#00d0eb; font-size: 18px; margin-top: 50px;">Fetching Level ${level} from CMS...</div>`;
+            let serverData = getRandomLevelData(currentLevel);
 
-            let serverData = await fetchLevelDataFromCMS(currentLevel);
-
-            if (serverData && serverData.matrix) {
+            if (serverData) {
                 const newPalette = [
                     '#ff4141', '#10c278', '#0068ff', '#ff8c00', 
                     '#ffd000', '#00d0eb', '#6100ed', '#6c6c6c', 
@@ -320,26 +482,14 @@
                 undoStack = []; selectedTubeIndex = null; renderBoard();
                 document.getElementById('min-moves').innerText = (serverData.metrics && serverData.metrics.minMoves) ? serverData.metrics.minMoves : '...';
             } else {
-                document.getElementById('board').innerHTML = `<div style="color:#ff5252; font-size: 20px; text-align: center; margin-top:50px;">LEVEL ${level} NOT FOUND OR CMS ERROR</div>`;
+                document.getElementById('board').innerHTML = '<div style="color:#ff5252; font-size: 20px; text-align: center; margin-top:50px;">LEVEL NOT AVAILABLE</div>';
                 document.getElementById('min-moves').innerText = '-';
             }
         }
 
-        function restartLevel() { 
-            playSfx('drop'); 
-            if (initialTubesState.length > 0) {
-                tubes = JSON.parse(JSON.stringify(initialTubesState));
-                undoStack = []; selectedTubeIndex = null; playerMoves = 0;
-                document.getElementById('player-moves').innerText = playerMoves;
-                hiddenBalls = []; document.getElementById('flying-ball-container').innerHTML = '';
-                isGameWon = false;
-                renderBoard();
-            } else {
-                initLevel(currentLevel);
-            }
-        }
+        function restartLevel() { playSfx('drop'); initLevel(currentLevel); }
         
-        // ================= HỆ THỐNG POPUP =================
+        // ================= HỆ THỐNG POPUP WIN / LOSE =================
         function closeResultModal() {
             playSfx('drop');
             document.getElementById('result-modal').style.display = 'none';
@@ -347,7 +497,7 @@
 
         function showWinModal() {
             let minVal = document.getElementById('min-moves').innerText;
-            let bestKey = 'ballmagic_preview_best_lv_' + currentLevel;
+            let bestKey = 'ballmagic_best_lv_' + currentLevel;
             let savedBest = localStorage.getItem(bestKey);
             
             if (!savedBest || playerMoves < parseInt(savedBest)) {
@@ -355,7 +505,7 @@
                 localStorage.setItem(bestKey, savedBest);
             }
 
-            document.getElementById('modal-title-img').src = 'https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/main/icons/title-win.png';
+            document.getElementById('modal-title-img').src = './assets/icon/title-win.png';
             
             document.getElementById('modal-subtitle').innerHTML = "Your moves";
             document.getElementById('modal-score').style.display = 'block';
@@ -380,10 +530,10 @@
 
         function showLoseModal() {
             let minVal = document.getElementById('min-moves').innerText;
-            let bestKey = 'ballmagic_preview_best_lv_' + currentLevel;
+            let bestKey = 'ballmagic_best_lv_' + currentLevel;
             let savedBest = localStorage.getItem(bestKey) || "...";
 
-            document.getElementById('modal-title-img').src = 'https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/main/icons/title-lose.png';
+            document.getElementById('modal-title-img').src = './assets/icon/title-lose.png';
             
             document.getElementById('modal-subtitle').innerHTML = "Try going back<br>or resetting the game.";
             document.getElementById('modal-score').style.display = 'none';
@@ -405,13 +555,13 @@
             document.getElementById('result-modal').style.display = 'flex';
         }
 
-        async function nextLevelLogic() {
+        function nextLevelLogic() {
             let currentIndexInList = activeLevelList.indexOf(currentLevel);
             if (currentIndexInList !== -1 && currentIndexInList < activeLevelList.length - 1) {
                 currentLevel = activeLevelList[currentIndexInList + 1]; 
-                await initLevel(currentLevel);
+                initLevel(currentLevel);
             } else {
-                document.getElementById('modal-title-img').src = 'https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/main/icons/title-win.png';
+                document.getElementById('modal-title-img').src = './assets/icon/title-win.png';
                 document.getElementById('modal-subtitle').innerHTML = "You have beaten<br>all available levels!";
                 document.getElementById('modal-score').style.display = 'none';
                 document.getElementById('modal-metrics-box').style.display = 'none';
@@ -505,7 +655,7 @@
                         const ballDiv = document.createElement('div'); ballDiv.className = 'ball'; ballDiv.style.background = ballColor;
                         
                         const overlayImg = document.createElement('img');
-                        overlayImg.src = 'https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/main/icons/bongbong.png';
+                        overlayImg.src = './assets/icon/bongbong.png';
                         overlayImg.style.cssText = 'position:absolute; top:0; left:0; width:100%; height:100%; border-radius:50%; pointer-events:none; z-index:2; object-fit:cover;';
                         ballDiv.appendChild(overlayImg);
 
@@ -546,7 +696,7 @@
                         flyingBall.style.position = 'fixed'; flyingBall.style.margin = '0'; flyingBall.style.background = movingBall; flyingBall.style.zIndex = '9999';
                         
                         const flyingOverlay = document.createElement('img');
-                        flyingOverlay.src = 'https://raw.githubusercontent.com/andesign0499-beep/ball-sort-frontend/main/icons/bongbong.png';
+                        flyingOverlay.src = './assets/icon/bongbong.png';
                         flyingOverlay.style.cssText = 'position:absolute; top:0; left:0; width:100%; height:100%; border-radius:50%; pointer-events:none; z-index:2; object-fit:cover;';
                         flyingBall.appendChild(flyingOverlay);
 

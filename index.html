@@ -24,7 +24,6 @@
             background-repeat: repeat;
         }
 
-        /* Đã thu nhỏ kích thước logo và lề */
         #game-logo-img {
             height: 60px; width: auto; object-fit: contain; margin: 10px 0 5px 0;
             filter: drop-shadow(0 4px 6px rgba(0,0,0,0.8)); display: none;
@@ -44,7 +43,7 @@
         #best-moves { color: #ffffff; }
         #min-moves { color: #00ffff; }
 
-        /* Nút chọn Level với background tĩnh */
+        /* Nút chọn Level ở Header */
         .level-select-custom { 
             background-color: transparent;
             background-image: url('./assets/icon/bt_level.png');
@@ -56,19 +55,12 @@
             color: #3e2700; 
             font-family: "Comic Relief", system-ui; font-weight: 700; font-size: 16px; 
             cursor: pointer; 
-            
-            /* Căn lề phải để chữ luôn cách đều mũi tên */
             text-align: right;
-            text-align-last: right;
-            appearance: none; 
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            
-            /* padding phải 28px để chừa chỗ cho mũi tên vẽ trên background, padding trái 10px */
             padding: 0 28px 0 10px;
             filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+            transition: transform 0.1s;
         }
-        .level-select-custom option { background: #ffe066; color: #3e2700; }
+        .level-select-custom:active { transform: scale(0.95); }
 
         .game-info-moves {
             margin-top: 15px;
@@ -77,9 +69,7 @@
             justify-content: center;
         }
         
-        #player-moves {
-            color: #ffffff; 
-        }
+        #player-moves { color: #ffffff; }
         /* ============================================= */
 
         #game-screen { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; width: 100%; height: 100dvh; padding: 10px 0; box-sizing: border-box; }
@@ -117,12 +107,13 @@
         #btn-mute:active { transform: scale(0.85); }
         #btn-mute img { width: 32px; height: 32px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6)); }
 
-        /* ================= GIAO DIỆN POPUP ẢNH CUSTOM ================= */
+        /* ================= GIAO DIỆN MODALS ================= */
         .modal-overlay { 
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: rgba(0, 0, 0, 0.85); z-index: 2000; justify-content: center; align-items: center; padding: 24px; box-sizing: border-box; 
         }
         
+        /* Modal Result Orb (Win/Lose) */
         .modal-orb {
             width: 350px; height: 350px; 
             background-image: url('./assets/icon/popup-bg.png');
@@ -135,8 +126,7 @@
 
         .modal-title-img {
             position: absolute; top: 15px; left: 50%; transform: translateX(-50%);
-            width: 85%; height: auto; object-fit: contain;
-            pointer-events: none;
+            width: 85%; height: auto; object-fit: contain; pointer-events: none;
         }
 
         .modal-content-area {
@@ -156,19 +146,63 @@
         .btn-custom {
             background-color: transparent; border: none; outline: none;
             background-size: contain; background-repeat: no-repeat; background-position: center;
-            width: 140px; height: 50px;
-            color: white; font-family: "Comic Relief", system-ui; font-weight: 700; 
-            font-size: 16px; 
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; 
-            padding: 0; 
-            transition: transform 0.1s; letter-spacing: 0.5px;
-            -webkit-text-stroke: 2px rgba(0,0,0,0.68);
-            paint-order: stroke fill;
+            width: 140px; height: 50px; color: white; font-family: "Comic Relief", system-ui; font-weight: 700; 
+            font-size: 16px; display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; 
+            transition: transform 0.1s; letter-spacing: 0.5px; -webkit-text-stroke: 2px rgba(0,0,0,0.68); paint-order: stroke fill;
         }
         .btn-custom:active { transform: scale(0.92); }
         .btn-blue { background-image: url('./assets/icon/bt_blue.png'); }
         .btn-green { background-image: url('./assets/icon/bt_green.png'); }
+
+        /* Modal Chọn Level (Mới) */
+        .level-modal-box {
+            width: 100%;
+            max-width: 360px; /* Khung rộng tối đa 360px */
+            background-color: var(--bg-color);
+            background-image: var(--bg-pattern); /* Nền như nền game */
+            background-size: var(--bg-size);
+            border: 2px solid #ffb22a; /* Viền vàng cam */
+            border-radius: 20px;
+            padding: 20px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-sizing: border-box;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+        }
+        .level-modal-title {
+            font-size: 20px; font-weight: 700; color: #fff; margin: 0 0 15px 0; text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        }
+        .level-grid-wrapper {
+            width: 100%; background: rgba(0, 0, 0, 0.45); /* Lớp kính mờ lót dưới */
+            border-radius: 14px; padding: 15px 10px; box-sizing: border-box; margin-bottom: 20px;
+        }
+        .level-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* 4 cột theo thiết kế */
+            gap: 15px 5px;
+            max-height: 50vh;
+            overflow-y: auto;
+        }
+        /* Custom thanh cuộn */
+        .level-grid::-webkit-scrollbar { width: 5px; }
+        .level-grid::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.25); border-radius: 5px; }
+        
+        .level-item {
+            display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.1s;
+        }
+        .level-item:active { transform: scale(0.9); }
+        .level-icon {
+            width: 48px; height: 48px; 
+            background-size: contain; background-repeat: no-repeat; background-position: center;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 15px; font-weight: 700; margin-bottom: 5px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+        }
+        .level-icon-active { background-image: url('./assets/icon/bg_level_active.png'); color: #000; }
+        .level-icon-none { background-image: url('./assets/icon/bg_level_none.png'); color: #fff; }
+        
+        .level-text { font-size: 12px; color: #fff; white-space: nowrap; text-shadow: 0 1px 2px rgba(0,0,0,0.8); }
 
     </style>
 </head>
@@ -177,12 +211,12 @@
     <div id="game-screen">
         <img id="game-logo-img" src="./assets/logo_ballmagic.png" alt="Ball Magic Logo">
         
-        <!-- CẤU TRÚC HEADER MỚI THEO ẢNH -->
         <div class="header-section">
             <div class="game-info-top">
                 <span class="info-text"><span class="info-label">Best:</span> <span id="best-moves">...</span></span>
                 
-                <select id="level-dropdown" class="level-select-custom" onchange="onLevelSelectChange(this)"></select>
+                <!-- Đổi Select thành Button Mở Popup -->
+                <button id="level-btn" class="level-select-custom" onclick="openLevelModal()">Level 1</button>
                 
                 <span class="info-text"><span class="info-label">Min:</span> <span id="min-moves">...</span></span>
             </div>
@@ -200,21 +234,31 @@
         <img id="mute-icon" src="./assets/icon/volume-max.svg" alt="Volume">
     </button>
 
-    <!-- Modal Popup -->
+    <!-- Modal Level Select (Mới) -->
+    <div id="level-select-modal" class="modal-overlay">
+        <div class="level-modal-box">
+            <h2 class="level-modal-title">Choose level and play</h2>
+            <div class="level-grid-wrapper">
+                <div class="level-grid" id="level-grid">
+                    <!-- Javascript sẽ tự động điền các màn chơi vào đây -->
+                </div>
+            </div>
+            <!-- Dùng lại nút màu xanh có sẵn -->
+            <button class="btn-custom btn-green" onclick="closeLevelModal()">CLOSE</button>
+        </div>
+    </div>
+
+    <!-- Modal Popup Win/Lose -->
     <div id="result-modal" class="modal-overlay">
         <div class="modal-orb">
-            <!-- Ảnh Title Win/Lose chèn bên trên bóng -->
             <img id="modal-title-img" src="" class="modal-title-img">
-            
             <div class="modal-content-area">
                 <div id="modal-subtitle" class="modal-subtitle"></div>
                 <div id="modal-score" class="score-large"></div>
-                
                 <div id="modal-metrics-box">
                     <div class="score-small">Min Moves level <span id="modal-lvl-text"></span>: <span id="modal-min-moves" class="val-blue"></span></div>
                     <div class="score-small">Best Moves: <span id="modal-best-moves" class="val-orange"></span></div>
                 </div>
-
                 <div class="modal-buttons">
                     <button id="modal-btn-left" class="btn-custom btn-blue"></button>
                     <button id="modal-btn-right" class="btn-custom btn-green"></button>
@@ -261,19 +305,17 @@
 
         function setupActiveLevels() {
             activeLevelList = gameData.activeLevels || [];
-            const dropdown = document.getElementById('level-dropdown'); dropdown.innerHTML = '';
-            for (let i = 1; i <= 80; i++) {
-                let opt = document.createElement('option'); opt.value = i;
-                if (activeLevelList.includes(i)) opt.innerText = `Level ${i}`;
-                else { opt.innerText = `Level ${i} 🔒`; opt.disabled = true; }
-                dropdown.appendChild(opt);
+            
+            // Nếu data rỗng, tự tạo mảng 80 level để test giao diện
+            if (activeLevelList.length === 0) {
+                for (let i = 1; i <= 80; i++) activeLevelList.push(i);
             }
+            
             if (activeLevelList.length > 0 && !activeLevelList.includes(currentLevel)) currentLevel = activeLevelList[0];
-            dropdown.value = currentLevel;
         }
 
         function getRandomLevelData(levelNum) {
-            let list = gameData.levels[levelNum];
+            let list = gameData.levels ? gameData.levels[levelNum] : null;
             if (list && list.length > 0) return list[Math.floor(Math.random() * list.length)]; 
             return null;
         }
@@ -311,22 +353,61 @@
             else initLevel(currentLevel);
         };
 
-        function onLevelSelectChange(select) { 
-            currentLevel = parseInt(select.value);
-            localStorage.setItem('ballmagic_current_level', currentLevel);
-            initLevel(currentLevel); 
+        // ================= XỬ LÝ POPUP CHỌN LEVEL =================
+        function openLevelModal() {
+            playSfx('jump');
+            renderLevelGrid(); // Render lại danh sách mỗi lần mở để cập nhật điểm mới nhất
+            document.getElementById('level-select-modal').style.display = 'flex';
         }
+
+        function closeLevelModal() {
+            playSfx('drop');
+            document.getElementById('level-select-modal').style.display = 'none';
+        }
+
+        function renderLevelGrid() {
+            const container = document.getElementById('level-grid');
+            container.innerHTML = '';
+            
+            activeLevelList.forEach(levelNum => {
+                let bestKey = 'ballmagic_best_lv_' + levelNum;
+                let bestScore = localStorage.getItem(bestKey);
+                
+                // Xác định icon và text theo thiết kế ảnh
+                let iconClass = bestScore ? 'level-icon-active' : 'level-icon-none';
+                let iconText = bestScore ? bestScore : '...';
+
+                let item = document.createElement('div');
+                item.className = 'level-item';
+                item.onclick = () => { selectLevelFromModal(levelNum); };
+
+                item.innerHTML = `
+                    <div class="level-icon ${iconClass}">${iconText}</div>
+                    <div class="level-text">Level ${levelNum}</div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function selectLevelFromModal(levelNum) {
+            closeLevelModal();
+            currentLevel = levelNum;
+            localStorage.setItem('ballmagic_current_level', currentLevel);
+            initLevel(currentLevel);
+        }
+        // ==========================================================
 
         function initLevel(level) {
             currentLevel = level; 
             localStorage.setItem('ballmagic_current_level', currentLevel);
-            document.getElementById('level-dropdown').value = currentLevel;
+            
+            // Cập nhật text nút chọn level
+            document.getElementById('level-btn').innerText = `Level ${currentLevel}`;
+            
             hiddenBalls = []; document.getElementById('flying-ball-container').innerHTML = '';
             
-            // Xử lý điểm MOVES
             playerMoves = 0; document.getElementById('player-moves').innerText = playerMoves;
             
-            // Xử lý điểm BEST từ LocalStorage
             let bestKey = 'ballmagic_best_lv_' + currentLevel;
             let savedBest = localStorage.getItem(bestKey);
             document.getElementById('best-moves').innerText = savedBest ? savedBest : '...';
@@ -368,7 +449,7 @@
 
         function restartLevel() { playSfx('drop'); initLevel(currentLevel); }
         
-        // ================= HỆ THỐNG POPUP =================
+        // ================= HỆ THỐNG POPUP WIN / LOSE =================
         function closeResultModal() {
             playSfx('drop');
             document.getElementById('result-modal').style.display = 'none';

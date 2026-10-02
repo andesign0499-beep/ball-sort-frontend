@@ -68,7 +68,6 @@
         }
         .level-select-custom:active { transform: scale(0.95); }
 
-        /* NÚT MUTE GÓC PHẢI TRÊN - ICON 24x24 */
         #btn-mute { 
             position: absolute; top: 15px; right: 15px; z-index: 1000; 
             width: 40px; height: 40px; 
@@ -115,7 +114,11 @@
         /* ================= GIAO DIỆN MODALS ================= */
         .modal-overlay { 
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0, 0, 0, 0.85); z-index: 2000; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; 
+            background: rgba(0, 0, 0, 0.85); z-index: 2000; justify-content: center; align-items: center; 
+            
+            /* SỬA LỖI CÁCH MÉP: Đặt chuẩn padding 16px cho viền màn hình */
+            padding: 16px; 
+            box-sizing: border-box; 
         }
         
         .modal-orb {
@@ -182,7 +185,9 @@
 
         /* ================= Modal Chọn Level ================= */
         .level-modal-box {
-            width: calc(100% - 32px); max-width: 400px; max-height: 700px; 
+            width: 100%; /* SỬA LỖI CÁCH MÉP: Dàn full 100% không gian bên trong lớp mờ 16px */
+            max-width: 460px; /* TĂNG RỘNG TỐI ĐA LÊN 460px */
+            max-height: 700px; 
             background-color: var(--bg-color); background-image: var(--bg-pattern); background-size: var(--bg-size);
             border: 2px solid #ffb22a; border-radius: 36px; padding: 15px 15px 10px 15px; 
             display: flex; flex-direction: column; align-items: center; box-sizing: border-box; box-shadow: 0 15px 40px rgba(0,0,0,0.8);
@@ -205,13 +210,17 @@
         .level-icon {
             width: 48px; height: 48px; background-size: contain; background-repeat: no-repeat; background-position: center;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            font-size: 15px; font-weight: 700; margin-bottom: 5px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6)); line-height: 1; 
+            font-size: 20px; /* Chữ Level bên trong bóng to ra */
+            font-weight: 700; margin-bottom: 5px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6)); line-height: 1; 
         }
         .level-icon-active { background-image: url('./assets/icon/bg_level_active.png'); color: #000; }
         .level-icon-none { background-image: url('./assets/icon/bg_level_none.png'); color: #fff; }
         .level-icon-min { background-image: url('./assets/icon/bg_level_min.png'); color: #fff; }
         
-        .level-text { font-size: 12px; color: #fff; white-space: nowrap; text-shadow: 0 1px 2px rgba(0,0,0,0.8); }
+        /* Chỉnh lại text điểm bên dưới */
+        .level-text { font-size: 13px; color: #fff; white-space: nowrap; text-shadow: 0 1px 2px rgba(0,0,0,0.8); margin-top: 2px;}
+        /* Màu tím Magenta chói cho điểm Perfect */
+        .level-text.perfect { color: #ff33cc; }
 
         .stars-container {
             position: absolute; display: flex; justify-content: center; gap: -2px; 
@@ -480,8 +489,11 @@
                 }
 
                 let iconClass = 'level-icon-none';
-                let iconText = '...';
+                let iconText = `${levelNum}`; // Cập nhật cấu trúc: Chỉ để số level ở giữa bóng
                 let starsHtml = '';
+                
+                let scoreTextStr = `.../${minMoves}`; // Mặc định khi chưa có điểm
+                let textClass = 'level-text'; // Class màu sắc cho điểm
 
                 if (bestScore) {
                     let pMoves = parseInt(bestScore);
@@ -490,11 +502,13 @@
 
                     if (isPerfect) {
                         iconClass = 'level-icon-min';
-                        iconText = `<div style="font-size: 18px; margin-top: -3px;">${pMoves}</div><div style="font-size: 7px; margin-top: 3px; font-weight: 900; letter-spacing: 0.5px; color: rgba(255,255,255,0.9);">MIN</div>`;
+                        textClass = 'level-text perfect'; // Đổi màu điểm số thành màu tím nếu Perfect
                     } else {
                         iconClass = 'level-icon-active';
-                        iconText = `<span style="font-size: 17px;">${pMoves}</span>`;
                     }
+
+                    // Cập nhật text hiển thị điểm thực tế
+                    scoreTextStr = `${pMoves}/${minMoves}`;
 
                     let totalIcons = Math.floor(stars) + (stars % 1 !== 0 ? 1 : 0);
                     starsHtml = `<div class="stars-container count-${totalIcons}">`;
@@ -506,12 +520,13 @@
                 item.className = 'level-item';
                 item.onclick = () => { selectLevelFromModal(levelNum); };
 
+                // Cấu trúc HTML của mỗi item level
                 item.innerHTML = `
                     <div style="position: relative; display: flex; flex-direction: column; align-items: center;">
                         ${starsHtml}
                         <div class="level-icon ${iconClass}">${iconText}</div>
                     </div>
-                    <div class="level-text">Level ${levelNum}</div>
+                    <div class="${textClass}">${scoreTextStr}</div>
                 `;
                 container.appendChild(item);
             });

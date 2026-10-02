@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ball Magic - Sort Puzzle</title>
+    <script src="https://connect.facebook.net/en_US/fbinstant.6.3.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Comic+Relief:wght@700&display=swap');
 
@@ -78,7 +79,10 @@
         #btn-mute img { width: 24px; height: 24px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6)); }
 
         /* ================= BÀN CHƠI ================= */
-        #game-screen { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; width: 100%; height: 100dvh; padding: 8px 0; box-sizing: border-box; }
+        #game-screen { 
+            position: relative; z-index: 5; /* Nổi lên trên lớp ánh sáng */
+            display: flex; flex-direction: column; align-items: center; justify-content: flex-start; width: 100%; height: 100dvh; padding: 8px 0; box-sizing: border-box; 
+        }
         .board-section { flex-grow: 1; display: flex; align-items: center; justify-content: center; width: 100%; margin-top: 0;}
 
         .board { display: flex; flex-direction: column; align-items: center; gap: 24px; width: 100%; max-width: 100vw; padding: 0; box-sizing: border-box; }
@@ -205,6 +209,41 @@
         .stars-container.count-2 .star:nth-child(2) { transform: rotate(8deg); }
 
         .level-modal-box .btn-green { margin-bottom: -40px; } 
+
+        /* ================= HIỆU ỨNG ÁNH SÁNG NỀN (AMBIENT GLOW) ================= */
+        body::before, body::after {
+            content: "";
+            position: fixed; 
+            border-radius: 50%;
+            filter: blur(60px); 
+            z-index: 0; 
+            pointer-events: none; 
+            will-change: transform; 
+        }
+
+        body::before {
+            top: -10vh; left: -20vw;
+            width: 70vw; height: 70vw;
+            background: radial-gradient(circle, rgba(180, 40, 255, 0.25) 0%, transparent 70%);
+            animation: floatLightMagenta 12s infinite alternate ease-in-out;
+        }
+
+        body::after {
+            bottom: -20vh; right: -20vw;
+            width: 80vw; height: 80vw;
+            background: radial-gradient(circle, rgba(0, 200, 255, 0.2) 0%, transparent 70%);
+            animation: floatLightCyan 15s infinite alternate ease-in-out;
+        }
+
+        @keyframes floatLightMagenta {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(40vw, 30vh) scale(1.3); }
+        }
+
+        @keyframes floatLightCyan {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(-30vw, -20vh) scale(1.2); }
+        }
 
     </style>
 </head>
@@ -464,7 +503,6 @@
                     let stars = calculateStars(pMoves, minMoves);
                     let isPerfect = (stars === 3.0);
 
-                    // ĐÃ FIX: Chỉ giữ lại số level trong quả bóng
                     if (isPerfect) {
                         iconClass = 'level-icon-min';
                         textClass = 'level-text perfect'; 

@@ -24,7 +24,6 @@
             background-repeat: repeat;
         }
 
-        /* Đã giảm height, padding và margin của logo để tiết kiệm không gian dọc */
         #game-logo-img {
             height: 56px; width: auto; object-fit: contain; margin: 4px 0 4px 0;
             filter: drop-shadow(0 4px 6px rgba(0,0,0,0.8)); display: none;
@@ -33,8 +32,7 @@
         /* ================= HEADER ================= */
         .header-section { 
             width: 100%; display: flex; flex-direction: column; align-items: center; 
-            margin-bottom: 20px; /* Cách bàn chơi chuẩn xác 20px */
-            padding-top: 8px; z-index: 10; 
+            margin-bottom: 20px; padding-top: 8px; z-index: 10; 
         }
         
         .game-info-top { 
@@ -81,10 +79,7 @@
         #btn-mute img { width: 24px; height: 24px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6)); }
 
         /* ================= BÀN CHƠI ================= */
-        /* Giảm padding top của game screen để đẩy mọi thứ lên cao hơn một chút */
         #game-screen { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; width: 100%; height: 100dvh; padding: 8px 0; box-sizing: border-box; }
-        
-        /* ĐÃ XÓA margin-top: -32px gây lỗi đè ống */
         .board-section { flex-grow: 1; display: flex; align-items: center; justify-content: center; width: 100%; margin-top: 0;}
 
         .board { display: flex; flex-direction: column; align-items: center; gap: 24px; width: 100%; max-width: 100vw; padding: 0; box-sizing: border-box; }
@@ -152,7 +147,7 @@
         .btn-blue { background-image: url('./assets/icon/bt_blue.png'); }
         .btn-green { background-image: url('./assets/icon/bt_green.png'); }
 
-        /* ================= HIỆU ỨNG ================= */
+        /* ================= HIỆU ỨNG PHÁO GIẤY ================= */
         .confetti {
             position: fixed; width: 8px; height: 16px; z-index: 9999; top: -24px; pointer-events: none;
             animation: confettiFall linear forwards; border-radius: 4px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);
@@ -164,7 +159,7 @@
 
         /* ================= Modal Chọn Level ================= */
         .level-modal-box {
-            width: calc(100% - 32px); max-width: 460px; max-height: 704px; 
+            width: 100%; max-width: 460px; max-height: 704px; 
             background-color: var(--bg-color); background-image: var(--bg-pattern); background-size: var(--bg-size);
             border: 2px solid #ffb22a; border-radius: 32px; padding: 16px; 
             display: flex; flex-direction: column; align-items: center; box-sizing: border-box; box-shadow: 0 16px 40px rgba(0,0,0,0.8);
@@ -187,7 +182,7 @@
         .level-icon {
             width: 48px; height: 48px; background-size: contain; background-repeat: no-repeat; background-position: center;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            font-size: 20px; font-weight: 700; margin-bottom: 4px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.6)); line-height: 1; 
+            font-size: 24px; font-weight: 700; margin-bottom: 4px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.6)); line-height: 1; 
         }
         .level-icon-active { background-image: url('./assets/icon/bg_level_active.png'); color: #000; }
         .level-icon-none { background-image: url('./assets/icon/bg_level_none.png'); color: #fff; }
@@ -424,13 +419,13 @@
         }
 
         window.onload = async function() { 
-            document.getElementById('board').innerHTML = '<div style="color:#ffd700; font-size: 16px; margin-top:48px;">Loading Magic...</div>';
+            document.getElementById('board').innerHTML = '<div style="color:#ffd700; font-size: 20px; margin-top:48px;">Loading Magic...</div>';
             
             await loadOfflineData();
             applyGameConfig();
             setupActiveLevels();
 
-            if (activeLevelList.length === 0) document.getElementById('board').innerHTML = '<div style="color:#ff5252; font-size: 16px; text-align: center; margin-top:48px;">NO LEVELS FOUND!<br><span style="font-size:12px; color:#aaa;">(data.json is missing or empty)</span></div>';
+            if (activeLevelList.length === 0) document.getElementById('board').innerHTML = '<div style="color:#ff5252; font-size: 20px; text-align: center; margin-top:48px;">NO LEVELS FOUND!<br><span style="font-size:16px; color:#aaa;">(data.json is missing or empty)</span></div>';
             else initLevel(currentLevel);
         };
 
@@ -470,10 +465,10 @@
                     let stars = calculateStars(pMoves, minMoves);
                     let isPerfect = (stars === 3.0);
 
+                    // ĐÃ FIX: Chỉ giữ lại số level trong quả bóng
                     if (isPerfect) {
                         iconClass = 'level-icon-min';
                         textClass = 'level-text perfect'; 
-                        iconText = `<div style="font-size: 16px; margin-top: -4px;">${pMoves}</div><div style="font-size: 8px; margin-top: 4px; font-weight: 900; letter-spacing: 0.5px; color: rgba(255,255,255,0.9);">MIN</div>`;
                     } else {
                         iconClass = 'level-icon-active';
                     }

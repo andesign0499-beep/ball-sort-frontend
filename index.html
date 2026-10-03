@@ -49,9 +49,9 @@
         .game-info-bar { 
             display: flex; justify-content: space-between; align-items: center; 
             width: calc(100% - 32px); max-width: 460px; 
-            height: 44px; /* Chiều cao chuẩn 44px */
-            background-color: rgba(0, 0, 0, 0.32); /* Nền đen 32% */
-            border-radius: 22px; /* Bo cong hoàn hảo 50% của 44px */
+            height: 44px; 
+            background-color: rgba(0, 0, 0, 0.32); 
+            border-radius: 22px; 
             padding: 0 16px; 
             box-sizing: border-box;
             font-family: "Comic Relief", system-ui; font-weight: 700;
@@ -60,20 +60,35 @@
         /* Cụm thông tin trái/phải */
         .info-group { display: flex; align-items: center; gap: 8px; }
         
-        .icon-circle { display: flex; align-items: center; justify-content: center; }
-        .icon-circle img { width: 20px; height: 20px; object-fit: contain; }
+        /* Box Icon Nền mờ 8% Trắng */
+        .icon-circle { 
+            width: 24px; height: 24px; 
+            background-color: rgba(255, 255, 255, 0.08); 
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; 
+        }
+        .icon-circle img { 
+            width: 14px; height: 14px; 
+            object-fit: contain; 
+            /* Lệnh thần thánh đổi mọi SVG thành màu Trắng */
+            filter: brightness(0) invert(1); 
+        }
         
         .text-col { display: flex; flex-direction: column; justify-content: center; }
         .text-right { align-items: flex-end; text-align: right; }
         
+        /* Font chuẩn: Text 12px, Số 16px */
         .text-col .label { color: #ffd700; font-size: 12px; font-weight: 700; line-height: 1; margin-bottom: 2px; }
-        .text-col .value { color: #ffffff; font-size: 20px; font-weight: 700; line-height: 1; }
+        .text-col .value { color: #ffffff; font-size: 16px; font-weight: 700; line-height: 1; transition: color 0.3s ease; }
+        
+        /* Hiệu ứng màu tím khi đạt Perfect */
+        .text-col .value.perfect { color: #ff33cc; }
 
         /* Cụm nút giữa (Undo, Level, Restart) */
         .action-group { display: flex; align-items: center; gap: 8px; }
         
         .btn-action {
-            width: 36px; height: 36px; /* Nút kích thước 36px */
+            width: 36px; height: 36px; 
             background-color: transparent; 
             background-image: url('./assets/icon/bt_retune.png');
             background-size: 100% 100%; background-position: center; background-repeat: no-repeat;
@@ -83,7 +98,7 @@
             display: flex; align-items: center; justify-content: center;
         }
         .btn-action img { 
-            width: 20px; height: 20px; /* Icon bên trong 20px */
+            width: 20px; height: 20px; 
             object-fit: contain; 
         }
         .btn-action:active { transform: scale(0.85); }
@@ -284,7 +299,7 @@
                     <div class="text-col text-right">
                         <span class="label">Moves</span>
                         <span class="value" id="player-moves">0</span>
-                        <!-- Hidden thẻ min-moves để logic tính sao phía dưới không bị sụp -->
+                        <!-- Hidden thẻ min-moves -->
                         <span id="min-moves" style="display:none;">...</span>
                     </div>
                     <div class="icon-circle"><img src="./assets/icon/star.svg" alt="Star"></div>
@@ -573,14 +588,14 @@
             
             let bestKey = 'ballmagic_best_lv_' + currentLevel;
             let savedBest = localStorage.getItem(bestKey);
-            document.getElementById('best-moves').innerText = savedBest ? savedBest : '...';
-
-            document.getElementById('min-moves').innerText = '...';
-            isGameWon = false;
-
+            
             let serverData = getRandomLevelData(currentLevel);
+            let minMoves = 9999;
 
             if (serverData) {
+                minMoves = (serverData.metrics && serverData.metrics.minMoves) ? serverData.metrics.minMoves : 9999;
+                document.getElementById('min-moves').innerText = minMoves;
+                
                 const newPalette = ['#ff4141', '#10c278', '#0068ff', '#ff8c00', '#ffd000', '#00d0eb', '#6100ed', '#6c6c6c', '#7dd800', '#d30756', '#c600cc', '#cacaca'];
                 let levelColorMap = {}; let paletteIdx = 0;
 
@@ -595,11 +610,26 @@
                 tubes = JSON.parse(JSON.stringify(fixedMatrix)); 
                 initialTubesState = JSON.parse(JSON.stringify(tubes));
                 undoStack = []; selectedTubeIndex = null; renderBoard();
-                document.getElementById('min-moves').innerText = (serverData.metrics && serverData.metrics.minMoves) ? serverData.metrics.minMoves : '...';
             } else {
                 document.getElementById('board').innerHTML = '<div style="color:#ff5252; font-size: 24px; text-align: center; margin-top:48px;">LEVEL NOT AVAILABLE</div>';
                 document.getElementById('min-moves').innerText = '-';
             }
+
+            // Logic tính điểm đổi màu Tím cho chữ Best ở thanh trạng thái
+            let bestEl = document.getElementById('best-moves');
+            if (savedBest) {
+                bestEl.innerText = savedBest;
+                if (parseInt(savedBest) <= minMoves) {
+                    bestEl.classList.add('perfect');
+                } else {
+                    bestEl.classList.remove('perfect');
+                }
+            } else {
+                bestEl.innerText = '...';
+                bestEl.classList.remove('perfect');
+            }
+            
+            isGameWon = false;
         }
 
         function restartLevel() { playSfx('drop'); initLevel(currentLevel); }
@@ -618,6 +648,13 @@
             if (!savedBest || playerMoves < parseInt(savedBest)) {
                 savedBest = playerMoves; 
                 localStorage.setItem(bestKey, savedBest);
+                
+                // Cập nhật lại màu Best Score ngay lập tức nếu đạt kỉ lục mới
+                let bestEl = document.getElementById('best-moves');
+                bestEl.innerText = savedBest;
+                if (parseInt(savedBest) <= minVal) {
+                    bestEl.classList.add('perfect');
+                }
             }
 
             let stars = calculateStars(playerMoves, minVal);

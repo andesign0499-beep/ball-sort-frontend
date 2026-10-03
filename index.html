@@ -145,7 +145,6 @@
         .val-orange { color: #e65134; }
         .text-magenta { color: #ff33cc; }
 
-        /* Nút gần lại cách nhau 12px */
         .modal-buttons { display: flex; gap: 12px; margin-top: 16px; justify-content: center; width: 100%; }
         
         .btn-custom {
@@ -156,7 +155,7 @@
         .btn-blue { background-image: url('./assets/icon/bt_blue.png'); }
         .btn-green { background-image: url('./assets/icon/bt_green.png'); }
 
-        /* ================= HIỆU ỨNG ================= */
+        /* ================= HIỆU ỨNG PHÁO GIẤY ================= */
         .confetti {
             position: fixed; width: 8px; height: 16px; z-index: 9999; top: -24px; pointer-events: none;
             animation: confettiFall linear forwards; border-radius: 4px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);
@@ -268,8 +267,8 @@
                 <div id="modal-subtitle" class="modal-subtitle"></div>
                 <div id="modal-score" class="score-large"></div>
                 <div id="modal-metrics-box">
-                    <!-- HTML ĐÃ CẬP NHẬT ĐỂ MÀU CHỮ THÀNH TÍM MAGENTA -->
-                    <div class="score-small text-magenta">Min Moves level <span id="modal-lvl-text"></span>: <span id="modal-min-moves-box" class="val-blue"></span></div>
+                    <!-- ĐÃ SỬA LẠI: Chữ giữ nguyên màu mặc định, chỉ có số mới mang class màu tím -->
+                    <div class="score-small">Min Moves level <span id="modal-lvl-text"></span>: <span id="modal-min-moves-box" class="text-magenta"></span></div>
                     <div class="score-small">Best Moves: <span id="modal-best-moves" class="val-orange"></span></div>
                 </div>
                 <div class="modal-buttons">
@@ -364,7 +363,6 @@
         }
 
         function playSfx(type) {
-            // HAPTIC FEEDBACK (RUNG) CHO GAME FEEL
             if (navigator.vibrate) {
                 if (type === 'jump') navigator.vibrate(10);
                 else if (type === 'drop') navigator.vibrate(40);
@@ -377,14 +375,10 @@
             
             if (type === 'jump') { osc.type = 'sine'; osc.frequency.setValueAtTime(400, now); osc.frequency.exponentialRampToValueAtTime(800, now + 0.1); gain.gain.setValueAtTime(0.2, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1); osc.start(now); osc.stop(now + 0.1); } 
             else if (type === 'drop') { osc.type = 'sine'; osc.frequency.setValueAtTime(800, now); osc.frequency.exponentialRampToValueAtTime(400, now + 0.1); gain.gain.setValueAtTime(0.2, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1); osc.start(now); osc.stop(now + 0.1); } 
-            else if (type === 'error') { 
-                // ĐÃ FIX: Âm thanh lỗi êm tai hơn (sóng Triangle thay vì Sawtooth)
-                osc.type = 'triangle'; osc.frequency.setValueAtTime(300, now); osc.frequency.exponentialRampToValueAtTime(150, now + 0.15); gain.gain.setValueAtTime(0.15, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15); osc.start(now); osc.stop(now + 0.15); 
-            } 
+            else if (type === 'error') { osc.type = 'triangle'; osc.frequency.setValueAtTime(300, now); osc.frequency.exponentialRampToValueAtTime(150, now + 0.15); gain.gain.setValueAtTime(0.15, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15); osc.start(now); osc.stop(now + 0.15); } 
             else if (type === 'win') { const notes = [261.63, 329.63, 392.00, 523.25]; notes.forEach((freq, i) => { const oscW = audioCtx.createOscillator(); const gainW = audioCtx.createGain(); oscW.connect(gainW); gainW.connect(audioCtx.destination); oscW.type = 'sine'; oscW.frequency.setValueAtTime(freq, now + i * 0.1); gainW.gain.setValueAtTime(0.2, now + i * 0.1); gainW.gain.exponentialRampToValueAtTime(0.01, now + i * 0.1 + 0.2); oscW.start(now + i * 0.1); oscW.stop(now + i * 0.1 + 0.2); }); }
         }
 
-        // HÀM BẮN TIA SÁNG (PARTICLES) KHI HOÀN THÀNH ỐNG
         function triggerTubeParticles(rect, color) {
             for (let i = 0; i < 15; i++) {
                 let p = document.createElement('div');
@@ -713,14 +707,12 @@
                         anim.onfinish = () => {
                             flyingBall.remove(); playSfx('drop'); hiddenBalls = hiddenBalls.filter(h => h !== hiddenItem); renderBoard(); 
                             
-                            // ADDED: HIỆU ỨNG VẬT LÝ NHÚN BÓNG
                             const currentTargetTubeEl = document.querySelector(`.tube[data-index='${index}']`);
                             if(currentTargetTubeEl && currentTargetTubeEl.lastElementChild) {
                                 currentTargetTubeEl.lastElementChild.classList.add('squash');
                                 setTimeout(() => { if(currentTargetTubeEl.lastElementChild) currentTargetTubeEl.lastElementChild.classList.remove('squash'); }, 200);
                             }
 
-                            // ADDED: HIỆU ỨNG PARTICLES KHI HOÀN THÀNH ỐNG
                             let targetTubeArr = tubes[index];
                             if (targetTubeArr.length === TUBE_CAPACITY && new Set(targetTubeArr).size === 1) {
                                 triggerTubeParticles(currentTargetTubeEl.getBoundingClientRect(), targetTubeArr[0]);

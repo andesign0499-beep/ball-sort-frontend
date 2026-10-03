@@ -100,16 +100,8 @@
         .ball { position: relative; width: 32px; height: 32px; border-radius: 50%; margin-top: 4px; box-shadow: inset -4px -4px 8px rgba(0,0,0,0.5); }
         .ball.jump { transform: translateY(-16px); }
 
-        /* HIỆU ỨNG VẬT LÝ NHÚN BÓNG (SQUASH) */
-        .ball.squash {
-            animation: squashAnim 0.15s cubic-bezier(0.25, 1, 0.5, 1);
-            transform-origin: bottom center;
-        }
-        @keyframes squashAnim {
-            0% { transform: scale(1, 1); }
-            50% { transform: scale(1.2, 0.8) translateY(2px); }
-            100% { transform: scale(1, 1); }
-        }
+        .ball.squash { animation: squashAnim 0.15s cubic-bezier(0.25, 1, 0.5, 1); transform-origin: bottom center; }
+        @keyframes squashAnim { 0% { transform: scale(1, 1); } 50% { transform: scale(1.2, 0.8) translateY(2px); } 100% { transform: scale(1, 1); } }
 
         .board.compact { gap: 16px; }
         .board.compact .row { gap: 8px; }
@@ -133,19 +125,29 @@
         .popup-star.half { background-image: url('./assets/icon/icon_star_12.png'); }
         .popup-stars-container.count-3 .popup-star:nth-child(2) { transform: translateY(-8px); }
 
-        .modal-title-img { position: absolute; top: 24px; left: 50%; transform: translateX(-50%); width: 80%; height: auto; object-fit: contain; pointer-events: none; }
+        /* ĐÃ FIX: Ảnh tiêu đề cố định phía trên và cao hơn */
+        .modal-title-img { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); width: 80%; height: auto; object-fit: contain; pointer-events: none; }
 
-        /* CĂN CHỈNH LẠI POPUP WIN/LOSE */
-        .modal-content-area { margin-top: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #4a2f1d; width: 100%; }
-        .modal-subtitle { font-size: 18px; font-weight: 700; margin-bottom: 0px; line-height: 1.3;}
-        .score-large { font-size: 72px; color: #e65134; margin: 0 0 8px 0; line-height: 1; text-shadow: 1px 1px 0px rgba(0,0,0,0.1); }
-        .score-small { font-size: 14px; margin: 2px 0; font-weight: 700;}
+        /* ĐÃ FIX: Khung text căn giữa tuyệt đối, không bị trôi nổi */
+        .modal-content-area { 
+            position: absolute; top: 52%; left: 0; width: 100%; transform: translateY(-50%);
+            display: flex; flex-direction: column; align-items: center; justify-content: center; color: #4a2f1d; text-align: center;
+        }
+
+        /* ĐÃ FIX: Đồng bộ toàn bộ Font Text về 16px */
+        .modal-subtitle { font-size: 16px; font-weight: 700; margin-bottom: 4px; line-height: 1.4;}
+        .score-large { font-size: 64px; color: #e65134; margin: 0 0 4px 0; line-height: 1; text-shadow: 1px 1px 0px rgba(0,0,0,0.1); }
+        .score-small { font-size: 16px; margin: 4px 0; font-weight: 700; }
         
         .val-blue { color: #3baaf8; }
         .val-orange { color: #e65134; }
         .text-magenta { color: #ff33cc; }
 
-        .modal-buttons { display: flex; gap: 12px; margin-top: 16px; justify-content: center; width: 100%; }
+        /* ĐÃ FIX: Cố định nút ở sát viền dưới, cách nhau 16px */
+        .modal-buttons { 
+            position: absolute; bottom: 36px; left: 0; width: 100%; 
+            display: flex; gap: 16px; justify-content: center; 
+        }
         
         .btn-custom {
             background-color: transparent; border: none; outline: none; background-size: contain; background-repeat: no-repeat; background-position: center;
@@ -261,19 +263,21 @@
     <!-- Modal Popup Win/Lose/Perfect -->
     <div id="result-modal" class="modal-overlay">
         <div class="modal-orb">
+            <!-- NÚT BẤM ĐƯỢC CHUYỂN RA NGOÀI ĐỂ CỐ ĐỊNH VỊ TRÍ -->
+            <div class="modal-buttons">
+                <button id="modal-btn-left" class="btn-custom btn-blue"></button>
+                <button id="modal-btn-right" class="btn-custom btn-green"></button>
+            </div>
+            
             <div id="popup-stars" class="popup-stars-container"></div>
             <img id="modal-title-img" src="" class="modal-title-img">
+            
             <div class="modal-content-area">
                 <div id="modal-subtitle" class="modal-subtitle"></div>
                 <div id="modal-score" class="score-large"></div>
                 <div id="modal-metrics-box">
-                    <!-- ĐÃ SỬA LẠI: Chữ giữ nguyên màu mặc định, chỉ có số mới mang class màu tím -->
                     <div class="score-small">Min Moves level <span id="modal-lvl-text"></span>: <span id="modal-min-moves-box" class="text-magenta"></span></div>
                     <div class="score-small">Best Moves: <span id="modal-best-moves" class="val-orange"></span></div>
-                </div>
-                <div class="modal-buttons">
-                    <button id="modal-btn-left" class="btn-custom btn-blue"></button>
-                    <button id="modal-btn-right" class="btn-custom btn-green"></button>
                 </div>
             </div>
         </div>
@@ -560,7 +564,11 @@
         function showLoseModal() {
             let minVal = document.getElementById('min-moves').innerText; let bestKey = 'ballmagic_best_lv_' + currentLevel; let savedBest = localStorage.getItem(bestKey) || "...";
             document.getElementById('popup-stars').innerHTML = ''; document.getElementById('modal-title-img').src = './assets/icon/title-lose.png';
-            document.getElementById('modal-subtitle').innerHTML = "Try going back<br>or resetting the game."; document.getElementById('modal-score').style.display = 'none';
+            
+            // ĐÃ ĐỔI: Text tự nhiên "Try to undo your move or reset the game"
+            document.getElementById('modal-subtitle').innerHTML = "Try to undo your move<br>or reset the game."; 
+            
+            document.getElementById('modal-score').style.display = 'none';
             document.getElementById('modal-metrics-box').style.display = 'block'; document.getElementById('modal-lvl-text').innerText = currentLevel;
             document.getElementById('modal-min-moves-box').innerText = minVal; document.getElementById('modal-best-moves').innerText = savedBest;
             let btnLeft = document.getElementById('modal-btn-left'); btnLeft.style.display = 'flex'; btnLeft.innerText = "RETURN"; btnLeft.onclick = () => { closeResultModal(); undoMove(); };

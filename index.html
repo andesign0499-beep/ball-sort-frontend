@@ -125,16 +125,13 @@
         .popup-star.half { background-image: url('./assets/icon/icon_star_12.png'); }
         .popup-stars-container.count-3 .popup-star:nth-child(2) { transform: translateY(-8px); }
 
-        /* ĐÃ FIX: Ảnh tiêu đề cố định phía trên và cao hơn */
         .modal-title-img { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); width: 80%; height: auto; object-fit: contain; pointer-events: none; }
 
-        /* ĐÃ FIX: Khung text căn giữa tuyệt đối, không bị trôi nổi */
         .modal-content-area { 
             position: absolute; top: 52%; left: 0; width: 100%; transform: translateY(-50%);
             display: flex; flex-direction: column; align-items: center; justify-content: center; color: #4a2f1d; text-align: center;
         }
 
-        /* ĐÃ FIX: Đồng bộ toàn bộ Font Text về 16px */
         .modal-subtitle { font-size: 16px; font-weight: 700; margin-bottom: 4px; line-height: 1.4;}
         .score-large { font-size: 64px; color: #e65134; margin: 0 0 4px 0; line-height: 1; text-shadow: 1px 1px 0px rgba(0,0,0,0.1); }
         .score-small { font-size: 16px; margin: 4px 0; font-weight: 700; }
@@ -143,7 +140,6 @@
         .val-orange { color: #e65134; }
         .text-magenta { color: #ff33cc; }
 
-        /* ĐÃ FIX: Cố định nút ở sát viền dưới, cách nhau 16px */
         .modal-buttons { 
             position: absolute; bottom: 36px; left: 0; width: 100%; 
             display: flex; gap: 16px; justify-content: center; 
@@ -263,7 +259,7 @@
     <!-- Modal Popup Win/Lose/Perfect -->
     <div id="result-modal" class="modal-overlay">
         <div class="modal-orb">
-            <!-- NÚT BẤM ĐƯỢC CHUYỂN RA NGOÀI ĐỂ CỐ ĐỊNH VỊ TRÍ -->
+            <!-- NÚT BẤM CỐ ĐỊNH -->
             <div class="modal-buttons">
                 <button id="modal-btn-left" class="btn-custom btn-blue"></button>
                 <button id="modal-btn-right" class="btn-custom btn-green"></button>
@@ -565,14 +561,17 @@
             let minVal = document.getElementById('min-moves').innerText; let bestKey = 'ballmagic_best_lv_' + currentLevel; let savedBest = localStorage.getItem(bestKey) || "...";
             document.getElementById('popup-stars').innerHTML = ''; document.getElementById('modal-title-img').src = './assets/icon/title-lose.png';
             
-            // ĐÃ ĐỔI: Text tự nhiên "Try to undo your move or reset the game"
+            // ĐÃ ĐỔI THÀNH UNDO
             document.getElementById('modal-subtitle').innerHTML = "Try to undo your move<br>or reset the game."; 
             
             document.getElementById('modal-score').style.display = 'none';
             document.getElementById('modal-metrics-box').style.display = 'block'; document.getElementById('modal-lvl-text').innerText = currentLevel;
             document.getElementById('modal-min-moves-box').innerText = minVal; document.getElementById('modal-best-moves').innerText = savedBest;
-            let btnLeft = document.getElementById('modal-btn-left'); btnLeft.style.display = 'flex'; btnLeft.innerText = "RETURN"; btnLeft.onclick = () => { closeResultModal(); undoMove(); };
+            
+            // NÚT TRÁI ĐỔI THÀNH UNDO
+            let btnLeft = document.getElementById('modal-btn-left'); btnLeft.style.display = 'flex'; btnLeft.innerText = "UNDO"; btnLeft.onclick = () => { closeResultModal(); undoMove(); };
             let btnRight = document.getElementById('modal-btn-right'); btnRight.innerText = "RESET"; btnRight.onclick = () => { closeResultModal(); restartLevel(); };
+            
             document.getElementById('result-modal').style.display = 'flex';
         }
 

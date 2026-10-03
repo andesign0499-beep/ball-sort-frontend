@@ -48,32 +48,14 @@
         
         .game-info-bar { 
             display: flex; justify-content: space-between; align-items: center; 
-            width: calc(100% - 32px); max-width: 460px; 
-            height: 44px; 
-            background-color: rgba(0, 0, 0, 0.32); 
-            border-radius: 22px; 
-            /* CÁCH MÉP NGOÀI 8PX */
-            padding: 0 8px; 
-            box-sizing: border-box;
-            font-family: "Comic Relief", system-ui; font-weight: 700;
+            width: calc(100% - 32px); max-width: 460px; height: 44px; 
+            background-color: rgba(0, 0, 0, 0.32); border-radius: 22px; 
+            padding: 0 8px; box-sizing: border-box; font-family: "Comic Relief", system-ui; font-weight: 700;
         }
 
-        /* Cụm thông tin trái/phải */
-        /* CÁCH CHỮ 4PX */
         .info-group { display: flex; align-items: center; gap: 4px; }
-        
-        /* Box Icon Nền mờ 8% Trắng */
-        .icon-circle { 
-            width: 24px; height: 24px; 
-            background-color: rgba(255, 255, 255, 0.08); 
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; 
-        }
-        .icon-circle img { 
-            width: 20px; height: 20px; /* TĂNG ICON LÊN 20PX */
-            object-fit: contain; 
-            filter: brightness(0) invert(1); 
-        }
+        .icon-circle { width: 24px; height: 24px; background-color: rgba(255, 255, 255, 0.08); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .icon-circle img { width: 20px; height: 20px; object-fit: contain; filter: brightness(0) invert(1); }
         
         .text-col { display: flex; flex-direction: column; justify-content: center; }
         .text-right { align-items: flex-end; text-align: right; }
@@ -82,63 +64,52 @@
         .text-col .value { color: #ffffff; font-size: 16px; font-weight: 700; line-height: 1; transition: color 0.3s ease; }
         .text-col .value.perfect { color: #ff33cc; }
 
-        /* Cụm nút giữa (Undo, Level, Restart) */
         .action-group { display: flex; align-items: center; gap: 8px; }
         
         .btn-action {
-            width: 36px; height: 36px; 
-            background-color: transparent; 
-            background-image: url('./assets/icon/bt_retune.png');
+            width: 36px; height: 36px; background-color: transparent; background-image: url('./assets/icon/bt_retune.png');
             background-size: 100% 100%; background-position: center; background-repeat: no-repeat;
-            border: none; outline: none; cursor: pointer; transition: transform 0.1s;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
-            padding: 0;
-            display: flex; align-items: center; justify-content: center;
+            border: none; outline: none; cursor: pointer; transition: transform 0.1s; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+            padding: 0; display: flex; align-items: center; justify-content: center;
         }
-        .btn-action img { 
-            width: 20px; height: 20px; 
-            object-fit: contain; 
-            /* ĐÃ FIX: ĐỔI SVG BÊN TRONG NÚT TÍM THÀNH MÀU TRẮNG */
-            filter: brightness(0) invert(1);
-        }
+        .btn-action img { width: 20px; height: 20px; object-fit: contain; filter: brightness(0) invert(1); }
         .btn-action:active { transform: scale(0.85); }
 
         .level-select-custom { 
-            background-color: transparent;
-            background-image: url('./assets/icon/bt_level.png');
-            background-size: 100% 100%; background-repeat: no-repeat; background-position: center;
-            border: none; outline: none;
-            width: 104px; height: 40px; 
-            color: #3e2700; font-family: "Comic Relief", system-ui; font-weight: 700; font-size: 16px; 
-            cursor: pointer; display: flex; align-items: center; justify-content: center;
-            padding: 0 4px 0 0; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5)); transition: transform 0.1s;
+            background-color: transparent; background-image: url('./assets/icon/bt_level.png'); background-size: 100% 100%; background-repeat: no-repeat; background-position: center;
+            border: none; outline: none; width: 104px; height: 40px; color: #3e2700; font-family: "Comic Relief", system-ui; font-weight: 700; font-size: 16px; 
+            cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0 4px 0 0; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5)); transition: transform 0.1s;
         }
         .level-select-custom:active { transform: scale(0.95); }
 
         /* ================= BÀN CHƠI ================= */
-        #game-screen { 
-            position: relative; z-index: 5; 
-            display: flex; flex-direction: column; align-items: center; justify-content: flex-start; width: 100%; height: 100dvh; padding: 8px 0; box-sizing: border-box; 
-        }
+        #game-screen { position: relative; z-index: 5; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; width: 100%; height: 100dvh; padding: 8px 0; box-sizing: border-box; }
         .board-section { flex-grow: 1; display: flex; align-items: center; justify-content: center; width: 100%; margin-top: 0;}
 
         .board { display: flex; flex-direction: column; align-items: center; gap: 24px; width: 100%; max-width: 100vw; padding: 0; box-sizing: border-box; }
         .row { display: flex; justify-content: center; gap: 12px; width: 100%; }
         
         .tube {
-            width: 40px; height: 240px; border-radius: 4px 4px 20px 20px; 
-            display: flex; flex-direction: column-reverse; align-items: center; padding-bottom: 8px; position: relative; cursor: pointer; 
+            width: 40px; height: 240px; border-radius: 4px 4px 20px 20px; display: flex; flex-direction: column-reverse; align-items: center; padding-bottom: 8px; position: relative; cursor: pointer; 
             box-shadow: inset 0 -8px 16px rgba(0,0,0,0.5); -webkit-tap-highlight-color: transparent; transition: box-shadow 0.3s ease, border-color 0.3s ease;
             background: var(--tube-bg); border: 2px solid var(--tube-border);
         }
         .tube.selected { border-color: #ffd700; box-shadow: 0 0 12px #ffd700, inset 0 -8px 16px rgba(0,0,0,0.5); }
         .tube.completed-magic { border-color: #00ffff; box-shadow: 0 0 20px #00ffff, inset 0 -8px 16px rgba(0,255,255,0.4); animation: pulseGlow 1.5s infinite alternate; }
         
-        .ball { 
-            position: relative; width: 32px; height: 32px; border-radius: 50%; margin-top: 4px; 
-            box-shadow: inset -4px -4px 8px rgba(0,0,0,0.5); 
-        }
+        .ball { position: relative; width: 32px; height: 32px; border-radius: 50%; margin-top: 4px; box-shadow: inset -4px -4px 8px rgba(0,0,0,0.5); }
         .ball.jump { transform: translateY(-16px); }
+
+        /* HIỆU ỨNG VẬT LÝ NHÚN BÓNG (SQUASH) */
+        .ball.squash {
+            animation: squashAnim 0.15s cubic-bezier(0.25, 1, 0.5, 1);
+            transform-origin: bottom center;
+        }
+        @keyframes squashAnim {
+            0% { transform: scale(1, 1); }
+            50% { transform: scale(1.2, 0.8) translateY(2px); }
+            100% { transform: scale(1, 1); }
+        }
 
         .board.compact { gap: 16px; }
         .board.compact .row { gap: 8px; }
@@ -149,14 +120,10 @@
         @keyframes pulseGlow { 0% { box-shadow: 0 0 8px #00ffff, inset 0 -8px 16px rgba(0,255,255,0.4); } 100% { box-shadow: 0 0 24px #ff77ff, inset 0 -8px 16px rgba(255,119,255,0.6); } }
 
         /* ================= GIAO DIỆN MODALS ================= */
-        .modal-overlay { 
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0, 0, 0, 0.85); z-index: 2000; justify-content: center; align-items: center; padding: 8px; box-sizing: border-box; 
-        }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 2000; justify-content: center; align-items: center; padding: 8px; box-sizing: border-box; }
         
         .modal-orb {
-            width: 352px; height: 352px; 
-            background-image: url('./assets/icon/popup-bg.png'); background-size: contain; background-position: center; background-repeat: no-repeat;
+            width: 352px; height: 352px; background-image: url('./assets/icon/popup-bg.png'); background-size: contain; background-position: center; background-repeat: no-repeat;
             display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; position: relative;
             font-family: "Comic Relief", system-ui; font-weight: 700; filter: drop-shadow(0 24px 40px rgba(0,0,0,0.9)); 
         }
@@ -168,26 +135,28 @@
 
         .modal-title-img { position: absolute; top: 24px; left: 50%; transform: translateX(-50%); width: 80%; height: auto; object-fit: contain; pointer-events: none; }
 
-        .modal-content-area { margin-top: 48px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #4a2f1d; width: 100%; }
-        .modal-subtitle { font-size: 20px; font-weight: 700; margin-bottom: 8px; line-height: 1.3;}
-        .score-large { font-size: 64px; color: #e65134; margin: -4px 0 4px 0; line-height: 1; text-shadow: 1px 1px 0px rgba(0,0,0,0.1); }
-        .score-small { font-size: 16px; margin: 4px 0; }
+        /* CĂN CHỈNH LẠI POPUP WIN/LOSE */
+        .modal-content-area { margin-top: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #4a2f1d; width: 100%; }
+        .modal-subtitle { font-size: 18px; font-weight: 700; margin-bottom: 0px; line-height: 1.3;}
+        .score-large { font-size: 72px; color: #e65134; margin: 0 0 8px 0; line-height: 1; text-shadow: 1px 1px 0px rgba(0,0,0,0.1); }
+        .score-small { font-size: 14px; margin: 2px 0; font-weight: 700;}
+        
         .val-blue { color: #3baaf8; }
         .val-orange { color: #e65134; }
+        .text-magenta { color: #ff33cc; }
 
-        .modal-buttons { display: flex; gap: 16px; margin-top: 24px; justify-content: center; width: 100%; }
+        /* Nút gần lại cách nhau 12px */
+        .modal-buttons { display: flex; gap: 12px; margin-top: 16px; justify-content: center; width: 100%; }
         
         .btn-custom {
             background-color: transparent; border: none; outline: none; background-size: contain; background-repeat: no-repeat; background-position: center;
-            width: 144px; height: 48px; color: white; font-family: "Comic Relief", system-ui; font-weight: 700; 
-            font-size: 16px; display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; 
-            transition: transform 0.1s; letter-spacing: 0.5px; -webkit-text-stroke: 2px rgba(0,0,0,0.68); paint-order: stroke fill;
+            width: 144px; height: 48px; color: white; font-family: "Comic Relief", system-ui; font-weight: 700; font-size: 16px; display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; transition: transform 0.1s; letter-spacing: 0.5px; -webkit-text-stroke: 2px rgba(0,0,0,0.68); paint-order: stroke fill;
         }
         .btn-custom:active { transform: scale(0.92); }
         .btn-blue { background-image: url('./assets/icon/bt_blue.png'); }
         .btn-green { background-image: url('./assets/icon/bt_green.png'); }
 
-        /* ================= HIỆU ỨNG PHÁO GIẤY ================= */
+        /* ================= HIỆU ỨNG ================= */
         .confetti {
             position: fixed; width: 8px; height: 16px; z-index: 9999; top: -24px; pointer-events: none;
             animation: confettiFall linear forwards; border-radius: 4px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);
@@ -199,64 +168,33 @@
 
         /* ================= Modal Chọn Level ================= */
         .level-modal-box {
-            width: 100%; max-width: 460px; max-height: 704px; 
-            background-color: var(--bg-color); background-image: var(--bg-pattern); background-size: var(--bg-size);
-            border: 2px solid #ffb22a; border-radius: 32px; padding: 16px; 
-            display: flex; flex-direction: column; align-items: center; box-sizing: border-box; box-shadow: 0 16px 40px rgba(0,0,0,0.8);
+            width: 100%; max-width: 460px; max-height: 704px; background-color: var(--bg-color); background-image: var(--bg-pattern); background-size: var(--bg-size);
+            border: 2px solid #ffb22a; border-radius: 32px; padding: 16px; display: flex; flex-direction: column; align-items: center; box-sizing: border-box; box-shadow: 0 16px 40px rgba(0,0,0,0.8);
         }
         .level-modal-title { font-size: 24px; font-weight: 700; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.8); margin: 0 0 16px 0; }
-        
-        .level-grid-wrapper {
-            width: 100%; background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%);
-            border-radius: 24px; box-sizing: border-box; margin-bottom: 0px; padding: 12px; 
-        }
-        .level-grid {
-            display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px 8px; 
-            max-height: 448px; overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none; padding-top: 16px; 
-        }
+        .level-grid-wrapper { width: 100%; background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%); border-radius: 24px; box-sizing: border-box; margin-bottom: 0px; padding: 12px; }
+        .level-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px 8px; max-height: 448px; overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none; padding-top: 16px; }
         .level-grid::-webkit-scrollbar { display: none; }
-        
         .level-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.1s; }
         .level-item:active { transform: scale(0.9); }
-        
-        .level-icon {
-            width: 48px; height: 48px; background-size: contain; background-repeat: no-repeat; background-position: center;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            font-size: 20px; font-weight: 700; margin-bottom: 4px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.6)); line-height: 1; 
-        }
+        .level-icon { width: 48px; height: 48px; background-size: contain; background-repeat: no-repeat; background-position: center; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; margin-bottom: 4px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.6)); line-height: 1; }
         .level-icon-active { background-image: url('./assets/icon/bg_level_active.png'); color: #000; }
         .level-icon-none { background-image: url('./assets/icon/bg_level_none.png'); color: #fff; }
         .level-icon-min { background-image: url('./assets/icon/bg_level_min.png'); color: #fff; }
-        
         .level-text { font-size: 12px; color: #fff; white-space: nowrap; text-shadow: 0 2px 4px rgba(0,0,0,0.8); margin-top: 4px;}
         .level-text.perfect { color: #ff33cc; }
-
-        .stars-container {
-            position: absolute; display: flex; justify-content: center; gap: -2px; 
-            width: 100%; pointer-events: none; z-index: 2; top: -8px; 
-        }
-        .star {
-            width: 16px; height: 16px; background-image: url('./assets/icon/icon_star.png');
-            background-size: contain; background-repeat: no-repeat; background-position: center; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
-        }
+        .stars-container { position: absolute; display: flex; justify-content: center; gap: -2px; width: 100%; pointer-events: none; z-index: 2; top: -8px; }
+        .star { width: 16px; height: 16px; background-image: url('./assets/icon/icon_star.png'); background-size: contain; background-repeat: no-repeat; background-position: center; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8)); }
         .star.half { background-image: url('./assets/icon/icon_star_12.png'); }
-        
         .stars-container.count-3 .star:nth-child(2) { transform: translateY(-4px); }
         .stars-container.count-2 .star:nth-child(1) { transform: rotate(-8deg); }
         .stars-container.count-2 .star:nth-child(2) { transform: rotate(8deg); }
-
         .level-modal-box .btn-green { margin-bottom: -40px; } 
 
-        /* ================= HIỆU ỨNG ÁNH SÁNG NỀN (AMBIENT GLOW) ================= */
-        body::before, body::after {
-            content: ""; position: fixed; border-radius: 50%; filter: blur(60px); z-index: 0; pointer-events: none; will-change: transform; 
-        }
-        body::before {
-            top: -10vh; left: -20vw; width: 70vw; height: 70vw; background: radial-gradient(circle, rgba(180, 40, 255, 0.25) 0%, transparent 70%); animation: floatLightMagenta 12s infinite alternate ease-in-out;
-        }
-        body::after {
-            bottom: -20vh; right: -20vw; width: 80vw; height: 80vw; background: radial-gradient(circle, rgba(0, 200, 255, 0.2) 0%, transparent 70%); animation: floatLightCyan 15s infinite alternate ease-in-out;
-        }
+        /* ================= HIỆU ỨNG ÁNH SÁNG NỀN ================= */
+        body::before, body::after { content: ""; position: fixed; border-radius: 50%; filter: blur(60px); z-index: 0; pointer-events: none; will-change: transform; }
+        body::before { top: -10vh; left: -20vw; width: 70vw; height: 70vw; background: radial-gradient(circle, rgba(180, 40, 255, 0.25) 0%, transparent 70%); animation: floatLightMagenta 12s infinite alternate ease-in-out; }
+        body::after { bottom: -20vh; right: -20vw; width: 80vw; height: 80vw; background: radial-gradient(circle, rgba(0, 200, 255, 0.2) 0%, transparent 70%); animation: floatLightCyan 15s infinite alternate ease-in-out; }
         @keyframes floatLightMagenta { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(40vw, 30vh) scale(1.3); } }
         @keyframes floatLightCyan { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(-30vw, -20vh) scale(1.2); } }
 
@@ -273,7 +211,6 @@
         
         <div class="header-section">
             <div class="game-info-bar">
-                
                 <!-- CỤM TRÁI: Best -->
                 <div class="info-group">
                     <div class="icon-circle"><img src="./assets/icon/cup.svg" alt="Best"></div>
@@ -303,7 +240,6 @@
                     </div>
                     <div class="icon-circle"><img src="./assets/icon/star.svg" alt="Star"></div>
                 </div>
-
             </div>
         </div>
         
@@ -317,9 +253,7 @@
         <div class="level-modal-box">
             <h2 class="level-modal-title">Choose level and play</h2>
             <div class="level-grid-wrapper">
-                <div class="level-grid" id="level-grid">
-                    <!-- Javascript điền level vào đây -->
-                </div>
+                <div class="level-grid" id="level-grid"></div>
             </div>
             <button class="btn-custom btn-green" onclick="closeLevelModal()">CLOSE</button>
         </div>
@@ -334,7 +268,8 @@
                 <div id="modal-subtitle" class="modal-subtitle"></div>
                 <div id="modal-score" class="score-large"></div>
                 <div id="modal-metrics-box">
-                    <div class="score-small">Min Moves level <span id="modal-lvl-text"></span>: <span id="modal-min-moves-box" class="val-blue"></span></div>
+                    <!-- HTML ĐÃ CẬP NHẬT ĐỂ MÀU CHỮ THÀNH TÍM MAGENTA -->
+                    <div class="score-small text-magenta">Min Moves level <span id="modal-lvl-text"></span>: <span id="modal-min-moves-box" class="val-blue"></span></div>
                     <div class="score-small">Best Moves: <span id="modal-best-moves" class="val-orange"></span></div>
                 </div>
                 <div class="modal-buttons">
@@ -429,27 +364,64 @@
         }
 
         function playSfx(type) {
+            // HAPTIC FEEDBACK (RUNG) CHO GAME FEEL
+            if (navigator.vibrate) {
+                if (type === 'jump') navigator.vibrate(10);
+                else if (type === 'drop') navigator.vibrate(40);
+                else if (type === 'error') navigator.vibrate([50, 30, 50]);
+                else if (type === 'win') navigator.vibrate([100, 50, 100, 50, 100]);
+            }
+
             if (isMuted || !audioCtx) return;
             const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.connect(gain); gain.connect(audioCtx.destination); const now = audioCtx.currentTime;
+            
             if (type === 'jump') { osc.type = 'sine'; osc.frequency.setValueAtTime(400, now); osc.frequency.exponentialRampToValueAtTime(800, now + 0.1); gain.gain.setValueAtTime(0.2, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1); osc.start(now); osc.stop(now + 0.1); } 
             else if (type === 'drop') { osc.type = 'sine'; osc.frequency.setValueAtTime(800, now); osc.frequency.exponentialRampToValueAtTime(400, now + 0.1); gain.gain.setValueAtTime(0.2, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1); osc.start(now); osc.stop(now + 0.1); } 
-            else if (type === 'error') { osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, now); gain.gain.setValueAtTime(0.1, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2); osc.start(now); osc.stop(now + 0.2); } 
+            else if (type === 'error') { 
+                // ĐÃ FIX: Âm thanh lỗi êm tai hơn (sóng Triangle thay vì Sawtooth)
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(300, now); osc.frequency.exponentialRampToValueAtTime(150, now + 0.15); gain.gain.setValueAtTime(0.15, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15); osc.start(now); osc.stop(now + 0.15); 
+            } 
             else if (type === 'win') { const notes = [261.63, 329.63, 392.00, 523.25]; notes.forEach((freq, i) => { const oscW = audioCtx.createOscillator(); const gainW = audioCtx.createGain(); oscW.connect(gainW); gainW.connect(audioCtx.destination); oscW.type = 'sine'; oscW.frequency.setValueAtTime(freq, now + i * 0.1); gainW.gain.setValueAtTime(0.2, now + i * 0.1); gainW.gain.exponentialRampToValueAtTime(0.01, now + i * 0.1 + 0.2); oscW.start(now + i * 0.1); oscW.stop(now + i * 0.1 + 0.2); }); }
+        }
+
+        // HÀM BẮN TIA SÁNG (PARTICLES) KHI HOÀN THÀNH ỐNG
+        function triggerTubeParticles(rect, color) {
+            for (let i = 0; i < 15; i++) {
+                let p = document.createElement('div');
+                p.style.position = 'fixed';
+                p.style.left = (rect.left + rect.width / 2) + 'px';
+                p.style.top = rect.top + 'px';
+                p.style.width = (Math.random() * 6 + 4) + 'px';
+                p.style.height = p.style.width;
+                p.style.backgroundColor = color;
+                p.style.borderRadius = '50%';
+                p.style.pointerEvents = 'none';
+                p.style.zIndex = '1000';
+                p.style.boxShadow = `0 0 8px ${color}`;
+                document.body.appendChild(p);
+
+                let angle = (Math.random() * Math.PI) - Math.PI; 
+                let velocity = 20 + Math.random() * 50;
+                let tx = Math.cos(angle) * velocity;
+                let ty = Math.sin(angle) * velocity - 20;
+
+                let anim = p.animate([
+                    { transform: `translate(0, 0) scale(1)`, opacity: 1 },
+                    { transform: `translate(${tx}px, ${ty}px) scale(0)`, opacity: 0 }
+                ], { duration: 400 + Math.random() * 300, easing: 'ease-out', fill: 'forwards' });
+
+                anim.onfinish = () => p.remove();
+            }
         }
 
         function triggerConfetti() {
             const colors = ['#ff5252', '#448aff', '#76ff03', '#ffd740', '#e040fb', '#ffab40'];
             for (let i = 0; i < 70; i++) {
                 let conf = document.createElement('div');
-                conf.className = 'confetti';
-                conf.style.left = Math.random() * 100 + 'vw';
-                conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                conf.style.width = (Math.random() * 8 + 8) + 'px';
-                conf.style.height = (Math.random() * 12 + 12) + 'px';
-                conf.style.animationDuration = (Math.random() * 2 + 2) + 's';
-                conf.style.animationDelay = Math.random() * 1 + 's';
-                document.body.appendChild(conf);
-                setTimeout(() => conf.remove(), 5000);
+                conf.className = 'confetti'; conf.style.left = Math.random() * 100 + 'vw'; conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                conf.style.width = (Math.random() * 8 + 8) + 'px'; conf.style.height = (Math.random() * 12 + 12) + 'px';
+                conf.style.animationDuration = (Math.random() * 2 + 2) + 's'; conf.style.animationDelay = Math.random() * 1 + 's';
+                document.body.appendChild(conf); setTimeout(() => conf.remove(), 5000);
             }
         }
 
@@ -457,37 +429,18 @@
             const colors = ['#ff5252', '#448aff', '#76ff03', '#ffd740', '#e040fb', '#ffab40'];
             for (let i = 0; i < 6; i++) { 
                 setTimeout(() => {
-                    let startX = 15 + Math.random() * 70; 
-                    let startY = 15 + Math.random() * 50; 
-
+                    let startX = 15 + Math.random() * 70; let startY = 15 + Math.random() * 50; 
                     for (let j = 0; j < 35; j++) { 
                         let p = document.createElement('div');
-                        p.style.position = 'fixed';
-                        p.style.left = startX + 'vw';
-                        p.style.top = startY + 'vh';
-                        p.style.width = (Math.random() * 4 + 4) + 'px';
-                        p.style.height = p.style.width;
-                        p.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                        p.style.borderRadius = '50%';
-                        p.style.pointerEvents = 'none';
-                        p.style.zIndex = '9999';
-                        p.style.boxShadow = `0 0 8px ${p.style.backgroundColor}`;
+                        p.style.position = 'fixed'; p.style.left = startX + 'vw'; p.style.top = startY + 'vh';
+                        p.style.width = (Math.random() * 4 + 4) + 'px'; p.style.height = p.style.width;
+                        p.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)]; p.style.borderRadius = '50%';
+                        p.style.pointerEvents = 'none'; p.style.zIndex = '9999'; p.style.boxShadow = `0 0 8px ${p.style.backgroundColor}`;
                         document.body.appendChild(p);
 
-                        let angle = Math.random() * Math.PI * 2;
-                        let velocity = 40 + Math.random() * 120; 
-                        let tx = Math.cos(angle) * velocity;
-                        let ty = Math.sin(angle) * velocity + 40; 
-
-                        let anim = p.animate([
-                            { transform: `translate(0, 0) scale(1)`, opacity: 1 },
-                            { transform: `translate(${tx}px, ${ty}px) scale(0)`, opacity: 0 }
-                        ], {
-                            duration: 700 + Math.random() * 500, 
-                            easing: 'cubic-bezier(0.25, 1, 0.5, 1)',
-                            fill: 'forwards'
-                        });
-
+                        let angle = Math.random() * Math.PI * 2; let velocity = 40 + Math.random() * 120; 
+                        let tx = Math.cos(angle) * velocity; let ty = Math.sin(angle) * velocity + 40; 
+                        let anim = p.animate([{ transform: `translate(0, 0) scale(1)`, opacity: 1 }, { transform: `translate(${tx}px, ${ty}px) scale(0)`, opacity: 0 }], { duration: 700 + Math.random() * 500, easing: 'cubic-bezier(0.25, 1, 0.5, 1)', fill: 'forwards' });
                         anim.onfinish = () => p.remove();
                     }
                 }, i * 250); 
@@ -496,70 +449,36 @@
 
         window.onload = async function() { 
             document.getElementById('board').innerHTML = '<div style="color:#ffd700; font-size: 20px; margin-top:48px;">Loading Magic...</div>';
-            
-            await loadOfflineData();
-            applyGameConfig();
-            setupActiveLevels();
-
+            await loadOfflineData(); applyGameConfig(); setupActiveLevels();
             if (activeLevelList.length === 0) document.getElementById('board').innerHTML = '<div style="color:#ff5252; font-size: 20px; text-align: center; margin-top:48px;">NO LEVELS FOUND!<br><span style="font-size:16px; color:#aaa;">(data.json is missing or empty)</span></div>';
             else initLevel(currentLevel);
         };
 
-        function openLevelModal() {
-            playSfx('jump');
-            renderLevelGrid(); 
-            document.getElementById('level-select-modal').style.display = 'flex';
-        }
-
-        function closeLevelModal() {
-            playSfx('drop');
-            document.getElementById('level-select-modal').style.display = 'none';
-        }
+        function openLevelModal() { playSfx('jump'); renderLevelGrid(); document.getElementById('level-select-modal').style.display = 'flex'; }
+        function closeLevelModal() { playSfx('drop'); document.getElementById('level-select-modal').style.display = 'none'; }
 
         function renderLevelGrid() {
-            const container = document.getElementById('level-grid');
-            container.innerHTML = '';
+            const container = document.getElementById('level-grid'); container.innerHTML = '';
             
             activeLevelList.forEach(levelNum => {
-                let bestKey = 'ballmagic_best_lv_' + levelNum;
-                let bestScore = localStorage.getItem(bestKey);
-                
+                let bestKey = 'ballmagic_best_lv_' + levelNum; let bestScore = localStorage.getItem(bestKey);
                 let minMoves = 9999;
                 if (gameData && gameData.levels && gameData.levels[levelNum] && gameData.levels[levelNum].length > 0) {
                     minMoves = gameData.levels[levelNum][0].metrics.minMoves || 9999;
                 }
 
-                let iconClass = 'level-icon-none';
-                let iconText = `${levelNum}`; 
-                let starsHtml = '';
-                
-                let scoreTextStr = `.../${minMoves}`; 
-                let textClass = 'level-text'; 
+                let iconClass = 'level-icon-none'; let iconText = `${levelNum}`; let starsHtml = '';
+                let scoreTextStr = `.../${minMoves}`; let textClass = 'level-text'; 
 
                 if (bestScore) {
-                    let pMoves = parseInt(bestScore);
-                    let stars = calculateStars(pMoves, minMoves);
-                    let isPerfect = (stars === 3.0);
-
-                    if (isPerfect) {
-                        iconClass = 'level-icon-min';
-                        textClass = 'level-text perfect'; 
-                    } else {
-                        iconClass = 'level-icon-active';
-                    }
-
+                    let pMoves = parseInt(bestScore); let stars = calculateStars(pMoves, minMoves); let isPerfect = (stars === 3.0);
+                    if (isPerfect) { iconClass = 'level-icon-min'; textClass = 'level-text perfect'; } else { iconClass = 'level-icon-active'; }
                     scoreTextStr = `${pMoves}/${minMoves}`;
-
                     let totalIcons = Math.floor(stars) + (stars % 1 !== 0 ? 1 : 0);
-                    starsHtml = `<div class="stars-container count-${totalIcons}">`;
-                    starsHtml += getStarsHtmlInner(stars, 'star');
-                    starsHtml += '</div>';
+                    starsHtml = `<div class="stars-container count-${totalIcons}">`; starsHtml += getStarsHtmlInner(stars, 'star'); starsHtml += '</div>';
                 }
 
-                let item = document.createElement('div');
-                item.className = 'level-item';
-                item.onclick = () => { selectLevelFromModal(levelNum); };
-
+                let item = document.createElement('div'); item.className = 'level-item'; item.onclick = () => { selectLevelFromModal(levelNum); };
                 item.innerHTML = `
                     <div style="position: relative; display: flex; flex-direction: column; align-items: center;">
                         ${starsHtml}
@@ -571,43 +490,27 @@
             });
         }
 
-        function selectLevelFromModal(levelNum) {
-            closeLevelModal();
-            currentLevel = levelNum;
-            localStorage.setItem('ballmagic_current_level', currentLevel);
-            initLevel(currentLevel);
-        }
+        function selectLevelFromModal(levelNum) { closeLevelModal(); currentLevel = levelNum; localStorage.setItem('ballmagic_current_level', currentLevel); initLevel(currentLevel); }
 
         function initLevel(level) {
-            currentLevel = level; 
-            localStorage.setItem('ballmagic_current_level', currentLevel);
+            currentLevel = level; localStorage.setItem('ballmagic_current_level', currentLevel);
             document.getElementById('level-btn').innerText = `Level ${currentLevel}`;
-            hiddenBalls = []; document.getElementById('flying-ball-container').innerHTML = '';
-            playerMoves = 0; document.getElementById('player-moves').innerText = playerMoves;
+            hiddenBalls = []; document.getElementById('flying-ball-container').innerHTML = ''; playerMoves = 0; document.getElementById('player-moves').innerText = playerMoves;
             
-            let bestKey = 'ballmagic_best_lv_' + currentLevel;
-            let savedBest = localStorage.getItem(bestKey);
-            
-            let serverData = getRandomLevelData(currentLevel);
-            let minMoves = 9999;
+            let bestKey = 'ballmagic_best_lv_' + currentLevel; let savedBest = localStorage.getItem(bestKey);
+            let serverData = getRandomLevelData(currentLevel); let minMoves = 9999;
 
             if (serverData) {
                 minMoves = (serverData.metrics && serverData.metrics.minMoves) ? serverData.metrics.minMoves : 9999;
                 document.getElementById('min-moves').innerText = minMoves;
-                
                 const newPalette = ['#ff4141', '#10c278', '#0068ff', '#ff8c00', '#ffd000', '#00d0eb', '#6100ed', '#6c6c6c', '#7dd800', '#d30756', '#c600cc', '#cacaca'];
                 let levelColorMap = {}; let paletteIdx = 0;
-
-                let fixedMatrix = serverData.matrix.map(tube => 
-                    tube.map(color => {
-                        if (/^[0-9A-Fa-f]{6}$/.test(color)) color = '#' + color;
-                        if (!levelColorMap[color]) { levelColorMap[color] = newPalette[paletteIdx % newPalette.length]; paletteIdx++; }
-                        return levelColorMap[color];
-                    })
-                );
-
-                tubes = JSON.parse(JSON.stringify(fixedMatrix)); 
-                initialTubesState = JSON.parse(JSON.stringify(tubes));
+                let fixedMatrix = serverData.matrix.map(tube => tube.map(color => {
+                    if (/^[0-9A-Fa-f]{6}$/.test(color)) color = '#' + color;
+                    if (!levelColorMap[color]) { levelColorMap[color] = newPalette[paletteIdx % newPalette.length]; paletteIdx++; }
+                    return levelColorMap[color];
+                }));
+                tubes = JSON.parse(JSON.stringify(fixedMatrix)); initialTubesState = JSON.parse(JSON.stringify(tubes));
                 undoStack = []; selectedTubeIndex = null; renderBoard();
             } else {
                 document.getElementById('board').innerHTML = '<div style="color:#ff5252; font-size: 24px; text-align: center; margin-top:48px;">LEVEL NOT AVAILABLE</div>';
@@ -617,131 +520,68 @@
             let bestEl = document.getElementById('best-moves');
             if (savedBest) {
                 bestEl.innerText = savedBest;
-                if (parseInt(savedBest) <= minMoves) {
-                    bestEl.classList.add('perfect');
-                } else {
-                    bestEl.classList.remove('perfect');
-                }
-            } else {
-                bestEl.innerText = '...';
-                bestEl.classList.remove('perfect');
-            }
-            
+                if (parseInt(savedBest) <= minMoves) bestEl.classList.add('perfect'); else bestEl.classList.remove('perfect');
+            } else { bestEl.innerText = '...'; bestEl.classList.remove('perfect'); }
             isGameWon = false;
         }
 
         function restartLevel() { playSfx('drop'); initLevel(currentLevel); }
-        
-        function closeResultModal() {
-            playSfx('drop');
-            document.getElementById('result-modal').style.display = 'none';
-        }
+        function closeResultModal() { playSfx('drop'); document.getElementById('result-modal').style.display = 'none'; }
 
         function showWinModal() {
-            let minValStr = document.getElementById('min-moves').innerText;
-            let minVal = parseInt(minValStr) || 9999;
-            let bestKey = 'ballmagic_best_lv_' + currentLevel;
-            let savedBest = localStorage.getItem(bestKey);
+            let minValStr = document.getElementById('min-moves').innerText; let minVal = parseInt(minValStr) || 9999;
+            let bestKey = 'ballmagic_best_lv_' + currentLevel; let savedBest = localStorage.getItem(bestKey);
             
             if (!savedBest || playerMoves < parseInt(savedBest)) {
-                savedBest = playerMoves; 
-                localStorage.setItem(bestKey, savedBest);
-                
-                let bestEl = document.getElementById('best-moves');
-                bestEl.innerText = savedBest;
-                if (parseInt(savedBest) <= minVal) {
-                    bestEl.classList.add('perfect');
-                }
+                savedBest = playerMoves; localStorage.setItem(bestKey, savedBest);
+                let bestEl = document.getElementById('best-moves'); bestEl.innerText = savedBest;
+                if (parseInt(savedBest) <= minVal) bestEl.classList.add('perfect');
             }
 
-            let stars = calculateStars(playerMoves, minVal);
-            let isPerfect = (stars === 3.0);
-
-            let popupStarsDiv = document.getElementById('popup-stars');
-            let totalIcons = Math.floor(stars) + (stars % 1 !== 0 ? 1 : 0);
-            popupStarsDiv.innerHTML = getStarsHtmlInner(stars, 'popup-star');
-            popupStarsDiv.className = 'popup-stars-container count-' + totalIcons;
+            let stars = calculateStars(playerMoves, minVal); let isPerfect = (stars === 3.0);
+            let popupStarsDiv = document.getElementById('popup-stars'); let totalIcons = Math.floor(stars) + (stars % 1 !== 0 ? 1 : 0);
+            popupStarsDiv.innerHTML = getStarsHtmlInner(stars, 'popup-star'); popupStarsDiv.className = 'popup-stars-container count-' + totalIcons;
 
             triggerFireworks(); 
 
             if (isPerfect) {
                 document.getElementById('modal-title-img').src = './assets/icon/title-perfect.png';
                 document.getElementById('modal-subtitle').innerHTML = `<span style="font-size: 16px;">You have found the minimum number<br>of moves for Level ${currentLevel}.</span>`;
-                
-                document.getElementById('modal-score').style.display = 'block';
-                document.getElementById('modal-score').innerText = playerMoves;
+                document.getElementById('modal-score').style.display = 'block'; document.getElementById('modal-score').innerText = playerMoves;
                 document.getElementById('modal-metrics-box').style.display = 'none';
-                
                 triggerConfetti(); 
             } else {
                 document.getElementById('modal-title-img').src = './assets/icon/title-win.png';
                 document.getElementById('modal-subtitle').innerHTML = "Your moves";
-                
-                document.getElementById('modal-score').style.display = 'block';
-                document.getElementById('modal-score').innerText = playerMoves;
-
-                document.getElementById('modal-metrics-box').style.display = 'block';
-                document.getElementById('modal-lvl-text').innerText = currentLevel;
-                document.getElementById('modal-min-moves-box').innerText = minValStr;
-                document.getElementById('modal-best-moves').innerText = savedBest;
+                document.getElementById('modal-score').style.display = 'block'; document.getElementById('modal-score').innerText = playerMoves;
+                document.getElementById('modal-metrics-box').style.display = 'block'; document.getElementById('modal-lvl-text').innerText = currentLevel;
+                document.getElementById('modal-min-moves-box').innerText = minValStr; document.getElementById('modal-best-moves').innerText = savedBest;
             }
 
-            let btnLeft = document.getElementById('modal-btn-left');
-            btnLeft.style.display = 'flex';
-            btnLeft.innerText = "REPLAY";
-            btnLeft.onclick = () => { closeResultModal(); restartLevel(); };
-
-            let btnRight = document.getElementById('modal-btn-right');
-            btnRight.innerText = "NEXT LEVEL";
-            btnRight.onclick = () => { closeResultModal(); nextLevelLogic(); };
-
+            let btnLeft = document.getElementById('modal-btn-left'); btnLeft.style.display = 'flex'; btnLeft.innerText = "REPLAY"; btnLeft.onclick = () => { closeResultModal(); restartLevel(); };
+            let btnRight = document.getElementById('modal-btn-right'); btnRight.innerText = "NEXT LEVEL"; btnRight.onclick = () => { closeResultModal(); nextLevelLogic(); };
             document.getElementById('result-modal').style.display = 'flex';
         }
 
         function showLoseModal() {
-            let minVal = document.getElementById('min-moves').innerText;
-            let bestKey = 'ballmagic_best_lv_' + currentLevel;
-            let savedBest = localStorage.getItem(bestKey) || "...";
-
-            document.getElementById('popup-stars').innerHTML = '';
-
-            document.getElementById('modal-title-img').src = './assets/icon/title-lose.png';
-            document.getElementById('modal-subtitle').innerHTML = "Try going back<br>or resetting the game.";
-            document.getElementById('modal-score').style.display = 'none';
-
-            document.getElementById('modal-metrics-box').style.display = 'block';
-            document.getElementById('modal-lvl-text').innerText = currentLevel;
-            document.getElementById('modal-min-moves-box').innerText = minVal;
-            document.getElementById('modal-best-moves').innerText = savedBest;
-
-            let btnLeft = document.getElementById('modal-btn-left');
-            btnLeft.style.display = 'flex';
-            btnLeft.innerText = "RETURN"; 
-            btnLeft.onclick = () => { closeResultModal(); undoMove(); };
-
-            let btnRight = document.getElementById('modal-btn-right');
-            btnRight.innerText = "RESET";
-            btnRight.onclick = () => { closeResultModal(); restartLevel(); };
-
+            let minVal = document.getElementById('min-moves').innerText; let bestKey = 'ballmagic_best_lv_' + currentLevel; let savedBest = localStorage.getItem(bestKey) || "...";
+            document.getElementById('popup-stars').innerHTML = ''; document.getElementById('modal-title-img').src = './assets/icon/title-lose.png';
+            document.getElementById('modal-subtitle').innerHTML = "Try going back<br>or resetting the game."; document.getElementById('modal-score').style.display = 'none';
+            document.getElementById('modal-metrics-box').style.display = 'block'; document.getElementById('modal-lvl-text').innerText = currentLevel;
+            document.getElementById('modal-min-moves-box').innerText = minVal; document.getElementById('modal-best-moves').innerText = savedBest;
+            let btnLeft = document.getElementById('modal-btn-left'); btnLeft.style.display = 'flex'; btnLeft.innerText = "RETURN"; btnLeft.onclick = () => { closeResultModal(); undoMove(); };
+            let btnRight = document.getElementById('modal-btn-right'); btnRight.innerText = "RESET"; btnRight.onclick = () => { closeResultModal(); restartLevel(); };
             document.getElementById('result-modal').style.display = 'flex';
         }
 
         function nextLevelLogic() {
             let currentIndexInList = activeLevelList.indexOf(currentLevel);
-            if (currentIndexInList !== -1 && currentIndexInList < activeLevelList.length - 1) {
-                currentLevel = activeLevelList[currentIndexInList + 1]; 
-                initLevel(currentLevel);
-            } else {
-                document.getElementById('popup-stars').innerHTML = ''; 
-                document.getElementById('modal-title-img').src = './assets/icon/title-win.png';
-                document.getElementById('modal-subtitle').innerHTML = "You have beaten<br>all available levels!";
-                document.getElementById('modal-score').style.display = 'none';
-                document.getElementById('modal-metrics-box').style.display = 'none';
-                
-                document.getElementById('modal-btn-left').style.display = 'none';
-                document.getElementById('modal-btn-right').innerText = "CLOSE";
-                document.getElementById('modal-btn-right').onclick = closeResultModal;
-                
+            if (currentIndexInList !== -1 && currentIndexInList < activeLevelList.length - 1) { currentLevel = activeLevelList[currentIndexInList + 1]; initLevel(currentLevel); } 
+            else {
+                document.getElementById('popup-stars').innerHTML = ''; document.getElementById('modal-title-img').src = './assets/icon/title-win.png';
+                document.getElementById('modal-subtitle').innerHTML = "You have beaten<br>all available levels!"; document.getElementById('modal-score').style.display = 'none';
+                document.getElementById('modal-metrics-box').style.display = 'none'; document.getElementById('modal-btn-left').style.display = 'none';
+                document.getElementById('modal-btn-right').innerText = "CLOSE"; document.getElementById('modal-btn-right').onclick = closeResultModal;
                 document.getElementById('result-modal').style.display = 'flex';
             }
         }
@@ -751,10 +591,7 @@
         
         async function checkSolvability(tubesState) {
             if (isWonState(tubesState)) return true;
-            let queue = [JSON.parse(JSON.stringify(tubesState))]; 
-            let visited = new Set(); visited.add(getCanonicalSignature(tubesState));
-            let iterations = 0; const MAX_ITERATIONS = 50000;
-
+            let queue = [JSON.parse(JSON.stringify(tubesState))]; let visited = new Set(); visited.add(getCanonicalSignature(tubesState)); let iterations = 0; const MAX_ITERATIONS = 50000;
             while (queue.length > 0) {
                 if (iterations % 1000 === 0) await new Promise(resolve => setTimeout(resolve, 0));
                 iterations++; let current = queue.shift();
@@ -806,15 +643,10 @@
 
         function renderBoard() {
             const board = document.getElementById('board'); board.innerHTML = '';
-            const numTubes = tubes.length; const topCount = Math.ceil(numTubes / 2);
-            const rows = [ tubes.slice(0, topCount), tubes.slice(topCount) ];
+            const numTubes = tubes.length; const topCount = Math.ceil(numTubes / 2); const rows = [ tubes.slice(0, topCount), tubes.slice(topCount) ];
             
             let maxTubesInRow = Math.max(...rows.map(r => r.length));
-            if (maxTubesInRow >= 7) {
-                board.classList.add('compact');
-            } else {
-                board.classList.remove('compact');
-            }
+            if (maxTubesInRow >= 7) board.classList.add('compact'); else board.classList.remove('compact');
 
             let globalIndex = 0;
             rows.forEach((rowTubes) => {
@@ -826,17 +658,12 @@
                     let isWaitingForBall = hiddenBalls.some(h => h.tube === currentIndex);
                     
                     tubeDiv.className = `tube ${selectedTubeIndex === currentIndex ? 'selected' : ''} ${isComplete && !isWaitingForBall ? 'completed-magic' : ''}`;
-                    tubeDiv.setAttribute('data-index', currentIndex);
-                    tubeDiv.onclick = () => handleTubeClick(currentIndex);
+                    tubeDiv.setAttribute('data-index', currentIndex); tubeDiv.onclick = () => handleTubeClick(currentIndex);
                     
                     tube.forEach((ballColor, ballIndex) => {
                         const ballDiv = document.createElement('div'); ballDiv.className = 'ball'; ballDiv.style.background = ballColor;
-                        
-                        const overlayImg = document.createElement('img');
-                        overlayImg.src = './assets/icon/bongbong.png';
-                        overlayImg.style.cssText = 'position:absolute; top:0; left:0; width:100%; height:100%; border-radius:50%; pointer-events:none; z-index:2; object-fit:cover;';
+                        const overlayImg = document.createElement('img'); overlayImg.src = './assets/icon/bongbong.png'; overlayImg.style.cssText = 'position:absolute; top:0; left:0; width:100%; height:100%; border-radius:50%; pointer-events:none; z-index:2; object-fit:cover;';
                         ballDiv.appendChild(overlayImg);
-
                         let isHidden = hiddenBalls.some(h => h.tube === currentIndex && h.index === ballIndex);
                         if (isHidden) ballDiv.style.opacity = '0';
                         if (selectedTubeIndex === currentIndex && ballIndex === tube.length - 1 && !isHidden) ballDiv.classList.add('jump');
@@ -855,16 +682,14 @@
             } else {
                 if (selectedTubeIndex === index) { selectedTubeIndex = null; playSfx('drop'); renderBoard(); } 
                 else {
-                    let sourceTube = tubes[selectedTubeIndex]; let targetTube = tubes[index];
-                    let topBall = sourceTube[sourceTube.length - 1];
+                    let sourceTube = tubes[selectedTubeIndex]; let targetTube = tubes[index]; let topBall = sourceTube[sourceTube.length - 1];
 
                     if (targetTube.length < TUBE_CAPACITY && (targetTube.length === 0 || targetTube[targetTube.length - 1] === topBall)) {
                         const sourceNode = document.querySelector(`.tube[data-index='${selectedTubeIndex}']`).lastElementChild;
                         const targetNode = document.querySelector(`.tube[data-index='${index}']`);
                         const sourceRect = sourceNode.getBoundingClientRect();
                         
-                        undoStack.push(JSON.parse(JSON.stringify(tubes)));
-                        selectedTubeIndex = null; 
+                        undoStack.push(JSON.parse(JSON.stringify(tubes))); selectedTubeIndex = null; 
                         let movingBall = sourceTube.pop(); targetTube.push(movingBall);
                         playerMoves++; document.getElementById('player-moves').innerText = playerMoves;
                         
@@ -875,42 +700,34 @@
                         
                         const flyingBall = document.createElement('div'); flyingBall.className = 'ball';
                         flyingBall.style.position = 'fixed'; flyingBall.style.margin = '0'; flyingBall.style.background = movingBall; flyingBall.style.zIndex = '9999';
+                        flyingBall.style.width = sourceRect.width + 'px'; flyingBall.style.height = sourceRect.height + 'px';
                         
-                        flyingBall.style.width = sourceRect.width + 'px';
-                        flyingBall.style.height = sourceRect.height + 'px';
-
-                        const flyingOverlay = document.createElement('img');
-                        flyingOverlay.src = './assets/icon/bongbong.png';
-                        flyingOverlay.style.cssText = 'position:absolute; top:0; left:0; width:100%; height:100%; border-radius:50%; pointer-events:none; z-index:2; object-fit:cover;';
+                        const flyingOverlay = document.createElement('img'); flyingOverlay.src = './assets/icon/bongbong.png'; flyingOverlay.style.cssText = 'position:absolute; top:0; left:0; width:100%; height:100%; border-radius:50%; pointer-events:none; z-index:2; object-fit:cover;';
                         flyingBall.appendChild(flyingOverlay);
 
                         const jumpHeight = Math.min(sourceRect.top, targetRect.top) - 48;
-                        flyingBall.style.left = '0px'; flyingBall.style.top = '0px';
-                        document.getElementById('flying-ball-container').appendChild(flyingBall);
+                        flyingBall.style.left = '0px'; flyingBall.style.top = '0px'; document.getElementById('flying-ball-container').appendChild(flyingBall);
 
-                        const anim = flyingBall.animate([
-                            { transform: `translate(${sourceRect.left}px, ${sourceRect.top}px)` },
-                            { transform: `translate(${sourceRect.left}px, ${jumpHeight}px)`, easing: 'ease-out', offset: 0.25 },
-                            { transform: `translate(${targetRect.left}px, ${jumpHeight}px)`, easing: 'ease-in-out', offset: 0.65 },
-                            { transform: `translate(${targetRect.left}px, ${targetRect.top}px)`, easing: 'ease-in', offset: 0.85 },
-                            { transform: `translate(${targetRect.left}px, ${targetRect.top - 12}px)`, easing: 'ease-out', offset: 0.92 },
-                            { transform: `translate(${targetRect.left}px, ${targetRect.top}px)`, easing: 'ease-in', offset: 1.0 }
-                        ], { duration: 350, fill: 'forwards' });
+                        const anim = flyingBall.animate([{ transform: `translate(${sourceRect.left}px, ${sourceRect.top}px)` }, { transform: `translate(${sourceRect.left}px, ${jumpHeight}px)`, easing: 'ease-out', offset: 0.25 }, { transform: `translate(${targetRect.left}px, ${jumpHeight}px)`, easing: 'ease-in-out', offset: 0.65 }, { transform: `translate(${targetRect.left}px, ${targetRect.top}px)`, easing: 'ease-in', offset: 0.85 }, { transform: `translate(${targetRect.left}px, ${targetRect.top - 12}px)`, easing: 'ease-out', offset: 0.92 }, { transform: `translate(${targetRect.left}px, ${targetRect.top}px)`, easing: 'ease-in', offset: 1.0 }], { duration: 350, fill: 'forwards' });
                         
                         anim.onfinish = () => {
                             flyingBall.remove(); playSfx('drop'); hiddenBalls = hiddenBalls.filter(h => h !== hiddenItem); renderBoard(); 
                             
+                            // ADDED: HIỆU ỨNG VẬT LÝ NHÚN BÓNG
+                            const currentTargetTubeEl = document.querySelector(`.tube[data-index='${index}']`);
+                            if(currentTargetTubeEl && currentTargetTubeEl.lastElementChild) {
+                                currentTargetTubeEl.lastElementChild.classList.add('squash');
+                                setTimeout(() => { if(currentTargetTubeEl.lastElementChild) currentTargetTubeEl.lastElementChild.classList.remove('squash'); }, 200);
+                            }
+
+                            // ADDED: HIỆU ỨNG PARTICLES KHI HOÀN THÀNH ỐNG
+                            let targetTubeArr = tubes[index];
+                            if (targetTubeArr.length === TUBE_CAPACITY && new Set(targetTubeArr).size === 1) {
+                                triggerTubeParticles(currentTargetTubeEl.getBoundingClientRect(), targetTubeArr[0]);
+                            }
+                            
                             if (!checkWin()) {
-                                setTimeout(() => {
-                                    checkSolvability(tubes).then(isSolvable => {
-                                        if (!isSolvable) {
-                                            playSfx('error');
-                                            showLoseModal();
-                                        } else {
-                                            checkGameOver();
-                                        }
-                                    });
-                                }, 50);
+                                setTimeout(() => { checkSolvability(tubes).then(isSolvable => { if (!isSolvable) { playSfx('error'); showLoseModal(); } else { checkGameOver(); } }); }, 50);
                             }
                         };
                     } else { playSfx('error'); if (targetTube.length > 0) { selectedTubeIndex = index; renderBoard(); } }

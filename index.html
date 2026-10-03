@@ -29,45 +29,7 @@
             filter: drop-shadow(0 4px 6px rgba(0,0,0,0.8)); display: none;
         }
 
-        /* ================= HEADER ================= */
-        .header-section { 
-            width: 100%; display: flex; flex-direction: column; align-items: center; 
-            margin-bottom: 20px; padding-top: 8px; z-index: 10; 
-        }
-        
-        .game-info-top { 
-            display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; 
-            width: calc(100% - 32px); max-width: 460px; padding: 0; box-sizing: border-box;
-            font-family: "Comic Relief", system-ui; font-weight: 700; gap: 8px;
-        }
-        
-        .info-text { font-size: 16px; text-shadow: 0 2px 4px rgba(0,0,0,0.9); display: flex; align-items: center; gap: 8px; white-space: nowrap; }
-        .info-text:nth-child(1) { justify-self: start; }
-        .level-select-custom { justify-self: center; }
-        .info-text:nth-child(3) { justify-self: end; }
-
-        .info-label { color: #ffd700; }
-        #best-moves { color: #ffffff; }
-        #score-text { color: #ffffff; display: flex; align-items: center; }
-
-        .level-select-custom { 
-            background-color: transparent;
-            background-image: url('./assets/icon/bt_level.png');
-            background-size: 100% 100%; 
-            background-repeat: no-repeat;
-            background-position: center;
-            border: none; outline: none;
-            width: 104px; height: 40px; 
-            color: #3e2700; 
-            font-family: "Comic Relief", system-ui; font-weight: 700; font-size: 16px; 
-            cursor: pointer; 
-            display: flex; align-items: center; justify-content: center;
-            padding: 0 4px 0 0; 
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
-            transition: transform 0.1s;
-        }
-        .level-select-custom:active { transform: scale(0.95); }
-
+        /* ================= MUTE BUTTON ================= */
         #btn-mute { 
             position: absolute; top: 16px; right: 16px; z-index: 1000; 
             width: 40px; height: 40px; 
@@ -78,9 +40,69 @@
         #btn-mute:active { transform: scale(0.85); }
         #btn-mute img { width: 24px; height: 24px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6)); }
 
+        /* ================= HEADER (DẠNG CAPSULE 44px) ================= */
+        .header-section { 
+            width: 100%; display: flex; flex-direction: column; align-items: center; 
+            margin-bottom: 20px; padding-top: 8px; z-index: 10; 
+        }
+        
+        .game-info-bar { 
+            display: flex; justify-content: space-between; align-items: center; 
+            width: calc(100% - 32px); max-width: 460px; 
+            height: 44px; /* Chiều cao chuẩn 44px */
+            background-color: rgba(0, 0, 0, 0.32); /* Nền đen 32% */
+            border-radius: 22px; /* Bo cong hoàn hảo 50% của 44px */
+            padding: 0 16px; 
+            box-sizing: border-box;
+            font-family: "Comic Relief", system-ui; font-weight: 700;
+        }
+
+        /* Cụm thông tin trái/phải */
+        .info-group { display: flex; align-items: center; gap: 8px; }
+        
+        .icon-circle { display: flex; align-items: center; justify-content: center; }
+        .icon-circle img { width: 20px; height: 20px; object-fit: contain; }
+        
+        .text-col { display: flex; flex-direction: column; justify-content: center; }
+        .text-right { align-items: flex-end; text-align: right; }
+        
+        .text-col .label { color: #ffd700; font-size: 12px; font-weight: 700; line-height: 1; margin-bottom: 2px; }
+        .text-col .value { color: #ffffff; font-size: 20px; font-weight: 700; line-height: 1; }
+
+        /* Cụm nút giữa (Undo, Level, Restart) */
+        .action-group { display: flex; align-items: center; gap: 8px; }
+        
+        .btn-action {
+            width: 36px; height: 36px; /* Nút kích thước 36px */
+            background-color: transparent; 
+            background-image: url('./assets/icon/bt_retune.png');
+            background-size: 100% 100%; background-position: center; background-repeat: no-repeat;
+            border: none; outline: none; cursor: pointer; transition: transform 0.1s;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+            padding: 0;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .btn-action img { 
+            width: 20px; height: 20px; /* Icon bên trong 20px */
+            object-fit: contain; 
+        }
+        .btn-action:active { transform: scale(0.85); }
+
+        .level-select-custom { 
+            background-color: transparent;
+            background-image: url('./assets/icon/bt_level.png');
+            background-size: 100% 100%; background-repeat: no-repeat; background-position: center;
+            border: none; outline: none;
+            width: 104px; height: 40px; 
+            color: #3e2700; font-family: "Comic Relief", system-ui; font-weight: 700; font-size: 16px; 
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            padding: 0 4px 0 0; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5)); transition: transform 0.1s;
+        }
+        .level-select-custom:active { transform: scale(0.95); }
+
         /* ================= BÀN CHƠI ================= */
         #game-screen { 
-            position: relative; z-index: 5; /* Nổi lên trên lớp ánh sáng */
+            position: relative; z-index: 5; 
             display: flex; flex-direction: column; align-items: center; justify-content: flex-start; width: 100%; height: 100dvh; padding: 8px 0; box-sizing: border-box; 
         }
         .board-section { flex-grow: 1; display: flex; align-items: center; justify-content: center; width: 100%; margin-top: 0;}
@@ -212,38 +234,16 @@
 
         /* ================= HIỆU ỨNG ÁNH SÁNG NỀN (AMBIENT GLOW) ================= */
         body::before, body::after {
-            content: "";
-            position: fixed; 
-            border-radius: 50%;
-            filter: blur(60px); 
-            z-index: 0; 
-            pointer-events: none; 
-            will-change: transform; 
+            content: ""; position: fixed; border-radius: 50%; filter: blur(60px); z-index: 0; pointer-events: none; will-change: transform; 
         }
-
         body::before {
-            top: -10vh; left: -20vw;
-            width: 70vw; height: 70vw;
-            background: radial-gradient(circle, rgba(180, 40, 255, 0.25) 0%, transparent 70%);
-            animation: floatLightMagenta 12s infinite alternate ease-in-out;
+            top: -10vh; left: -20vw; width: 70vw; height: 70vw; background: radial-gradient(circle, rgba(180, 40, 255, 0.25) 0%, transparent 70%); animation: floatLightMagenta 12s infinite alternate ease-in-out;
         }
-
         body::after {
-            bottom: -20vh; right: -20vw;
-            width: 80vw; height: 80vw;
-            background: radial-gradient(circle, rgba(0, 200, 255, 0.2) 0%, transparent 70%);
-            animation: floatLightCyan 15s infinite alternate ease-in-out;
+            bottom: -20vh; right: -20vw; width: 80vw; height: 80vw; background: radial-gradient(circle, rgba(0, 200, 255, 0.2) 0%, transparent 70%); animation: floatLightCyan 15s infinite alternate ease-in-out;
         }
-
-        @keyframes floatLightMagenta {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(40vw, 30vh) scale(1.3); }
-        }
-
-        @keyframes floatLightCyan {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(-30vw, -20vh) scale(1.2); }
-        }
+        @keyframes floatLightMagenta { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(40vw, 30vh) scale(1.3); } }
+        @keyframes floatLightCyan { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(-30vw, -20vh) scale(1.2); } }
 
     </style>
 </head>
@@ -257,15 +257,39 @@
         <img id="game-logo-img" src="./assets/logo_ballmagic.png" alt="Ball Magic Logo">
         
         <div class="header-section">
-            <div class="game-info-top">
-                <span class="info-text"><span class="info-label">Best:</span> <span id="best-moves">...</span></span>
+            <div class="game-info-bar">
                 
-                <button id="level-btn" class="level-select-custom" onclick="openLevelModal()">Level 1</button>
-                
-                <span class="info-text">
-                    <img src="./assets/icon/icon_star.png" style="width: 24px; height: 24px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));">
-                    <span id="score-text"><span id="player-moves">0</span>/<span id="min-moves">...</span></span>
-                </span>
+                <!-- CỤM TRÁI: Best -->
+                <div class="info-group">
+                    <div class="icon-circle"><img src="./assets/icon/cup.svg" alt="Best"></div>
+                    <div class="text-col">
+                        <span class="label">Best</span>
+                        <span class="value" id="best-moves">...</span>
+                    </div>
+                </div>
+
+                <!-- CỤM GIỮA: Điều khiển -->
+                <div class="action-group">
+                    <button id="btn-undo" class="btn-action" onclick="undoMove()">
+                        <img src="./assets/icon/retune.svg" alt="Undo">
+                    </button>
+                    <button id="level-btn" class="level-select-custom" onclick="openLevelModal()">Level 1</button>
+                    <button id="btn-restart" class="btn-action" onclick="restartLevel()">
+                        <img src="./assets/icon/reset.svg" alt="Restart">
+                    </button>
+                </div>
+
+                <!-- CỤM PHẢI: Moves -->
+                <div class="info-group right">
+                    <div class="text-col text-right">
+                        <span class="label">Moves</span>
+                        <span class="value" id="player-moves">0</span>
+                        <!-- Hidden thẻ min-moves để logic tính sao phía dưới không bị sụp -->
+                        <span id="min-moves" style="display:none;">...</span>
+                    </div>
+                    <div class="icon-circle"><img src="./assets/icon/star.svg" alt="Star"></div>
+                </div>
+
             </div>
         </div>
         

@@ -52,13 +52,15 @@
             height: 44px; 
             background-color: rgba(0, 0, 0, 0.32); 
             border-radius: 22px; 
-            padding: 0 16px; 
+            /* CÁCH MÉP NGOÀI 8PX */
+            padding: 0 8px; 
             box-sizing: border-box;
             font-family: "Comic Relief", system-ui; font-weight: 700;
         }
 
         /* Cụm thông tin trái/phải */
-        .info-group { display: flex; align-items: center; gap: 8px; }
+        /* CÁCH CHỮ 4PX */
+        .info-group { display: flex; align-items: center; gap: 4px; }
         
         /* Box Icon Nền mờ 8% Trắng */
         .icon-circle { 
@@ -68,20 +70,16 @@
             display: flex; align-items: center; justify-content: center; 
         }
         .icon-circle img { 
-            width: 14px; height: 14px; 
+            width: 20px; height: 20px; /* TĂNG ICON LÊN 20PX */
             object-fit: contain; 
-            /* Lệnh thần thánh đổi mọi SVG thành màu Trắng */
             filter: brightness(0) invert(1); 
         }
         
         .text-col { display: flex; flex-direction: column; justify-content: center; }
         .text-right { align-items: flex-end; text-align: right; }
         
-        /* Font chuẩn: Text 12px, Số 16px */
         .text-col .label { color: #ffd700; font-size: 12px; font-weight: 700; line-height: 1; margin-bottom: 2px; }
         .text-col .value { color: #ffffff; font-size: 16px; font-weight: 700; line-height: 1; transition: color 0.3s ease; }
-        
-        /* Hiệu ứng màu tím khi đạt Perfect */
         .text-col .value.perfect { color: #ff33cc; }
 
         /* Cụm nút giữa (Undo, Level, Restart) */
@@ -100,6 +98,8 @@
         .btn-action img { 
             width: 20px; height: 20px; 
             object-fit: contain; 
+            /* ĐÃ FIX: ĐỔI SVG BÊN TRONG NÚT TÍM THÀNH MÀU TRẮNG */
+            filter: brightness(0) invert(1);
         }
         .btn-action:active { transform: scale(0.85); }
 
@@ -299,7 +299,6 @@
                     <div class="text-col text-right">
                         <span class="label">Moves</span>
                         <span class="value" id="player-moves">0</span>
-                        <!-- Hidden thẻ min-moves -->
                         <span id="min-moves" style="display:none;">...</span>
                     </div>
                     <div class="icon-circle"><img src="./assets/icon/star.svg" alt="Star"></div>
@@ -615,7 +614,6 @@
                 document.getElementById('min-moves').innerText = '-';
             }
 
-            // Logic tính điểm đổi màu Tím cho chữ Best ở thanh trạng thái
             let bestEl = document.getElementById('best-moves');
             if (savedBest) {
                 bestEl.innerText = savedBest;
@@ -649,7 +647,6 @@
                 savedBest = playerMoves; 
                 localStorage.setItem(bestKey, savedBest);
                 
-                // Cập nhật lại màu Best Score ngay lập tức nếu đạt kỉ lục mới
                 let bestEl = document.getElementById('best-moves');
                 bestEl.innerText = savedBest;
                 if (parseInt(savedBest) <= minVal) {

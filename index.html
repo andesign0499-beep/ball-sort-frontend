@@ -290,11 +290,10 @@
         let selectedTubeIndex = null;
         let playerMoves = 0;
         let hiddenBalls = [];
-        const TUBE_CAPACITY = 6; 
+        let TUBE_CAPACITY = 6; 
         let activeLevelList = []; 
         let isGameWon = false;
 
-        // Biến quản lý phiên thao tác để chống lỗi khi bấm nhanh / Undo lúc bóng đang bay
         let actionId = 0;
         let solvabilityTimer = null;
 
@@ -330,18 +329,80 @@
 
         async function loadOfflineData() {
             try {
-                let res = await fetch('data.json');
+                let res = await fetch('./data.json', { cache: 'no-store' });
+                if (!res.ok) throw new Error("HTTP " + res.status);
                 gameData = await res.json();
             } catch (e) {
                 console.error("Lỗi tải data.json:", e);
-                gameData = { config: {}, activeLevels: [], levels: {} };
+                gameData = { config: {}, activeLevels: [], levels: {}, loadError: e.message };
             }
         }
 
         function applyGameConfig() {
-            let config = gameData.config || {};
+            let config = (gameData && gameData.config) ? gameData.config : {};
             const logoImg = document.getElementById('game-logo-img');
             if (config.showTitle) { logoImg.style.display = 'block'; } else { logoImg.style.display = 'none'; }
             if (config.bgColor) document.documentElement.style.setProperty('--bg-color', config.bgColor);
             if (config.bgPattern) {
-                let pattern = config.bgPattern
+                let pattern = String(config.bgPattern);
+                if (!pattern.startsWith('url') && !pattern.startsWith('linear')) pattern = `url('${pattern}')`;
+                document.documentElement.style.setProperty('--bg-pattern', pattern);
+                document.documentElement.style.setProperty('--bg-size', 'auto'); 
+            }
+            if (config.tubeBorder) document.documentElement.style.setProperty('--tube-border', config.tubeBorder);
+            if (config.tubeBg) document.documentElement.style.setProperty('--tube-bg', config.tubeBg);
+        }
+
+        function setupActiveLevels() {
+            activeLevelList = [];
+            if (gameData && Array.isArray(gameData.activeLevels) && gameData.activeLevels.length > 0) {
+                activeLevelList = gameData.activeLevels.map(n => Number(n));
+            } else if (gameData && gameData.levels && Object.keys(gameData.levels).length > 0) {
+                activeLevelList = Object.keys(gameData.levels).map(n => Number(n)).filter(n => !isNaN(n)).sort((a, b) => a - b);
+            }
+            if (activeLevelList.length === 0) {
+                for (let i = 1; i <= 80; i++) activeLevelList.push(i);
+            }
+            if (activeLevelList.length > 0 && !activeLevelList.includes(Number(currentLevel))) {
+                currentLevel = activeLevelList[0];
+            }
+        }
+
+        function getRandomLevelData(levelNum) {
+            if (!gameData || !gameData.levels) return null;
+            let list = gameData.levels[levelNum] || gameData.levels[String(levelNum)];
+            if (Array.isArray(list) && list.length > 0) {
+                return list[Math.floor(Math.random() * list.length)];
+            }
+            if (list && typeof list === 'object' && !Array.isArray(list)) {
+                return list;
+            }
+            return null;
+        }
+
+        // Tự động nhận diện mảng ống nghiệm dù data.json lưu dưới tên matrix, tubes, board hay mảng trực tiếp
+        function extractMatrix(serverData) {
+            if (!serverData) return null;
+            if (Array.isArray(serverData.matrix)) return serverData.matrix;
+            if (Array.isArray(serverData.tubes)) return serverData.tubes;
+            if (Array.isArray(serverData.board)) return serverData.board;
+            if (Array.isArray(serverData.data)) return serverData.data;
+            if (Array.isArray(serverData)) return serverData;
+            return null;
+        }
+
+        let audioCtx = null;
+        let isMuted = false;
+        function initAudio() {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+            } catch (e) {}
+        }
+        document.body.addEventListener('pointerdown', initAudio, {once: true});
+        
+        function toggleMute() { 
+            initAudio(); 
+            isMuted = !isMuted; 
+            let muteEl = document.getElementById('mute-icon'); 
+            muteEl.src = isMuted ? './assets/icon/volume-x.svg' : './assets/icon/volume-max.svg';
